@@ -1,0 +1,1024 @@
+[
+ {
+  "id": "per-liam",
+  "nombre": "Liam",
+  "categoria": "personaje",
+  "rareza": "rara",
+  "coste": 4,
+  "descripcion": "Explorador visionario, guardián de las historias y del pueblo.",
+  "habilidad": "Lámpara en alto: al invocarlo, revela la carta superior de tu mazo.",
+  "afinidad": "Luz",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "liam",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 5,
+  "ataque": 3,
+  "defensa": 2,
+  "nota_editorial": "Su salida tras el cap. 15 está pendiente del autor.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Su salida tras el cap. 15 está pendiente del autor.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "liam-3d",
+   "variantes": [
+    640,
+    800,
+    903
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-elara",
+  "nombre": "Elara",
+  "categoria": "personaje",
+  "rareza": "rara",
+  "coste": 4,
+  "descripcion": "Guardiana del alma; escucha sin intentar arreglar.",
+  "habilidad": "Escuchar y reflejar: reduce en 1 el daño que recibe un aliado cada turno.",
+  "afinidad": "Luz",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "elara",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 5,
+  "ataque": 2,
+  "defensa": 3,
+  "nota_editorial": "Igual que Liam: cierre pendiente tras el cap. 15.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Igual que Liam: cierre pendiente tras el cap. 15.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "elara-3d",
+   "variantes": [
+    319
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-aides",
+  "nombre": "Aides",
+  "categoria": "personaje",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "El buscador que aprende a cuestionar sus creencias en el jardín.",
+  "habilidad": "Buscador: si hay un Lugar en juego, roba una carta.",
+  "afinidad": "Raíz",
+  "capitulo_origen": "1",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "aides",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 3,
+  "ataque": 2,
+  "defensa": 1,
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "aides-3d",
+   "variantes": [
+    263
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-callum",
+  "nombre": "Callum",
+  "categoria": "personaje",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "El sabio anciano que guía sin dar respuestas.",
+  "habilidad": "Guía: otorga +1 de ataque a un aliado hasta fin de turno.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "1",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "callum",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 4,
+  "ataque": 1,
+  "defensa": 3,
+  "nota_editorial": "La auditoría pide darle un coste propio: revisar su habilidad cuando se decida.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "La auditoría pide darle un coste propio: revisar su habilidad cuando se decida.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "callum-3d",
+   "variantes": [
+    640,
+    800,
+    977
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-consejero",
+  "nombre": "Consejero de Sombreros",
+  "categoria": "personaje",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "Visionario creativo que enseña a mirar de seis maneras.",
+  "habilidad": "Seis miradas: elige una de tres cartas robadas.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "4",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "consejero",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 3,
+  "ataque": 2,
+  "defensa": 2,
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "consejero-3d",
+   "variantes": [
+    270
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-tomas",
+  "nombre": "Tomás",
+  "categoria": "personaje",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "El agricultor que aprende a sembrar después de la tormenta.",
+  "habilidad": "Resiliente: no puede ser destruido el turno en que se invoca.",
+  "afinidad": "Raíz",
+  "capitulo_origen": "2",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "tomas",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 4,
+  "ataque": 1,
+  "defensa": 2,
+  "nota_editorial": "Se identifica con el Tomás del cap. 22 (aplicado en el manuscrito corregido).",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Se identifica con el Tomás del cap. 22 (aplicado en el manuscrito corregido).",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "tomas-3d",
+   "variantes": [
+    313
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-javier",
+  "nombre": "Javier",
+  "categoria": "personaje",
+  "rareza": "comun",
+  "coste": 3,
+  "descripcion": "Joven explorador atraído por desvelar significados ocultos.",
+  "habilidad": "Explorador de patrones: mira las 3 primeras cartas del mazo rival.",
+  "afinidad": "Mente",
+  "capitulo_origen": "5",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "javier",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 3,
+  "ataque": 3,
+  "defensa": 1,
+  "nota_editorial": "La auditoría lo llama 'joven enérgico' en el cap. 5; hay que unificar el arquetipo.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "La auditoría lo llama 'joven enérgico' en el cap. 5; hay que unificar el arquetipo.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "javier-3d",
+   "variantes": [
+    306
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-maria-anciana",
+  "nombre": "María, la Anciana",
+  "categoria": "personaje",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "Anciana sabia, portadora de las historias orales del pueblo.",
+  "habilidad": "Portadora de historias: recupera una carta de la pila de descartes.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "5",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "maria",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "pendiente_autor",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 4,
+  "ataque": 1,
+  "defensa": 2,
+  "nota_editorial": "Homónimo con la María de Inés (cap. 20+). El autor debe renombrar una de las dos.",
+  "jugable": false,
+  "aviso": "",
+  "etiqueta": "Pendiente autor",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Homónimo con la María de Inés (cap. 20+). El autor debe renombrar una de las dos.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "maria-3d",
+   "variantes": [
+    303
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-conejo",
+  "nombre": "Conejo Grisáceo con Lazo Rojo",
+  "categoria": "personaje",
+  "rareza": "epica",
+  "coste": 1,
+  "descripcion": "Mensajero enigmático que guía hacia los descubrimientos.",
+  "habilidad": "Guía misterioso: su primera aparición cada partida te permite buscar un Lugar.",
+  "afinidad": "Luz",
+  "capitulo_origen": "4",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "conejo",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 2,
+  "ataque": 1,
+  "defensa": 1,
+  "nota_editorial": "El autor quiere que sea misterio, no solo pausa: no explicar su origen en textos de carta.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "El autor quiere que sea misterio, no solo pausa: no explicar su origen en textos de carta.",
+  "procedencia_3d": "aportada_por_el_proyecto (confirmar autoría y licencia)",
+  "totem_3d": {
+   "carpeta": "assets/img/personajes-3d",
+   "base": "conejo-3d",
+   "variantes": [
+    244
+   ],
+   "tipo": "3d_chibi"
+  },
+  "estado_totem": "ok_3d",
+  "uso_figura_3d": "totem_en_mesa"
+ },
+ {
+  "id": "per-sabios",
+  "nombre": "Sabios Nómadas",
+  "categoria": "personaje",
+  "rareza": "legendaria",
+  "coste": 6,
+  "descripcion": "Portadores de relatos y símbolos que llegan con la caravana.",
+  "habilidad": "Sabiduría ancestral: todos tus aliados ganan +1/+1 mientras estén en juego.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "9",
+  "ilustracion": {
+   "carpeta": "assets/img/personajes",
+   "base": "sabios",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "vida": 7,
+  "ataque": 4,
+  "defensa": 4,
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "sin_figura_3d (usa retrato 2D en arco)"
+ },
+ {
+  "id": "obj-brujula",
+  "nombre": "Brújula Dorada",
+  "categoria": "objeto",
+  "rareza": "epica",
+  "coste": 3,
+  "descripcion": "La brújula que guía a Liam y Elara.",
+  "habilidad": "Equipar: el portador no puede ser atacado por cartas de Sombra.",
+  "afinidad": "Luz",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": {
+   "carpeta": "assets/img",
+   "base": "brujula-dorada",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "obj-gran-libro",
+  "nombre": "Gran Libro de Fábulas",
+  "categoria": "objeto",
+  "rareza": "legendaria",
+  "coste": 5,
+  "descripcion": "El libro vivo que guarda y lee a quien lo lee.",
+  "habilidad": "Al entrar en juego, roba 2 cartas; una vez por turno, devuelve un Desafío al mazo.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": {
+   "carpeta": "assets/img",
+   "base": "libro-oscuro-dorado",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "nota_editorial": "Qué custodian realmente el libro y las aves (cap. 7) sigue abierto.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Qué custodian realmente el libro y las aves (cap. 7) sigue abierto.",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "obj-lamparas",
+  "nombre": "Lámparas Mágicas",
+  "categoria": "objeto",
+  "rareza": "comun",
+  "coste": 1,
+  "descripcion": "Las lámparas que custodian Liam y Elara.",
+  "habilidad": "Un aliado gana +1 de defensa hasta tu próximo turno.",
+  "afinidad": "Luz",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": null,
+  "estado_canon": "web_publicado",
+  "estado_arte": "por_asignar",
+  "balance": "provisional",
+  "nota_editorial": "Sin ilustración propia aislada: usar recorte autorizado de Liam o Elara.",
+  "jugable": false,
+  "aviso": "",
+  "etiqueta": "Arte pendiente",
+  "autorizacion_uso": "n/a",
+  "uso_videojuego": "carta",
+  "observaciones": "Sin ilustración propia aislada: usar recorte autorizado de Liam o Elara.",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "obj-llaves",
+  "nombre": "Llaves de las Seis Puertas",
+  "categoria": "objeto",
+  "rareza": "rara",
+  "coste": 2,
+  "descripcion": "Las llaves que abren seis maneras de preguntar.",
+  "habilidad": "Descarta esta carta: cancela el efecto de un Desafío.",
+  "afinidad": "Mente",
+  "capitulo_origen": "4",
+  "ilustracion": {
+   "carpeta": "assets/img/cap04",
+   "base": "llaves-seis-puertas",
+   "variantes": [
+    1200,
+    1600,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "obj-amuleto",
+  "nombre": "Amuleto de la Intuición",
+  "categoria": "objeto",
+  "rareza": "rara",
+  "coste": 2,
+  "descripcion": "El amuleto flotante de Elara.",
+  "habilidad": "Equipar: al inicio de tu turno, mira la carta superior de tu mazo.",
+  "afinidad": "Luz",
+  "capitulo_origen": "8",
+  "ilustracion": null,
+  "estado_canon": "web_publicado",
+  "estado_arte": "por_asignar",
+  "balance": "provisional",
+  "nota_editorial": "No reaparece tras el cap. 8: decisión pendiente. Sin ilustración aislada.",
+  "jugable": false,
+  "aviso": "",
+  "etiqueta": "Arte pendiente",
+  "autorizacion_uso": "n/a",
+  "uso_videojuego": "carta",
+  "observaciones": "No reaparece tras el cap. 8: decisión pendiente. Sin ilustración aislada.",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "obj-sombreros",
+  "nombre": "Seis Sombreros para Pensar",
+  "categoria": "objeto",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "Seis sombreros flotantes, seis formas de mirar.",
+  "habilidad": "Elige: +1 ataque, +1 defensa o roba 1 carta (un sombrero por turno).",
+  "afinidad": "Mente",
+  "capitulo_origen": "4",
+  "ilustracion": {
+   "carpeta": "assets/img/cap04",
+   "base": "consejero-sombreros",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "lug-jardin",
+  "nombre": "Jardín de la Mente",
+  "categoria": "lugar",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "El jardín de creencias y malezas de la fábula de Aides.",
+  "habilidad": "Los aliados de Raíz recuperan 1 de vida al inicio de tu turno.",
+  "afinidad": "Raíz",
+  "capitulo_origen": "1",
+  "ilustracion": {
+   "carpeta": "assets/img/cap01",
+   "base": "jardin-heredado",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "lug-sauce",
+  "nombre": "Sauce del Reflejo",
+  "categoria": "lugar",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "El árbol donde Elara escucha a Tomás.",
+  "habilidad": "Cada turno, el primer ataque recibido por tus aliados se refleja con 1 de daño.",
+  "afinidad": "Luz",
+  "capitulo_origen": "2",
+  "ilustracion": {
+   "carpeta": "assets/img/cap02",
+   "base": "encuentro-sauce",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "nota_editorial": "Fijado como el único sauce (decisión del autor, ya aplicada).",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "Fijado como el único sauce (decisión del autor, ya aplicada).",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "lug-templo",
+  "nombre": "Templo de las Lámparas",
+  "categoria": "lugar",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "El templo que custodian Liam y Elara y que rodean las aves negras.",
+  "habilidad": "Las cartas de Objeto cuestan 1 menos de energía.",
+  "afinidad": "Luz",
+  "capitulo_origen": "Prólogo",
+  "ilustracion": {
+   "carpeta": "assets/img",
+   "base": "pueblo-templo",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "lug-plaza",
+  "nombre": "Plaza del Pueblo",
+  "categoria": "lugar",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "Donde el pueblo se reúne a hacer preguntas.",
+  "habilidad": "Ambos jugadores roban 1 carta al inicio de su turno.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "5",
+  "ilustracion": {
+   "carpeta": "assets/img/cap05",
+   "base": "reunion-plaza",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "nota_editorial": "El cap. 17 (06:06) ocurre aquí pero está pendiente de reescritura: no usarlo todavía.",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "El cap. 17 (06:06) ocurre aquí pero está pendiente de reescritura: no usarlo todavía.",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "lug-sumergido",
+  "nombre": "Pueblo Sumergido",
+  "categoria": "lugar",
+  "rareza": "epica",
+  "coste": 4,
+  "descripcion": "El pueblo bajo la presa, descubierto por los vecinos.",
+  "habilidad": "Las cartas de Sombra cuestan 1 menos; las de Luz, 1 más.",
+  "afinidad": "Sombra",
+  "capitulo_origen": "6",
+  "ilustracion": {
+   "carpeta": "assets/img/cap06",
+   "base": "secreto-sumergido",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-miedo",
+  "nombre": "Miedo",
+  "categoria": "emocion",
+  "rareza": "comun",
+  "coste": 1,
+  "descripcion": "El miedo sin motivo con el que el pueblo mira a las aves.",
+  "habilidad": "Un aliado rival no puede atacar este turno.",
+  "afinidad": "Sombra",
+  "capitulo_origen": "2",
+  "ilustracion": {
+   "carpeta": "assets/img/cap02",
+   "base": "miedo-comprension",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-confianza",
+  "nombre": "Confianza",
+  "categoria": "emocion",
+  "rareza": "comun",
+  "coste": 2,
+  "descripcion": "La confianza que une a Liam y Elara.",
+  "habilidad": "Un aliado gana +2 de ataque hasta fin de turno.",
+  "afinidad": "Luz",
+  "capitulo_origen": "3",
+  "ilustracion": {
+   "carpeta": "assets/img/cap03",
+   "base": "liam-confianza",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-intuicion",
+  "nombre": "Intuición",
+  "categoria": "emocion",
+  "rareza": "rara",
+  "coste": 2,
+  "descripcion": "La decisión que nace de los sueños paralelos.",
+  "habilidad": "Roba 2 cartas y descarta 1.",
+  "afinidad": "Luz",
+  "capitulo_origen": "8",
+  "ilustracion": {
+   "carpeta": "assets/img/cap08",
+   "base": "viaje-onirico",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-equilibrio",
+  "nombre": "Equilibrio",
+  "categoria": "emocion",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "Razón y emoción en armonía.",
+  "habilidad": "Iguala la vida de dos aliados al promedio (redondeo arriba).",
+  "afinidad": "Palabra",
+  "capitulo_origen": "1",
+  "ilustracion": {
+   "carpeta": "assets/img",
+   "base": "equilibrio-razon-emocion",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-sombra",
+  "nombre": "Sombra",
+  "categoria": "emocion",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "La parte que no se mira y que complementa a la luz.",
+  "habilidad": "Inflige 2 de daño a un aliado; si tienes Luz en juego, 1 de daño a ti.",
+  "afinidad": "Sombra",
+  "capitulo_origen": "3",
+  "ilustracion": {
+   "carpeta": "assets/img/cap03",
+   "base": "ejercicio-4-sombra-luz",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "Arte por validar",
+  "autorizacion_uso": "revisar",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "emo-claridad",
+  "nombre": "Claridad",
+  "categoria": "emocion",
+  "rareza": "epica",
+  "coste": 4,
+  "descripcion": "La claridad de propósito tras atravesar la sombra.",
+  "habilidad": "Elimina todos los efectos de Sombra y roba 1 carta.",
+  "afinidad": "Luz",
+  "capitulo_origen": "3",
+  "ilustracion": {
+   "carpeta": "assets/img",
+   "base": "claridad-proposito",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "des-seis-puertas",
+  "nombre": "Las Seis Puertas",
+  "categoria": "desafio",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "Seis puertas, seis preguntas.",
+  "habilidad": "Ambos eligen una de tres respuestas ocultas; quien acierte roba 2.",
+  "afinidad": "Mente",
+  "capitulo_origen": "4",
+  "ilustracion": {
+   "carpeta": "assets/img/cap04",
+   "base": "preguntas-puertas",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "des-grano-paja",
+  "nombre": "Grano y Paja",
+  "categoria": "desafio",
+  "rareza": "rara",
+  "coste": 3,
+  "descripcion": "Separar hechos de maldiciones.",
+  "habilidad": "Revela 3 cartas: conserva una, descarta las demás.",
+  "afinidad": "Palabra",
+  "capitulo_origen": "6",
+  "ilustracion": {
+   "carpeta": "assets/img/cap06",
+   "base": "separando-grano",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ },
+ {
+  "id": "des-enigma",
+  "nombre": "El Enigma del Libro Vivo",
+  "categoria": "desafio",
+  "rareza": "epica",
+  "coste": 4,
+  "descripcion": "Las inscripciones y el cofre del libro vivo.",
+  "habilidad": "Elige una carta del descarte; si la juegas este turno, cuesta 0.",
+  "afinidad": "Mente",
+  "capitulo_origen": "7",
+  "ilustracion": {
+   "carpeta": "assets/img/cap07",
+   "base": "enigma",
+   "variantes": [
+    1200,
+    640,
+    800
+   ],
+   "tipo": "2d_original"
+  },
+  "estado_canon": "web_publicado",
+  "estado_arte": "ok",
+  "balance": "provisional",
+  "jugable": true,
+  "aviso": "",
+  "autorizacion_uso": "uso_original_libro",
+  "uso_videojuego": "carta",
+  "observaciones": "",
+  "uso_figura_3d": "no_aplica"
+ }
+]

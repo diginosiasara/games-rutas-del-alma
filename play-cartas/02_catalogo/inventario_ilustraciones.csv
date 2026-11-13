@@ -1,0 +1,219 @@
+carpeta,nombre_base,anchos_disponibles,tipo_sugerido,usada_en_catalogo
+.,asociacion-libre,640/800/1200,escena/escenario,no
+.,brujula-dorada,640/800/1200,escena/escenario,si
+.,claridad-proposito,640/800/1200,escena/escenario,si
+.,ejercicio-1,640/800/1200,ejercicio/reflexion (no carta),no
+.,ejercicio-2,640/800/1200,ejercicio/reflexion (no carta),no
+.,ejercicio-3,640/800/1200,ejercicio/reflexion (no carta),no
+.,ejercicio-4,640/800/1200,ejercicio/reflexion (no carta),no
+.,elara,640/800/1200,escena/escenario,no
+.,equilibrio-razon-emocion,640/800/1200,escena/escenario,si
+.,historia-compartida,640/800/1200,escena/escenario,no
+.,historia-personal,640/800/1200,escena/escenario,no
+.,interpretacion-suenos,640/800/1200,escena/escenario,no
+.,liam,640/800/1200,escena/escenario,no
+.,libro-oscuro-dorado,640/800/1200,escena/escenario,si
+.,nino-interior,640/800/1200,escena/escenario,no
+.,poder-lenguaje,640/800/1200,escena/escenario,no
+.,portada,640/792,escena/escenario,no
+.,psicoanalisis-principios,640/800/1200,ejercicio/reflexion (no carta),no
+.,pueblo-templo,640/800/1200,escena/escenario,si
+.,reinterpretar-historias,640/800/1200,escena/escenario,no
+.,resistencias,640/800/1200,escena/escenario,no
+.,tormenta-portal,640/800/1120,escena/escenario,no
+.,yo-ello-superyo,640/800/1200,escena/escenario,no
+cap01,aides,640/800/1200,escena/escenario,no
+cap01,aides-jardinero,640/800/1200,escena/escenario,no
+cap01,apertura,640/800/1200,escena/escenario,no
+cap01,callum,640/800/1200,escena/escenario,no
+cap01,cierre-relato,640/800/1200,escena/escenario,no
+cap01,coaching-1-jardin-mental,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,coaching-2-creencias,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,coaching-3-accion,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,coaching-4-responsabilidad,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,desafio-creencias,640/800/1200,escena/escenario,no
+cap01,diario-afirmaciones,640/800/1200,escena/escenario,no
+cap01,ego-sublimacion,640/800/1200,escena/escenario,no
+cap01,ejercicio-1-identificacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,ejercicio-2-accion-transformacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,ejercicio-5-accion-consciente,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,ejercicio-lamina,640/1200,ejercicio/reflexion (no carta),no
+cap01,elara,640/800/1200,escena/escenario,no
+cap01,encuentro-callum,640/800/1200,escena/escenario,no
+cap01,ensenanza,640/800/1200,escena/escenario,no
+cap01,jardin-heredado,640/800/1200,escena/escenario,si
+cap01,liam,640/800/1200,escena/escenario,no
+cap01,nino-interior,640/800/1200,escena/escenario,no
+cap01,portada,640/800/1200,escena/escenario,no
+cap01,principio-1-inconsciente,640/800/1200,escena/escenario,no
+cap01,principio-2-individuacion,640/800/1200,escena/escenario,no
+cap01,principio-3-transferencia,640/800/1200,escena/escenario,no
+cap01,principio-5-johari,640/800/1200,escena/escenario,no
+cap01,psico-01-exploracion,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,psico-03-suenos,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,psico-04-asociacion-libre,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,psico-06-proyeccion,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,psico-08-accion-consciente,640/800/1200,ejercicio/reflexion (no carta),no
+cap01,reescribir-historia,640/800/1200,escena/escenario,no
+cap01,reinterpretacion,640/800/1200,escena/escenario,no
+cap01,transferencia-espejo,640/1200,escena/escenario,no
+cap01,transferencia-guia,640/1200,escena/escenario,no
+cap01,transformacion-continua,640/800/1200,escena/escenario,no
+cap01,transformacion-continua-estaciones,640/800/1200,escena/escenario,no
+cap02,arbol-inconsciente,640/800/1200,escena/escenario,no
+cap02,cadenas-mariposas,640/800/1200,escena/escenario,no
+cap02,comunidad-sanacion,640/800/1200,escena/escenario,no
+cap02,encuentro-sauce,640/800/1200,escena/escenario,si
+cap02,escucha-presencia,640/800/1200,escena/escenario,no
+cap02,escuchar-corazon,640/800/1200,escena/escenario,no
+cap02,espejos-claros,640/800/1200,escena/escenario,no
+cap02,faro-de-luz,640/800/1200,escena/escenario,no
+cap02,meditando-reflejo,640/800/1200,escena/escenario,no
+cap02,miedo-comprension,640/800/1200,escena/escenario,si
+cap02,portada,640/800/1200,escena/escenario,no
+cap02,preguntas-poderosas,640/800/1200,escena/escenario,no
+cap02,pueblo-aves-negras,640/800/1200,escena/escenario,no
+cap02,reinterpretar,640/800/1200,escena/escenario,no
+cap02,reunion-sauce,640/800/1200,escena/escenario,no
+cap02,romper-cadenas,640/800/1200,escena/escenario,no
+cap02,tormenta-interna,640/800/1200,escena/escenario,no
+cap02,transferencia,640/800/1200,escena/escenario,no
+cap03,cierre-abrazo,640/800/1200,escena/escenario,no
+cap03,coaching-1-arquetipos,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,coaching-2-integracion,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,coaching-3-autoconocimiento,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,coaching-4-escucha,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,coaching-5-proposito,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,ejercicio-1-arquetipos,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,ejercicio-2-opuestos,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,ejercicio-3-historias,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,ejercicio-4-sombra-luz,640/800/1200,ejercicio/reflexion (no carta),si
+cap03,ejercicio-5-proposito,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,elara-ancianos,640/800/1200,escena/escenario,no
+cap03,elara-meditacion,640/800/1200,escena/escenario,no
+cap03,liam-confianza,640/800/1200,escena/escenario,si
+cap03,liam-explorador,640/800/1200,escena/escenario,no
+cap03,portada,640/800/1200,escena/escenario,no
+cap03,psico-1-arquetipos,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,psico-2-individuacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,psico-3-historias,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,psico-4-llave,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,psico-5-psique,640/800/1200,ejercicio/reflexion (no carta),no
+cap03,templo-amanecer,640/800/1200,escena/escenario,no
+cap03,union-proposito,640/800/1200,escena/escenario,no
+cap04,coaching-1-preguntas,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,coaching-2-enfoques,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,coaching-3-autoindagacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,coaching-5-colectiva,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,coaching-6-cotidiana,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,consejero-sombreros,640/800/1200,escena/escenario,si
+cap04,encuentro-conejo,640/800/1200,escena/escenario,no
+cap04,llaves-seis-puertas,640/800/1200/1600,escena/escenario,si
+cap04,portada,640/800/1200,escena/escenario,no
+cap04,preguntas-puertas,640/800/1200,escena/escenario,si
+cap04,psico-1-inconsciente,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,psico-2-preguntas,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,psico-3-comunicacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,psico-4-autotransformacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,psico-5-realidades,640/800/1200,ejercicio/reflexion (no carta),no
+cap04,retorno-llaves,640/800/1200,escena/escenario,no
+cap04,sombrero-amarillo,640/800/1200/1600,escena/escenario,no
+cap04,sombrero-azul,640/800/1200,escena/escenario,no
+cap04,sombrero-blanco,640/800/1200,escena/escenario,no
+cap04,sombrero-negro,640/800/1200,escena/escenario,no
+cap04,sombrero-rojo,640/800/1200,escena/escenario,no
+cap04,sombrero-verde,640/800/1200/1600,escena/escenario,no
+cap05,cierre-comunidad,640/800/1200,escena/escenario,no
+cap05,conejo-revelacion,640/800/1200,escena/escenario,no
+cap05,portada,640/800/1200,escena/escenario,no
+cap05,reflexion-1-espejo,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,reflexion-2-llave,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,reflexion-3-emociones,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,reflexion-4-arbol,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,reflexion-5-corazon,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,reflexion-6-conejo,640/800/1200,ejercicio/reflexion (no carta),no
+cap05,regreso-pueblo,640/800/1200,escena/escenario,no
+cap05,reunion-plaza,640/800/1200,escena/escenario,si
+cap05,transformacion,640/800/1200,escena/escenario,no
+cap05,viaje-1-realidad,640/800/1200,escena/escenario,no
+cap05,viaje-2-emociones,640/800/1200,escena/escenario,no
+cap05,viaje-3-riesgos,640/800/1200,escena/escenario,no
+cap05,viaje-4-soluciones,640/800/1200,escena/escenario,no
+cap05,viaje-5-coordinando,640/800/1200,escena/escenario,no
+cap06,cierre-libro,640/800/1200,escena/escenario,no
+cap06,coaching-1-hechos,640/800/1200,ejercicio/reflexion (no carta),no
+cap06,coaching-2-lentes,640/800/1200,ejercicio/reflexion (no carta),no
+cap06,coaching-4-sumergido,640/800/1200,ejercicio/reflexion (no carta),no
+cap06,coaching-5-reconciliacion,640/800/1200,ejercicio/reflexion (no carta),no
+cap06,descubrimientos,640/800/1200,escena/escenario,no
+cap06,exploracion,640/800/1200,escena/escenario,no
+cap06,intro-faro,640/800/1200,escena/escenario,no
+cap06,inundacion,640/800/1200,escena/escenario,no
+cap06,nueva-unidad,640/800/1200,escena/escenario,no
+cap06,portada,640/800/1200,escena/escenario,no
+cap06,reunion,640/800/1200,escena/escenario,no
+cap06,roberto-lucia,640/800/1200,escena/escenario,no
+cap06,secreto-sumergido,640/800/1200,escena/escenario,si
+cap06,separando-grano,640/800/1200,escena/escenario,si
+cap06,simbolo,640/800/1200,escena/escenario,no
+cap07,coaching-1-sombras,640/800/1200,ejercicio/reflexion (no carta),no
+cap07,coaching-2-raices,640/800/1200,ejercicio/reflexion (no carta),no
+cap07,coaching-5-tesoro,640/800/1200,ejercicio/reflexion (no carta),no
+cap07,compas,640/800/1200,escena/escenario,no
+cap07,conclusion,640/800/1200,escena/escenario,no
+cap07,enigma,640/800/1200,escena/escenario,si
+cap07,escrituras,640/800/1200,escena/escenario,no
+cap07,libro-vivo,640/800/1200,escena/escenario,no
+cap07,mensaje,640/800/1200,escena/escenario,no
+cap07,oscuridad,640/800/1200,escena/escenario,no
+cap07,portada,640/800/1200,escena/escenario,no
+cap07,secreto,640/800/1200,escena/escenario,no
+cap08,aprendizaje,640/800/1200,escena/escenario,no
+cap08,arquetipos,640/800/1200,escena/escenario,no
+cap08,coaching-1,640/800/1200,ejercicio/reflexion (no carta),no
+cap08,coaching-2,640/800/1200,ejercicio/reflexion (no carta),no
+cap08,coaching-4,640/800/1200,ejercicio/reflexion (no carta),no
+cap08,conclusion,640/800/1200,escena/escenario,no
+cap08,corriente,640/800/1200,escena/escenario,no
+cap08,despertar,640/800/1200,escena/escenario,no
+cap08,ej-arquetipos,640/800/1200,escena/escenario,no
+cap08,ej-sombra,640/800/1200,escena/escenario,no
+cap08,elara-onirico,640/800/1200,escena/escenario,no
+cap08,espejo-sabio,640/800/1200,escena/escenario,no
+cap08,nuevo-comienzo,640/800/1200,escena/escenario,no
+cap08,planificar,640/800/1200,escena/escenario,no
+cap08,portada,640/800/1200,escena/escenario,no
+cap08,portales,640/800/1200,escena/escenario,no
+cap08,psicoanalisis,640/800/1200,ejercicio/reflexion (no carta),no
+cap08,puerta-bronce,640/800/1200,escena/escenario,no
+cap08,reescritura,640/800/1200,escena/escenario,no
+cap08,reflexion,640/800/1200,ejercicio/reflexion (no carta),no
+cap08,viaje-onirico,640/800/1200,escena/escenario,si
+cap09,aides,640/800/1200,escena/escenario,no
+cap09,cierre,640/800/1200,escena/escenario,no
+cap09,coaching-1,640/800/1200,ejercicio/reflexion (no carta),no
+cap09,coaching-2,640/800/1200,ejercicio/reflexion (no carta),no
+cap09,coaching-4,640/800/1200,ejercicio/reflexion (no carta),no
+cap09,coaching-5,640/800/1200,ejercicio/reflexion (no carta),no
+cap09,coaching-intro,640/800/1200,ejercicio/reflexion (no carta),no
+cap09,energia,640/800/1200,escena/escenario,no
+cap09,impacto,640/800/1200,escena/escenario,no
+cap09,llegada,640/800/1200,escena/escenario,no
+cap09,nuevo-comienzo,640/800/1200,escena/escenario,no
+cap09,portada,640/800/1200,escena/escenario,no
+cap09,reescribir,640/800/1200,escena/escenario,no
+cap09,revelacion,640/800/1200,escena/escenario,no
+cap09,sabios-pasado,640/800/1200,escena/escenario,no
+cap09,viaje-interno,640/800/1200,escena/escenario,no
+home,portada-ecos-sombras,640/800/1200,escena/escenario,no
+home,portada-rutas-del-alma,640,escena/escenario,no
+personajes,aides,640/800/1200,personaje,si
+personajes,callum,640/800/1200,personaje,si
+personajes,conejo,640/800/1200,personaje,si
+personajes,consejero,640/800/1200,personaje,si
+personajes,elara,640/800/1200,personaje,si
+personajes,javier,640/800/1200,personaje,si
+personajes,liam,640/800/1200,personaje,si
+personajes,maria,640/800/1200,personaje,si
+personajes,sabios,640/800/1200,personaje,si
+personajes,tomas,640/800/1200,personaje,si
