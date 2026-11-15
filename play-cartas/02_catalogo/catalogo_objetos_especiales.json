@@ -1,0 +1,60 @@
+{
+ "moneda_icono": "monedas.png (pixel.zip/monedas.png)",
+ "economia": {
+  "puntos_inicio": 0,
+  "monedas_inicio": 50,
+  "victoria_vs_ia_puntos": 20,
+  "fin_partida_monedas": 15,
+  "victoria_monedas_extra": 20
+ },
+ "objetos": [
+  {
+   "id": "especial_custodia_vigilante",
+   "nombre": "Custodia Vigilante",
+   "tipo": "pasivo",
+   "rareza": "epica",
+   "precio_puntos": 150,
+   "efecto": "Al empezar la partida revela la carta superior del mazo rival",
+   "asset": "custodia-vigilante.png",
+   "origen_asset": "pixel.zip/urraca-apollada.png",
+   "referencia": "Prólogo · Cap. 7"
+  },
+  {
+   "id": "especial_custodia_susurrante",
+   "nombre": "Custodia Susurrante",
+   "tipo": "activo",
+   "rareza": "rara",
+   "precio_puntos": 120,
+   "coste_energia": 2,
+   "uso": "1 vez por partida",
+   "efecto": "Revela 1 carta al azar de la mano rival",
+   "asset": "custodia-susurrante.png",
+   "origen_asset": "pixel.zip/urraca.png (reflejada horizontalmente)",
+   "referencia": "Prólogo · Cap. 2"
+  },
+  {
+   "id": "especial_custodia_mensajera",
+   "nombre": "Custodia Mensajera",
+   "tipo": "activo",
+   "rareza": "legendaria",
+   "precio_puntos": 200,
+   "coste_energia": 3,
+   "uso": "1 vez por partida",
+   "efecto": "Roba 1 carta extra sin pasar por la decisión de robo",
+   "asset": "custodia-mensajera.png",
+   "origen_asset": "pixel.zip/urraca-volando.png",
+   "referencia": "Cap. 7 · Cap. 9"
+  },
+  {
+   "id": "especial_velas_pueblo",
+   "nombre": "Velas del Pueblo",
+   "tipo": "pasivo",
+   "rareza": "rara",
+   "precio_puntos": 100,
+   "efecto": "+1 de energía en el primer turno de cada partida",
+   "asset": "velas-del-pueblo.png",
+   "origen_asset": "pixel.zip/velas.png",
+   "referencia": "Prólogo"
+  }
+ ]
+}

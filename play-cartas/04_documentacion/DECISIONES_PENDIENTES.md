@@ -16,3 +16,23 @@
 
 ## Técnicas (siguientes fases)
 Separar el motor de la interfaz, validar la partida en servidor, cuentas y persistencia, multijugador, pruebas en dispositivos reales (iOS/Android) y auditoría de accesibilidad (WCAG AA con axe).
+
+## Valores por defecto asumidos en la v4 (los informes los piden confirmar)
+- Unicidad solo por **tablero** (no por mano ni mazo). Los personajes propios repetidos no están bloqueados.
+- Opción B **sí** recupera energía. Límite de mano **7**. Timeout de decisión **20 s**. Sin regla especial para Liam y Elara.
+- Objetos especiales **permanentes**; precios 150/120/200/100 ✦; 50 🪙 de inicio; sin consumibles ni ofertas temporales.
+- Guía: proveedor de IA y voz del navegador; sin límite de mensajes, sin historial persistente y sin micrófono.
+
+## De los informes y NO implementado
+- Multiplicador ×1.25 de balance a legendarios/épicos y revisión de la curva de personajes (pendiente de confirmar; los «tontos» siguen igual).
+- 4 perfiles de IA (solo hay una IA con una heurística). Mecánica de «destierro». Personaje Lucía (no está en el catálogo de 30 cartas).
+- Todo el backend: validación en servidor, tablas SQL, API/SSE, moderación, límites de uso y costes del LLM, historial de conversaciones, TTS de pago (ElevenLabs/OpenAI), entrada por voz.
+- Consumibles de partida, logros, misiones, niveles, multijugador (las vías de ganar Puntos que no existen aún).
+- Playtest con 5 usuarios y balance de la opción B (la simulación comprueba reglas, no equilibrio).
+- Confirmación al rendirse; pantalla de ajustes.
+
+## Configurador de agente (v5): pendiente de tu confirmación
+- ¿Qué es exactamente «Antigravity» en tu flujo y qué API local expone? Hoy se trata como «otro servidor compatible con OpenAI».
+- Modelos por defecto del paquete (sugeridos: llama3.2:3b, qwen2.5:3b, gemma2:2b): comprobar que existen y cuál da mejor español.
+- ¿Empaquetar un runtime dentro del navegador (WebLLM/wllama) para no depender de Ollama? No está hecho.
+- Prueba con Ollama, LM Studio y llama.cpp reales (solo se probó con simuladores).

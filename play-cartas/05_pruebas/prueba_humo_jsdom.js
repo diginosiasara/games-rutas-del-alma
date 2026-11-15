@@ -10,6 +10,7 @@ const q=s=>w.document.querySelector(s),sleep=ms=>new Promise(r=>st(r,ms));
  w.go('deck');q('#auto').click();console.log('prog',q('.prog i').style.width);
  w.go('play');let seen={banner:0,hit:0,flt:0,pop:0};
  for(let t=0;t<30&&!q('#again');t++){
+  w.eval("if(G&&G.dec)decide('A')");
   for(const e of [...w.document.querySelectorAll('.hand [data-h]')]){e.click()}
   for(const u of w.document.querySelectorAll('[data-m]')){u.click();const f=q('#face');if(f)f.click();else{const x=q('[data-e]');if(x)x.click()}
    seen.hit+=w.document.querySelectorAll('.u.hit').length;seen.flt+=w.document.querySelectorAll('.flt').length;}

@@ -1,0 +1,13 @@
+{
+  "nombre": "Paquete de modelos de Rutas del Alma",
+  "version": 1,
+  "runtime": "ollama",
+  "endpoint": "http://127.0.0.1:11435",
+  "carpeta_modelos": "modelos-ia/ollama",
+  "nota": "El juego da prioridad a este paquete. Los modelos se descargan UNA vez con descargar-modelo y quedan dentro de esta carpeta. Los nombres son sugerencias: comprueba que existen en https://ollama.com/library",
+  "modelos": [
+    {"id": "llama3.2:3b", "nombre": "Llama 3.2 · 3B (equilibrado)", "tamano_aprox": "2 GB", "idioma": "es/multilingüe"},
+    {"id": "qwen2.5:3b", "nombre": "Qwen 2.5 · 3B (buen español)", "tamano_aprox": "2 GB", "idioma": "es/multilingüe"},
+    {"id": "gemma2:2b", "nombre": "Gemma 2 · 2B (ligero)", "tamano_aprox": "1.6 GB", "idioma": "es/multilingüe"}
+  ]
+}

@@ -10,7 +10,7 @@ setup="""()=>{go('deck');document.querySelector('#auto').click();go('play');
  G.p[1].board=[mk(6,'per-javier','Javier',3,1,3),mk(7,'per-consejero','Consejero',2,2,3),mk(8,'per-conejo','Conejo',1,1,2)];
  G.p[1].d={a:12,b:2,g:false};G.p[1].place='lug-jardin';
  G.p[0].hand=['per-liam','per-sabios','obj-brujula','lug-templo','emo-confianza','des-seis-puertas','obj-llaves'];
- G.rolled=[];G.fx=[];G.banner='';go('lib');go('play');}"""
+ G.dec=false;G.rolled=[];G.fx=[];G.banner='';go('lib');go('play');}"""
 with sync_playwright() as p:
     b=p.chromium.launch()
     for w,h in sizes:

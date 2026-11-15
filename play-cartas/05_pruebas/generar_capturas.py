@@ -7,7 +7,7 @@ SET="""()=>{go('deck');document.querySelector('#auto').click();go('play');
  G.p[1].board=[mk(6,'per-javier','Javier',3,1,3,false),mk(7,'per-consejero','Consejero',2,2,3,false),mk(8,'per-conejo','Conejo',1,1,2,false)];
  G.p[0].d={a:17,b:3,g:false};G.p[1].d={a:12,b:2,g:false};G.p[1].place='lug-sauce';G.p[0].place='lug-jardin';
  G.p[0].hand=['per-tomas','per-javier','obj-gran-libro','emo-confianza','lug-templo','des-seis-puertas','per-conejo'];
- G.rolled=[];G.fx=[];G.banner='';go('lib');go('play');}"""
+ G.dec=false;G.rolled=[];G.fx=[];G.banner='';go('lib');go('play');}"""
 with sync_playwright() as p:
     b=p.chromium.launch()
     d=b.new_page(viewport={'width':1366,'height':768});d.goto(F);d.wait_for_timeout(1800)
