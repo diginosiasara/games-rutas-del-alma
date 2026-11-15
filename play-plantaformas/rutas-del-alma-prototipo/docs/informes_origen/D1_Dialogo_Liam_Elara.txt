@@ -1,0 +1,160 @@
+# 📄 DISEÑO DE SISTEMA DE DIÁLOGO: LIAM Y ELARA
+## *Rutas del Alma: El Juego* — Ramificación, Consecuencias y Resonancia Emocional
+**Versión de referencia:** Prototipo Web v8 · **Base narrativa:** Cap. 3 (La Luz Interior) y Cap. 36/37 de *Senderos de Luna* (El peso compartido) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. FILOSOFÍA DEL SISTEMA
+En *Rutas del Alma*, Liam y Elara no son solo dos personajes jugables; son **dos mitades de una misma conciencia**. Sus conversaciones no son "ruido de fondo", sino **mecánicas de juego**. 
+
+Cada diálogo entre ellos es una oportunidad para el jugador de **integrar opuestos** (Razón/Emoción, Acción/Escucha). Las consecuencias no son "buenas" o "malas", sino que **alteran el estado del mundo, el vínculo entre ellos y la forma en que los NPCs los perciben**.
+
+---
+
+## 1. VARIABLES OCULTAS AFECTADAS POR EL DIÁLOGO
+
+| Variable | Descripción | Efecto en el Gameplay |
+| :--- | :--- | :--- |
+| **`vinculo_almico`** (0-100) | Sincronización entre Liam y Elara. | >80: Desbloquea la **Sinergia de Doble Lámpara** (luz blanca que disuelve zarzas Nivel 3). <50: Las lámparas parpadean y consumen más energía. |
+| **`carga_compartida`** (0-100) | El "peso" del mundo que llevan sobre los hombros (concepto de *Senderos de Luna*). | >70: La pantalla se oscurece ligeramente, los movimientos son un 10% más lentos. <30: El entorno se vuelve más brillante y las plantas crecen más rápido. |
+| **`equilibrio_luz`** (-50 a +50) | Negativo = Dominio de Liam (Lógica/Acción). Positivo = Dominio de Elara (Emoción/Intuición). | Afecta el tono de los NPCs: Callum prefiere equilibrio; Aides reacciona mejor a Elara; el Consejero valora a Liam. |
+| **`fatiga_emocional`** | Cansancio mental de Elara al absorber sombras. | Si es alta, Elara no puede usar su lámpara hasta que Liam la "ilumine" a ella. |
+
+---
+
+## 2. LISTA AMPLIA DE DIÁLOGOS RAMIFICADOS (POR ESCENARIO)
+
+### 🌲 ESCENARIO A: EXPLORACIÓN (Caminando por el bosque o el valle)
+**Contexto:** El jugador camina sin prisa. Se activa un diálogo espontáneo sobre el rumbo.
+
+#### Nodo: `exploracion_01_el_rumbo`
+**Liam:** *"El mapa indica que el templo está al norte. Si mantenemos el paso, llegaremos antes del anochecer. Pero el terreno se vuelve inestable."*
+**Elara:** *"Siento algo en el aire, Liam. No es el terreno. Es como si el bosque quisiera que nos detuviéramos. ¿Y si el camino correcto no es el más recto?"*
+
+*   **Opción A (Dominio Liam - Hechos):** *"No podemos guiarnos por corazoncitos, Elara. El pueblo nos necesita. Sigamos el mapa."*
+    *   **Consecuencias:** `equilibrio_luz` -10. `vinculo_almico` -5.
+    *   **Efecto gameplay:** Velocidad de movimiento +15%. **Se pierden 2 coleccionables ocultos** (Pétalos) en el bosque.
+*   **Opción B (Dominio Elara - Emoción):** *"Tienes razón. A veces mi intuición me juega malas pasadas. Guíame tú."*
+    *   **Consecuencias:** `equilibrio_luz` +10. `vinculo_almico` +5.
+    *   **Efecto gameplay:** Velocidad -5%. **Se revela un sendero secreto** con una flor rara.
+*   **Opción C (Integración - Sombrero Azul):** *"Tú marcas el ritmo, yo vigilo las sombras. Si algo no encaja, nos detenemos."*
+    *   **Consecuencias:** `vinculo_almico` +15. `equilibrio_luz` 0.
+    *   **Efecto gameplay:** Se activa el buff **"Sincronía"** (las lámparas consumen 20% menos energía durante 5 minutos).
+
+---
+
+### 🌑 ESCENARIO B: ANTE UNA SOMBRA DIFÍCIL (Zarza Nivel 2 o 3)
+**Contexto:** Encuentran una zarza que emite un aura oscura y susurra dudas.
+
+#### Nodo: `sombra_01_el_miedo`
+**Sombra (susurrando):** *"No sois suficientes. El pueblo se hundirá y vosotros no podréis evitarlo."*
+**Liam:** *"Es solo ruido. Si la ilumino con fuerza, se disipará."*
+**Elara:** *"No, Liam. Si la iluminas sin escucharla, solo la harás más fuerte. Está dolida."*
+
+*   **Opción A (Liam ataca con Luz):** *[Usar Lámpara Dorada]* *"¡Fuera de nuestro camino!"*
+    *   **Consecuencias:** La zarza se reduce un 50%, pero **se divide en 2 zarzas pequeñas** (Nivel 1). `carga_compartida` +10.
+*   **Opción B (Elara escucha con Empatía):** *[Usar Lámpara Violeta]* *"¿Qué te duele? ¿Qué necesitas que veamos?"*
+    *   **Consecuencias:** La zarza se transforma en **Tierra Fértil** instantáneamente. `fatiga_emocional` de Elara +20. `vinculo_almico` +10.
+*   **Opción C (Sinergia - Requiere `vinculo_almico` > 60):** *[Activar Doble Lámpara]* *"Lo vemos juntos. Tu miedo es real, pero no te define."*
+    *   **Consecuencias:** La zarza se disuelve en **polvo de estrellas** (recurso raro para mejorar herramientas). `carga_compartida` -15. `vinculo_almico` +20.
+
+---
+
+### 🔥 ESCENARIO C: DESCANSO EN LA FOGATA (Noche / Vulnerabilidad)
+**Contexto:** Están sentados frente al fuego. El medidor de energía está bajo.
+
+#### Nodo: `fogata_01_la_duda_de_liam`
+**Liam:** *(Mirando su lámpara, que parpadea débil)* *"A veces pienso que esta luz no es mía. Que solo soy el mensajero, y que cuando el mensaje se entregue, me apagaré."*
+
+*   **Opción A (Elara consuela - Sombrero Rojo):** *"La luz no es el mensaje, Liam. La luz eres tú cuando decides no rendirte. Yo te he visto brillar cuando creías que estabas a oscuras."*
+    *   **Consecuencias:** `fatiga_emocional` de Elara +15. Liam recupera 50% de su Luz. `vinculo_almico` +10.
+*   **Opción B (Liam se cierra - Sombrero Negro):** *"No importa lo que sienta. Mañana hay que llegar al templo. Descansa."*
+    *   **Consecuencias:** `carga_compartida` +20. La fogata se apaga antes de tiempo. **El jugador no recupera el medidor de calma**.
+*   **Opción C (Pregunta poderosa - Sombrero Verde):** *"¿Y si tu luz no es para alumbrar el camino, sino para que otros no tropiecen en la oscuridad? ¿Qué pasaría si aceptaras eso?"*
+    *   **Consecuencias:** Liam sonríe levemente. Se desbloquea la **Habilidad Pasiva: "Faro"** (las plataformas ocultas brillan sutilmente incluso sin usar la lámpara).
+
+---
+
+### 🎩 ESCENARIO D: REFLEXIÓN SOBRE LOS SOMBREROS (Tras visitar al Consejero)
+**Contexto:** Acaban de obtener los sombreros. El jugador puede elegir cómo discutir su uso.
+
+#### Nodo: `sombreros_01_la_filosofia`
+**Elara:** *"Seis formas de mirar el mismo mundo. Me da vértigo pensar cuántas verdades nos estamos perdiendo cuando solo usamos una."*
+
+*   **Opción A (Liam analítico - Sombrero Blanco):** *"No son verdades distintas, Elara. Son capas de la misma verdad. El blanco es la base; sin él, los demás son solo opiniones."*
+    *   **Consecuencias:** Desbloquea **pistas objetivas** en el HUD (muestra la distancia exacta a los objetivos).
+*   **Opción B (Elara intuitiva - Sombrero Rojo):** *"Pero la base no lo es todo. El sombrero rojo me permite sentir el dolor de las zarzas. Sin él, solo seríamos jardineros, no sanadores."*
+    *   **Consecuencias:** Desbloquea **diálogos empáticos** con NPCs tristes (Tomás, Aides) que de otro modo estarían bloqueados.
+*   **Opción C (Integración):** *"El blanco nos dice qué hay. El rojo nos dice qué importa. Necesitamos los dos para saber qué hacer."*
+    *   **Consecuencias:** `vinculo_almico` +25. Se desbloquea el **Sombrero Propio (El Séptimo Sombrero)** en el menú de personalización.
+
+---
+
+### ⚖️ ESCENARIO E: EL PESO COMPARTIDO (Late Game / Cap. 36 Senderos de Luna)
+**Contexto:** Han descubierto que "el peso" del mundo está afectando a Catalina y a Selene. Deben decidir cómo actuar.
+
+#### Nodo: `peso_01_la_decisión`
+**Liam:** *"Si alguien tiene que cargar con esto, que sea yo. Tengo la lámpara más fuerte."*
+**Elara:** *"No. Si lo cargas solo, te romperás. Y si te rompes tú, me rompo yo. No es un peso de uno, Liam. Es un peso de todos."*
+
+*   **Opción A (Sacrificio de Liam):** *"Es mi responsabilidad como guardián. Aléjate, Elara. Yo lo sostendré."*
+    *   **Consecuencias:** `carga_compartida` de Liam al 100%. **Final alternativo "El Mártir"**: Liam se convierte en estatua de luz en el templo. Elara termina el juego sola.
+*   **Opción B (Sacrificio de Elara):** *"Tú guía el camino. Yo absorberé el dolor del pueblo. Es para lo que sirve mi lámpara."*
+    *   **Consecuencias:** `fatiga_emocional` de Elara al 100%. **Final alternativo "La Mártir"**: Elara se funde con las sombras del bosque. Liam termina el juego solo.
+*   **Opción C (El camino del libro - Compartir):** *"Nadie lo carga solo. Lo repartimos. Turnos. Con ayuda de Mirena, de Selene, del pueblo. Como dijo Selene: 'Quizá sea un oficio'."*
+    *   **Consecuencias:** `carga_compartida` se divide entre ambos (50/50). Se desbloquea el **Final Verdadero: "El Oficio de la Luz"**. El pueblo aprende a cuidar su propio jardín.
+
+---
+
+## 3. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 3.1 Sistema de "Resonancia" (Timing de diálogos)
+No todos los diálogos deben estar disponibles siempre. El motor debe evaluar el contexto:
+```javascript
+function evaluarContextoDialogo() {
+  let contexto = {
+    ubicacion: getZonaActual(), // 'bosque', 'templo', 'fogata'
+    hora: getHoraJuego(), // 'dia', 'noche'
+    estado_liam: liamData.energia,
+    estado_elara: elaraData.calma,
+    vinculo: gameState.vinculo_almico
+  };
+  
+  // Ejemplo: El diálogo de vulnerabilidad de Liam solo aparece de noche y si su energía es < 30%
+  if (contexto.hora === 'noche' && contexto.estado_liam < 30) {
+    activarNodo('fogata_01_la_duda_de_liam');
+  }
+}
+```
+
+### 3.2 Feedback Visual durante la conversación
+*   **Si el jugador elige una opción que aumenta el `vinculo_almico`:** Las lámparas de ambos emiten un pequeño destello sincronizado (partículas doradas y violetas que se mezclan).
+*   **Si el jugador elige una opción que aumenta la `carga_compartida`:** La cámara hace un ligero *zoom out* y la música baja un semitono, dando sensación de peso.
+*   **Indicador de "Opción de Sinergia":** Si el jugador tiene el `vinculo_almico` > 60, las opciones de "Doble Lámpara" deben brillar con un borde blanco en la UI de diálogo.
+
+### 3.3 Guardado de Estado Narrativo
+El `localStorage` debe guardar no solo las variables numéricas, sino las **decisiones tomadas**:
+```json
+"dialogos_liam_elara": {
+  "exploracion_01": "opcion_C",
+  "sombra_01": "opcion_B",
+  "fogata_01": "opcion_A",
+  "peso_01": "pendiente"
+}
+```
+Esto permite que, si el jugador recarga, los personajes no repitan las mismas dudas, sino que digan: *"Recuerdas lo que hablamos anoche en la fogata... Me ayudó."*
+
+---
+
+## 4. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Existen al menos 5 escenarios de diálogo ramificado entre Liam y Elara.
+*   ✅ Cada diálogo tiene al menos 3 opciones con consecuencias medibles en las variables (`vinculo`, `carga`, `equilibrio`).
+*   ✅ Las opciones de "Sinergia" (Doble Lámpara) solo se desbloquean si el `vinculo_almico` es alto.
+*   ✅ El diálogo del "Peso Compartido" (Escenario E) define el final del juego (3 finales distintos).
+*   ✅ Los textos mantienen el tono poético y de coaching ontológico del libro (no son frases genéricas de RPG).
+*   ✅ No hay errores de consola al cambiar de nodo de diálogo.
+
+---
+
+**¿Aprobado?** Este sistema convierte a Liam y Elara en el corazón narrativo del juego. Si das el visto bueno, el desarrollador puede empezar por implementar las variables ocultas y el Escenario A (Exploración) como prueba de concepto.

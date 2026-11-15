@@ -1,0 +1,177 @@
+# 📄 INFORME TÉCNICO — SPRINT 16
+## *Rutas del Alma: El Juego* — Profundidad Narrativa, Tensión de Perspectiva y Sistema de Vínculo (Liam & Elara)
+**Versión de referencia:** Prototipo Web v13 · **Base narrativa:** Cap. 3 (La Luz Interior) y Cap. 36/37 de *Senderos de Luna* (El peso compartido) · **Fecha:** 14 nov 2026
+**Dirigido a:** Dirección de Arte / Guionista / Desarrollador Lead
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Este sprint transforma a Liam y Elara de "compañeros de viaje" a **dos mitades de una conciencia en tensión**. Se implementa un **Sistema de Voz Activa/Pasiva** donde el personaje no controlado por el jugador reacciona, cuestiona y genera fricción narrativa. Además, se introduce el **Sistema de Vínculo y Estado de Ánimo**, donde las decisiones del jugador no solo cambian el entorno, sino la relación entre los protagonistas, ramificando los diálogos y el tono emocional del juego.
+
+---
+
+## 1. PROFUNDIZACIÓN DE PERSONALIDADES Y TRASFONDO
+
+Para que la tensión sea orgánica, cada personaje debe tener **motivaciones, miedos y mecanismos de defensa** claros, basados en el libro.
+
+### 1.1 Liam: El Explorador Visionario (El Peso de la Utilidad)
+*   **Trasfondo:** Creció sintiendo que debía "demostrar" su valía al pueblo. Su lámpara es una responsabilidad, no un don.
+*   **Motivación:** Encontrar la ruta más eficiente, resolver el problema, proteger a Elara de su propia sensibilidad.
+*   **Miedo profundo:** Que su luz no sea suficiente; que al final del camino, no haya nada que salvar.
+*   **Mecanismo de defensa:** Racionalización. Cuando hay dolor, busca un plan de acción.
+*   **Frase interna:** *"Si no hago algo útil, no sirvo para nada."*
+
+### 2.2 Elara: La Guardiana del Alma (La Absorción Empática)
+*   **Trasfondo:** De niña, al no poder evitar el sufrimiento de otros, aprendió a "sentirlo" para no sentirse impotente. Su lámpara es un puente, no una herramienta.
+*   **Motivación:** Comprender el dolor ajeno, validar las emociones, evitar que Liam se vuelva frío.
+*   **Miedo profundo:** Perder su propia identidad al absorber las sombras de los demás; que Liam la vea como "demasiado frágil".
+*   **Mecanismo de defensa:** Proyección emocional. Cuando hay un problema lógico, busca la herida emocional detrás.
+*   **Frase interna:** *"Si no siento lo que ellos sienten, los estoy abandonando."*
+
+---
+
+## 2. SISTEMA DE VOZ ACTIVA / PASIVA (Tensión de Perspectiva)
+
+Cuando el jugador controla a un personaje (Activo), el otro (Pasivo) no se queda en silencio. **El Pasivo actúa como la "conciencia crítica" del Activo**, generando una tensión narrativa constante.
+
+### 2.1 Matriz de Reacción (Ejemplo en un evento de juego)
+**Evento:** Encuentran una zarza de Nivel 2 (Resentimiento) que bloquea el camino.
+
+| Jugador Controla (Activo) | Acción del Activo | Reacción del Pasivo (Tensión) | Efecto en el Vínculo |
+| :--- | :--- | :--- | :--- |
+| **Liam** | Usa la lámpara dorada para quemar la raíz. | **Elara:** *"La estás castigando, Liam. Solo está asustada. ¿Por qué siempre tienes que imponer tu luz?"* | `tension` +10, `vinculo` -5 |
+| **Elara** | Usa la lámpara violeta para escuchar a la zarza. | **Liam:** *"No tenemos tiempo para sus miedos, Elara. El pueblo se está quedando a oscuras mientras tú consuelas espinas."* | `tension` +10, `vinculo` -5 |
+| **Liam** | Espera a que Elara hable con ella primero. | **Elara:** *(Sorprendida)* *"Gracias... a veces olvido que no estoy sola en esto."* | `tension` -10, `vinculo` +15 |
+| **Elara** | Pide a Liam que ilumine la raíz antes de tocarla. | **Liam:** *(Asiente)* *"Tienes razón. Tu empatía necesita mi estructura. Hagámoslo juntos."* | `tension` -10, `vinculo` +15 |
+
+### 2.2 Implementación Técnica (JSON de Diálogo con Doble Voz)
+```json
+{
+  "id": "zarza_nivel2_encuentro",
+  "event": "thorn_interaction",
+  "active_voice": "liam", 
+  "dialogue_tree": {
+    "liam_action_burn": {
+      "liam_text": "Fuera de nuestro camino. (Usa Lámpara Dorada)",
+      "elara_passive_reaction": {
+        "text": "La estás castigando, Liam. Solo está asustada.",
+        "mood_change": { "elara": "frustrada", "liam": "defensivo" },
+        "stats": { "tension": +10, "vinculo": -5 }
+      }
+    },
+    "liam_action_wait": {
+      "liam_text": "Elara, tú primero. Yo te cubro la espalda.",
+      "elara_passive_reaction": {
+        "text": "Gracias... a veces olvido que no estoy sola en esto.",
+        "mood_change": { "elara": "aliviada", "liam": "sereno" },
+        "stats": { "tension": -10, "vinculo": +15 }
+      }
+    }
+  }
+}
+```
+
+---
+
+## 3. SISTEMA DE VÍNCULO Y ESTADO DE ÁNIMO (Relationship FSM)
+
+El juego rastrea dos variables ocultas que dictan el tono de las escenas de descanso (fogata, cabaña, transiciones).
+
+### 3.1 Variables de Estado
+*   `vinculo` (0 - 100): Sincronización emocional.
+*   `tension` (0 - 100): Fricción acumulada por decisiones unilaterales.
+*   `fatiga_compartida` (0 - 100): El peso del mundo (Cap. 36).
+
+### 3.2 Estados de Ánimo (Mood States)
+El motor evalúa estas variables al final de cada pantalla para determinar el "Clima de la Escena":
+
+| Estado de Ánimo | Condición | Efecto Visual / Audio | Efecto en Diálogos de Descanso |
+| :--- | :--- | :--- | :--- |
+| **Armonía (Sinergia)** | `vinculo` > 70, `tension` < 30 | Filtro cálido, música con capas de arpa y cuerdas. | Se desbloquean diálogos de "Integración". Liam y Elara se ríen, se tocan el hombro. |
+| **Fricción (Tensión)** | `tension` > 60 | Filtro ligeramente azulado/gris, música con notas graves. | Diálogos cortantes. *"Tú nunca me escuchas."* / *"Tú nunca actúas."* |
+| **Distancia (Agotamiento)** | `fatiga_compartida` > 80 | Viñeta oscura, música minimalista. | Silencios incómodos. Caminan separados. El jugador debe forzar una "Escena de Reconciliación". |
+
+---
+
+## 4. RAMIFICACIÓN DEL JUEGO (Branching Narrative)
+
+Las decisiones no son solo "buenas" o "malas" para el entorno; **definen la identidad de la pareja** y desbloquean finales distintos en el Nivel 1.
+
+### 4.1 El Árbol de Decisiones del Nivel 1
+Al final del Nivel 1 (Escena de la Fogata / Cabaña de Callum), el juego evalúa el historial:
+
+*   **Rama A: El Camino de la Razón (Dominio de Liam)**
+    *   *Condición:* El jugador usó la lámpara de Liam en el 80% de las interacciones.
+    *   *Consecuencia:* El jardín está ordenado, pero las flores son escasas. Elara está en estado "Melancolía".
+    *   *Diálogo final:* Liam dice: *"Hemos limpiado el camino."* Elara responde: *"Sí. Pero ya no sé si caminamos juntos o si solo te sigo."*
+*   **Rama B: El Camino de la Emoción (Dominio de Elara)**
+    *   *Condición:* El jugador usó la lámpara de Elara en el 80% de las interacciones.
+    *   *Consecuencia:* El jardín está lleno de flores, pero las zarzas han rebrotado por falta de poda. Liam está en estado "Ansiedad".
+    *   *Diálogo final:* Elara dice: *"Siento que el jardín respira."* Liam responde: *"Respira, sí. Pero se está asfixiando entre la maleza que no te atreviste a cortar."*
+*   **Rama C: El Camino del Oficio (Integración - Final Secreto)**
+    *   *Condición:* `vinculo` > 80 y el jugador alternó las lámparas estratégicamente.
+    *   *Consecuencia:* Se desbloquea la **Sinergia de Doble Lámpara** (Luz Blanca).
+    *   *Diálogo final:* Callum sonríe y sirve dos tazas de té. *"Han descubierto el secreto. La luz no es de uno. Es del espacio entre los dos."*
+
+---
+
+## 5. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 5.1 Máquina de Estados de Ánimo (Mood FSM)
+```javascript
+const relationshipFSM = {
+  state: 'HARMONY', // HARMONY, FRICTION, DISTANCE
+  vinculo: 50,
+  tension: 20,
+  
+  evaluateMood: function() {
+    if (this.vinculo > 70 && this.tension < 30) this.state = 'HARMONY';
+    else if (this.tension > 60) this.state = 'FRICTION';
+    else if (fatiga_compartida > 80) this.state = 'DISTANCE';
+    
+    applyVisualFilter(this.state);
+    loadDialoguePool(this.state);
+  }
+};
+```
+
+### 5.2 Sistema de "Interrupción Pasiva"
+Cuando el jugador está a punto de tomar una decisión crítica (ej. usar un sombrero o una lámpara), el motor debe inyectar una línea de diálogo del personaje pasivo con un *delay* de 0.5 segundos, para que el jugador sienta el "peso" de la decisión.
+*   *Regla:* El personaje pasivo **nunca** debe bloquear la acción del jugador, solo comentar sus consecuencias emocionales.
+
+### 5.3 Guardado de Estado Narrativo
+El `localStorage` debe guardar el historial de decisiones para calcular el `vinculo` al recargar:
+```json
+"narrative_state": {
+  "liam_actions": 12,
+  "elara_actions": 8,
+  "synergy_actions": 3,
+  "current_mood": "FRICTION",
+  "unlocked_branch": "none"
+}
+```
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+1.  ✅ Liam y Elara tienen perfiles psicológicos documentados que guían sus reacciones pasivas.
+2.  ✅ En cada interacción crítica, el personaje no controlado emite una línea de diálogo que refleja su perspectiva (lógica vs. emocional).
+3.  ✅ Las variables `vinculo` y `tension` se actualizan dinámicamente según las elecciones del jugador.
+4.  ✅ El estado de ánimo (Armonía, Fricción, Distancia) altera el filtro visual y la música de fondo.
+5.  ✅ Al final del Nivel 1, existen al menos 3 variantes de diálogo según la rama tomada (Razón, Emoción, Integración).
+6.  ✅ El jugador siente que "cuidar la relación" es tan importante como "cuidar el jardín".
+
+---
+
+## 7. ORDEN DE IMPLEMENTACIÓN
+
+1.  **Día 1:** Definir el JSON de reacciones pasivas para los 5 eventos clave del Nivel 1.
+2.  **Día 2:** Implementar la Máquina de Estados de Ánimo (FSM) y los filtros visuales.
+3.  **Día 3:** Escribir las 3 ramas de diálogo final (Escena de la Fogata/Callum).
+4.  **Día 4:** Integrar el sistema de "Interrupción Pasiva" en el motor de diálogos.
+5.  **Día 5:** Pruebas de balanceo: asegurar que ninguna rama se sienta como un "castigo", sino como una consecuencia narrativa.
+
+---
+
+**¿Aprobado?** Este sistema eleva el juego de un "puzzle de plataformas" a una **experiencia de desarrollo relacional**. El jugador no solo aprende a cuidar su mente (el jardín), sino a integrar sus propias facetas internas (Liam y Elara). Si das el visto bueno, el desarrollador puede empezar por el Día 1.

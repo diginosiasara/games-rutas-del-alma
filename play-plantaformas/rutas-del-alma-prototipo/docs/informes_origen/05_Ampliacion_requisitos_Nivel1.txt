@@ -1,0 +1,152 @@
+Lo importante es que el desarrollador no se limite a incorporar los nuevos sprites: debe adaptar las escenas, las mecánicas y la experiencia de juego para que los personajes, las lámparas, las plantas y los espacios interactúen de forma coherente con la historia.
+
+Te preparo las indicaciones como una ampliación funcional y gráfica del Nivel 1 para que el desarrollador las pueda implementar.
+
+# AMPLIACIÓN DE REQUISITOS GRÁFICOS Y DE EXPERIENCIA DE JUEGO
+
+## Rutas del Alma: El Juego — Nivel 1
+
+### 1. Adaptación gráfica e integración de personajes
+
+El desarrollador deberá adaptar e integrar los nuevos recursos gráficos de Liam, Elara y Aides en el juego.
+
+No se trata únicamente de sustituir las imágenes actuales, sino de conseguir que los personajes tengan animaciones y comportamientos coherentes con las acciones que realizan.
+
+Será necesario contemplar:
+
+- Animaciones de caminar, correr, saltar, detenerse e interactuar.
+- Animaciones específicas para recoger objetos, arrancar zarzas, sembrar, regar y utilizar las lámparas.
+- Transiciones naturales entre estados y movimientos.
+- Diferenciación visual de las acciones de cada personaje.
+- Coherencia de escala, proporciones, posición y línea de suelo entre los personajes y los escenarios.
+
+### 2. Escenarios y plataformas transitables
+
+Es necesario mejorar los escenarios y la experiencia de exploración.
+
+Las plataformas que aparezcan en el escenario deben ser realmente funcionales:
+
+- Liam y Elara deben poder subir a las plataformas mediante saltos.
+- El personaje debe poder aterrizar sobre ellas y caminar por su superficie.
+- Deben existir diferentes alturas y recorridos que permitan explorar el entorno.
+- Las colisiones deben funcionar correctamente para evitar que los personajes atraviesen las plataformas o queden suspendidos.
+- Los elementos del escenario deben permitir una exploración natural, sin limitarse a ser decoración.
+
+### 3. Jardín: ciclo de cultivo y participación de Aides
+
+Aides será la responsable de cuidar el jardín. Esta mecánica debe tener protagonismo y no quedarse en una animación puntual.
+
+El jugador deberá poder repetir las acciones de jardinería en diferentes zonas del jardín.
+
+**Ciclo de trabajo de Aides:**
+
+1. Identificar las zarzas.
+2. Arrancar las zarzas.
+3. Preparar la tierra.
+4. Sembrar las semillas.
+5. Regar las semillas.
+6. Esperar a que aparezcan los primeros brotes.
+7. Observar cómo crecen las plantas.
+8. Recoger las flores cuando hayan florecido.
+
+Este proceso debe poder realizarse varias veces, en diferentes espacios y con distintas plantas.
+
+**Importante:** Aides debe ser quien realice estas acciones. Debe verse gráficamente cómo se acerca a la zona, trabaja la tierra, arranca, siembra, riega y recoge las flores.
+
+El jardín debe evolucionar progresivamente según las acciones realizadas por Aides.
+
+### 4. Mecánica especial: las lámparas mágicas y el crecimiento de las plantas
+
+Esta es una de las nuevas mecánicas que se deben incorporar.
+
+Las lámparas no deben funcionar únicamente como elementos de iluminación. Deben influir directamente en el crecimiento y las características de determinadas plantas.
+
+Se propone que el jugador pueda utilizar:
+
+- **Lámpara de Liam:** su luz dorada y firme puede generar un tipo de crecimiento especial en las plantas.
+- **Lámpara de Elara:** su luz puede provocar una transformación diferente, vinculada a las propiedades mágicas de su lámpara y a las sombras.
+- **Ambas lámparas simultáneamente:** cuando una planta recibe las dos luces, puede desarrollar una característica especial distinta de las anteriores.
+
+El resultado debe ser visible y reconocible en el aspecto de las plantas.
+
+Por tanto, se necesitan diferentes estados gráficos y de crecimiento:
+
+| Iluminación         | Resultado esperado                                                       |
+| ------------------- | ------------------------------------------------------------------------ |
+| Luz de Liam         | Planta con características mágicas propias de su luz dorada              |
+| Luz de Elara        | Planta con características mágicas propias de su luz                     |
+| Luz de Liam y Elara | Planta con una transformación especial por la combinación de ambas luces |
+
+El desarrollador deberá diseñar estas variantes visuales y establecer sus efectos dentro del juego. No deben ser simples cambios de color: interesa que cada variante tenga identidad y utilidad dentro de la experiencia.
+
+La mecánica debe permitir experimentar: el jugador podrá probar qué sucede cuando ilumina una misma planta con una lámpara u otra, o con ambas.
+
+### 5. Escena de Callum y acceso a su casa
+
+Cuando Liam y Elara lleguen a Callum y hablen con él, debe producirse una transición narrativa y jugable.
+
+Aides se quedará con Callum tomando el té. Ambos deberán entrar en la casa de Callum.
+
+La escena debe contemplar:
+
+- Una conversación entre Aides y Callum.
+- La animación de ambos personajes entrando en la vivienda.
+- Una escena interior de la casa.
+- Aides y Callum sentados tomando el té.
+- Una interacción que refleje que Aides permanece con Callum durante esta parte de la historia.
+
+### 6. La casa de Callum: espacio interior explorable
+
+La casa de Callum no debe ser únicamente un fondo o una escena cerrada.
+
+Debe convertirse en un espacio al que los personajes puedan acceder y del que puedan salir.
+
+**Requisitos funcionales:**
+
+- Liam y Elara deben poder entrar en la casa de Callum.
+- Liam y Elara deben poder salir de la casa cuando quieran.
+- Debe existir una transición visual entre el exterior y el interior.
+- La puerta debe funcionar como punto de entrada y salida.
+- El interior debe tener un escenario propio y permitir el movimiento de los personajes.
+- Aides y Callum deben permanecer juntos tomando el té, salvo que la narrativa contemple una interacción posterior.
+
+Es importante que el jugador pueda explorar la casa sin romper la situación narrativa de Aides y Callum.
+
+### 7. Experiencia de juego y coherencia narrativa
+
+Todas estas incorporaciones deben funcionar como parte de una misma experiencia.
+
+El jugador debe poder:
+
+- Explorar el pueblo y sus alrededores.
+- Saltar y subir a las plataformas.
+- Interactuar con los personajes y los elementos del escenario.
+- Incorporar a Aides al equipo.
+- Observar cómo Aides se ocupa del jardín.
+- Repetir las tareas de cultivo.
+- Experimentar con las lámparas de Liam y Elara para descubrir diferentes transformaciones de las plantas.
+- Llegar a la casa de Callum.
+- Ver cómo Aides y Callum entran para tomar el té.
+- Entrar y salir de la casa con Liam y Elara.
+
+### 8. Criterios de aceptación
+
+La ampliación se considerará implementada cuando:
+
+- Los nuevos sprites estén integrados y sus animaciones respondan a las acciones reales.
+- Las plataformas permitan subir, saltar y caminar sobre ellas.
+- Aides pueda arrancar zarzas, sembrar, regar y recoger flores.
+- El ciclo de cultivo pueda repetirse en varias ocasiones.
+- Las lámparas de Liam y Elara produzcan resultados diferenciados en las plantas.
+- La combinación de ambas lámparas genere una tercera variante.
+- Los cambios de las plantas sean visibles y se mantengan al volver a explorar el jardín.
+- Aides y Callum entren en la casa para tomar el té.
+- Liam y Elara puedan entrar y salir de la casa.
+- El interior de la vivienda tenga movimiento e interacción.
+- Las nuevas mecánicas no rompan el guardado, la progresión ni las funcionalidades existentes.
+
+**Objetivo final:** conseguir que el Nivel 1 sea un entorno realmente interactivo, donde los escenarios se puedan explorar, los personajes tengan funciones propias y las decisiones del jugador produzcan cambios visibles en el mundo del juego.
+
+La integración debe preservar la historia y la personalidad de los personajes. No queremos añadir acciones aisladas, sino construir una experiencia en la que explorar, cuidar, experimentar y descubrir formen parte de la narrativa.
+
+**Mi recomendación:** que el desarrollador trate las lámparas como una mecánica de experimentación y descubrimiento, no como un simple efecto visual. Así, el jugador tendrá motivos para volver al jardín, probar distintas combinaciones y descubrir qué tipos de plantas mágicas puede conseguir.

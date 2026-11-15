@@ -1,0 +1,327 @@
+📄 INFORME TÉCNICO — HOJA DE RUTA POST-v6
+Rutas del Alma: El Juego — Estado Consolidado, Deuda Pendiente y Próximos 3 Fases
+Versión de referencia: Prototipo Web v6 · Fecha: 14 nov 2026
+Dirigido a: Autor / Desarrollador Lead · Base: CHANGELOG_v6.md + análisis de index (2/6/7).html
+0. RESUMEN EJECUTIVO
+La v6 cierra dos frentes críticos del GDD: el ecosistema vegetal de producción (Sprint 11, 144 KB) y el Diario móvil (Sprint 27, visualViewport + autoguardado). El prototipo ya es jugable en vertical y horizontal sin el mensaje "Gira el dispositivo" (ese mensaje pertenece a ramas anteriores index (2) e index (6), no a la v6).
+Estado real: tenemos el esqueleto funcional del Nivel 1 con arte de plantas de producción, pero el 70% de los sistemas narrativos (Sprints 16-26) y el 60% del arte de personajes/NPCs/interiores (Sprints 13-18) quedan por integrar.
+Decisión estratégica: no abrir Nivel 2 hasta cerrar el Vertical Slice del Nivel 1. El orden propuesto por el desarrollador (cabaña → puente → NPCs → vínculo) es correcto en espíritu, pero necesita reordenarse por dependencias técnicas.
+1. ESTADO CONSOLIDADO (Qué tenemos en v6)
+Módulo
+Estado
+Versión
+Peso
+Motor base
+✅ Funcional
+HTML5 Canvas + JS puro
+~200 KB
+Movimiento + salto
+✅ Con coyote time + jump buffer
+v6
+—
+Lámparas (Liam/Elara)
+✅ Con medidor y cono de luz
+v6
+—
+Sombreros (Blanco/Rojo)
+✅ Rueda funcional
+v6
+—
+Ciclo de plantas
+✅ Arte final (semilla→marchita)
+v6
+~144 KB
+Zarzas (3 niveles)
+✅ Duda/Resentimiento/Miedo
+v6
+incluido en 144 KB
+Auras de lámpara
+✅ Con respiración y lighter
+v6
+—
+Diario móvil
+✅ visualViewport + autoguardado 3s
+v6
+—
+Orientación
+✅ Vertical + horizontal sin bloqueo
+v6
+—
+Guardado local
+✅ localStorage
+v6
+—
+2. DEUDA PENDIENTE (Qué falta)
+2.1 Deuda Artística (Alta prioridad visual)
+Sprint
+Elemento
+Estado
+Bloquea a
+13/19
+Spritesheets de Liam, Elara, Aides, Callum (animaciones reales)
+❌ No integrado
+Todos los sistemas narrativos
+14
+Interiores cabaña (banco, puerta, chimenea animada)
+❌ No integrado
+Escena del té, bucle Aides-Callum
+14
+VFX (auras Liam/Elara corregidas, destellos, partículas)
+❌ No integrado
+Feedback de lámparas
+14/18
+NPCs: Tomás, Conejo, Consejero, Javier, María, Lucía
+❌ No integrado
+Diálogos ramificados
+18
+Niveles 2-4 (Templo, Circo, Corredor, Custodias)
+❌ No integrado
+Producción completa
+5
+Enredadera puente (mecánica del lago)
+❌ No integrado
+Accesibilidad del lago
+2.2 Deuda de Sistemas Narrativos (Alta prioridad mecánica)
+Sprint
+Sistema
+Dependencia
+Complejidad
+22
+Fatiga / Sueño / Consecuencias
+Base para todos los demás
+🟡 Media
+26
+Ciclo Día/Noche
+Base para emociones y lámparas
+🟡 Media
+8
+Emociones de Aides (FSM)
+Base para jardín dinámico
+🟡 Media
+16
+Vínculo Liam-Elara
+Base para equidad y percusión
+🟠 Alta
+20
+Luces/Sombras + Equidad
+Requiere vínculo
+🟠 Alta
+23
+Percusión por Disonancia
+Requiere luces/sombras
+🟠 Alta
+24
+Trazas de Personalidad
+Requiere percusión
+🔴 Alta
+25
+Capas de Aprendizaje
+Requiere trazas
+🔴 Alta
+17
+Acciones en Equipo
+Requiere vínculo + equidad
+🟠 Alta
+3. HOJA DE RUTA PROPUESTA (3 Fases)
+🎯 FASE 1: Cierre Visual del Nivel 1 (2 semanas)
+Objetivo: que el Nivel 1 se vea y se sienta como "de producción".
+Orden
+Tarea
+Sprint
+Dependencia
+Impacto
+1.1
+Integrar spritesheets de Liam, Elara, Aides, Callum (Sprint 19)
+19
+—
+🔴 Crítico: sin personajes animados, nada más se siente real
+1.2
+Integrar interiores de cabaña (Sprint 14) + banco y puerta pendientes
+14
+1.1
+🔴 Crítico: escena del té es el corazón narrativo
+1.3
+Integrar NPCs: Tomás, Conejo, Consejero (Sprint 14)
+14
+1.1
+🟠 Alto: diálogos del Sauce y Claro
+1.4
+Integrar VFX corregidos (Sprint 14) — aura dorada de Liam, no rosa
+14
+1.1
+🟠 Alto: feedback de lámparas
+1.5
+Implementar enredadera puente (Sprint 5)
+5
+1.1, 1.3
+🟠 Alto: accesibilidad del lago
+1.6
+Integrar partículas fila 5 (polen, humo, mariposas)
+11
+1.1
+🟡 Medio: atmósfera
+Criterio de cierre de Fase 1: El jugador puede caminar desde el jardín hasta la cabaña, ver a Callum y Aides tomando té, cruzar el lago por el puente de enredadera, y hablar con Tomás bajo el Sauce. Todo con arte de producción.
+🎯 FASE 2: Sistemas Narrativos Base (3 semanas)
+Objetivo: que las decisiones del jugador tengan peso emocional y temporal.
+Orden
+Tarea
+Sprint
+Dependencia
+Impacto
+2.1
+Fatiga / Sueño / Consecuencias
+22
+—
+🔴 Base: sin fatiga, no hay necesidad de descanso
+2.2
+Ciclo Día/Noche
+26
+2.1
+🔴 Base: afecta lámparas, jardín, NPCs
+2.3
+Emociones de Aides (FSM 4 estados)
+8
+2.1, 2.2
+🔴 Base: el jardín responde al ánimo
+2.4
+Vínculo Liam-Elara
+16
+2.1
+🟠 Base para equidad y percusión
+2.5
+Luces/Sombras + Equidad
+20
+2.4
+🟠 Base para percusión
+2.6
+Percusión por Disonancia
+23
+2.5
+🟠 Corazón del diseño ontológico
+Criterio de cierre de Fase 2: El jugador siente que cansarse tiene consecuencias, que dormir cambia el mundo, que Aides reacciona a su estado, y que forzar una acción contra la naturaleza del personaje genera fricción narrativa legible.
+🎯 FASE 3: Sistemas Avanzados y Cierre (3 semanas)
+Objetivo: profundidad ontológica y pulido final.
+Orden
+Tarea
+Sprint
+Dependencia
+Impacto
+3.1
+Trazas de Personalidad
+24
+2.6
+🔴 Evolución de personajes
+3.2
+Capas de Aprendizaje
+25
+3.1
+🔴 Progresión no lineal
+3.3
+Acciones en Equipo (con equidad)
+17
+2.5, 2.6
+🟠 Cooperación real
+3.4
+Dashboard de Optimización
+20
+2.5, 3.1
+🟡 UX de decisión
+3.5
+Diálogos ramificados Callum/Aides/Liam-Elara
+12-16
+2.4, 3.1
+🟡 Profundidad narrativa
+3.6
+Pulido: audio, accesibilidad, performance
+21
+Todo
+🟡 Calidad final
+Criterio de cierre de Fase 3 (Vertical Slice completo): El jugador termina el Nivel 1 habiendo experimentado las 3 ramas finales (Razón/Emoción/Integración), con el jardín, los personajes y su propia relación transformados por sus decisiones.
+4. DECISIÓN SOBRE LA PROPUESTA DEL DESARROLLADOR
+El desarrollador propuso: cabaña → puente → NPCs → vínculo.
+Mi ajuste: ese orden es correcto en espíritu, pero invierte dos dependencias críticas:
+Propuesta original
+Ajuste recomendado
+Razón
+Cabaña primero
+Spritesheets de personajes primero
+La cabaña necesita a Callum y Aides animados para tener sentido. Sin ellos, es un fondo vacío.
+Puente antes que NPCs
+NPCs antes que puente
+El puente requiere a Aides (Sprint 5: "Aides siembra la enredadera"). Sin Aides animada, el puente no tiene narrativa.
+Vínculo al final
+Vínculo en Fase 2, no al final
+El vínculo es base para percusión, equidad y capas. Dejarlo para el final bloquea 4 sprints posteriores.
+Orden corregido:
+Spritesheets de personajes (1.1)
+Interiores de cabaña + banco/puerta (1.2)
+NPCs: Tomás, Conejo, Consejero (1.3)
+VFX corregidos (1.4)
+Enredadera puente (1.5)
+Partículas (1.6)
+Fatiga (2.1) → Día/Noche (2.2) → Emociones Aides (2.3) → Vínculo (2.4) → ...
+5. ACLARACIÓN CRÍTICA: EL MENSAJE "GIRA EL DISPOSITIVO"
+El CHANGELOG dice: "mi versión nunca lo tuvo". Correcto para la v6. Pero los archivos index (2).html y index (6).html sí lo tienen (línea: 📖↻Gira el dispositivo en horizontal para jugar.).
+Acción requerida:
+Si index (2) e index (6) son ramas obsoletas, archivarlas o eliminarlas para evitar confusión.
+Si son versiones alternativas que deben mantenerse, aplicar el fix de visualViewport y eliminar el mensaje en esas ramas también.
+Documentar en el README cuál es la versión canónica (actualmente: v6 / index.html).
+6. RIESGOS Y MITIGACIÓN
+Riesgo
+Probabilidad
+Impacto
+Mitigación
+Spritesheets de personajes inconsistentes con plantas (escala, estilo)
+Media
+Alto
+Validar anchor points y paleta antes de integrar (Día 1 de Fase 1)
+Sistemas narrativos (16-26) se vuelven inmanejables juntos
+Alta
+Alto
+Implementar uno por uno, con tests de integración tras cada sprint
+Peso total supera 4 MB al integrar niveles 2-4
+Media
+Alto
+WebP + lazy loading + texture atlases (ya planificado)
+El jugador no entiende la percusión (Sprint 23)
+Media
+Medio
+Semáforo de reconocibilidad + confirmación antes de forzar
+Fatiga frustrar al jugador
+Media
+Medio
+Modo Historia reduce penalizaciones; mensaje claro: "descansa en la cabaña"
+7. CRITERIOS DE CIERRE DEL VERTICAL SLICE (Definition of Done Global)
+El Vertical Slice del Nivel 1 se considera completo cuando:
+✅ Visual: Todos los personajes (Liam, Elara, Aides, Callum, Tomás, Conejo, Consejero) tienen spritesheets animados.
+✅ Escenarios: Jardín, cabaña (interior), Sauce del Reflejo, lago con puente, Claro del Consejero.
+✅ Mecánicas: Lámparas, sombreros (6), jardín (ciclo completo), diálogo empático, acciones en equipo.
+✅ Sistemas narrativos: Fatiga, día/noche, emociones de Aides, vínculo, luces/sombras, percusión, trazas, capas.
+✅ Narrativa ramificada: 3 finales del Nivel 1 (Razón/Emoción/Integración).
+✅ Diario: Entrada final con reflexiones del jugador, guardado local.
+✅ Accesibilidad: Modo Historia, daltónico, texto grande, reduced-motion.
+✅ Performance: < 4 MB, < 3s de carga en 4G, ≥ 50 FPS en móvil gama media.
+✅ Multi-dispositivo: Funciona en vertical y horizontal sin mensaje de rotación.
+8. PRÓXIMO PASO INMEDIATO
+Instrucción para el desarrollador:
+"Empieza por la Tarea 1.1: integrar los spritesheets de Liam, Elara, Aides y Callum del Sprint 19. Antes de integrarlos, valida: (a) anchor points en la base de los pies, (b) sin halos blancos, (c) escala coherente con las plantas ya integradas (~64x64 px en escena). Entrega un build donde los 4 personajes caminen por el jardín con animación real de 6 frames. No toques nada más hasta que esto esté validado visualmente."
+9. ENTREGABLES ESPERADOS EN 7 DÍAS
+Día
+Entregable
+Criterio de aceptación
+1-2
+Spritesheets de 4 personajes integrados
+Caminata de 6 frames fluida, sin "bailarín" vertical
+3-4
+Interiores de cabaña + banco + puerta
+Escena del té jugable con Callum y Aides sentados
+5
+NPCs Tomás y Conejo integrados
+Tomás bajo el Sauce con 4 poses, Conejo guía en el Claro
+6
+VFX corregidos (aura dorada de Liam)
+Lámparas con feedback visual distinto y accesible
+7
+Build v7 publicado + CHANGELOG actualizado
+Todas las pruebas automáticas pasan, sin errores de consola
+¿Aprobado? Si das el visto bueno, el desarrollador arranca por la Tarea 1.1 (spritesheets de personajes). ¿Quieres que prepare el checklist de validación de spritesheets (anchor points, escala, halos) o el JSON de configuración de animaciones para que el desarrollador los use como referencia el Día 1?

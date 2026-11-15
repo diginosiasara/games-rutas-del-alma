@@ -1,0 +1,61 @@
+📄 INFORME DE FEEDBACK Y REQUERIMIENTOS TÉCNICOS
+Proyecto: Rutas del Alma: El Juego
+Versión evaluada: Prototipo Web v2 (HTML5/Canvas)
+Fecha: Noviembre 2026
+Dirigido a: Equipo de Desarrollo / Desarrollador Lead
+1. RESUMEN EJECUTIVO
+Se ha revisado la Versión 2 del prototipo. El salto cualitativo en la estética es notable y muy positivo: la eliminación del borde blanco en personajes, la implementación de fondos generados por código (cielo dinámico, neblina, partículas) y el nuevo HUD de pergamino acercan el juego a la atmósfera "cálida, onírica y serena" descrita en el GDD.
+Sin embargo, para avanzar a la Fase 2 (Vertical Slice), es imperativo resolver las inconsistencias visuales entre los assets estáticos (que aún conservan halos blancos de las hojas de pegatinas) y el nuevo entorno, además de migrar de "animación simulada" a sprite sheets reales y validar el rendimiento en dispositivos móviles físicos.
+2. PUNTOS FUERTES (Mantener y potenciar)
+Atmósfera dinámica: El ciclo de cielo (mañana, atardecer, noche) y las partículas (polen, luciérnagas) funcionan excelente para el tono del juego.
+Iluminación: Los rayos de sol, la viñeta y los destellos de la lámpara añaden la profundidad que faltaba.
+HUD y Diálogos: El marco de pergamino y la inclusión de retratos en los diálogos son un gran acierto de UX.
+Peso del archivo: Mantenerse en ~870 KB es un logro técnico excelente para web.
+3. ÁREAS CRÍTICAS DE MEJORA (Acciones requeridas)
+🎨 A. Arte y Estética (Prioridad ALTA)
+Limpieza de Assets Estáticos: La cabaña de Callum y el templo lejano aún muestran un "halo blanco" o bordes irregulares porque se recortaron de la hoja de pegatinas original.
+Acción: Se deben limpiar estos assets en un editor de imágenes (eliminar el fondo blanco residual) o redibujarlos para que se integren sin bordes en el nuevo estilo.
+Corrección de Anomalías Visuales:
+Las "líneas de nieve" en las montañas se ven artificiales. Suavizar la transición o cambiar el estilo a neblina de montaña.
+La copa del Sauce del Reflejo "flota". Asegurar que el tronco se ancle visualmente al suelo con raíces o hierba que cubra la base.
+Transición a Sprite Sheets Reales: La animación de paso simulada (inclinación de torso/piernas) es un buen parche para el prototipo, pero para el Vertical Slice necesitamos animaciones reales (Idle, Run, Jump) hechas en Aseprite o similar, manteniendo la paleta de colores actual.
+💻 B. Interfaz de Usuario (UI) y Experiencia (UX)
+Superposición de Texto: El texto del HUD está pisando las "pastillas" o iconos de flores/malezas.
+Acción: Reajustar el padding y la jerarquía visual del HUD para que no haya solapamiento en ninguna resolución.
+Legibilidad en Diálogos: Asegurar que el contraste entre el texto y el fondo del pergamino sea óptimo, especialmente en pantallas de móviles bajo luz solar. El efecto typewriter debe tener una velocidad configurable (o un clic para saltar).
+Controles Táctiles: Verificar que el joystick virtual sea verdaderamente "flotante" (aparezca donde se pone el dedo) y que los botones de acción (Lámpara, Salto, Sombreros) tengan un tamaño mínimo de 48x48px y sean semitransparentes para no tapar al personaje.
+⚙️ C. Técnicos y Rendimiento (Prioridad ALTA para Fase 2)
+Pruebas en Dispositivo Real: El informe menciona que no se ha probado en móvil real.
+Acción obligatoria: Probar la build en al menos un Android de gama media (ej. Samsung A-series) y un iPhone. Medir: FPS (objetivo 60fps estables), respuesta táctil (latencia <100ms) y calentamiento del dispositivo.
+Optimización de Renderizado: A medida que añadamos más elementos, dibujar todo por código puede ser costoso.
+Acción: Preparar la arquitectura para usar Tilemaps (mapas de mosaicos) para el suelo y la hierba, y Sprite Sheets en lugar de imágenes sueltas, para reducir las llamadas de dibujo (draw calls) en el Canvas.
+Gestión de Estado: Confirmar que el localStorage guarda correctamente el progreso (flores recolectadas, última vela alcanzada) incluso si se cierra y reabre el navegador.
+4. HOJA DE RUTA PARA LA PRÓXIMA ITERACIÓN (Sprint 3)
+Para la próxima entrega, el desarrollador debe enfocarse en estos entregables concretos:
+Prioridad
+Tarea
+Criterio de Aceptación
+1
+Limpieza de Assets
+Cabaña, templo y elementos del entorno sin halos blancos ni bordes irregulares.
+2
+Corrección de UI
+Cero superposición de texto en el HUD. Diálogos legibles al 100% en modo móvil vertical y horizontal.
+3
+Animación de Personajes
+Implementar las primeras sprite sheets reales (proporcionadas por el autor/ilustrador) para el ciclo de caminar de Liam/Elara.
+4
+Test de Rendimiento Móvil
+Informe breve con captura de FPS y sensación de los controles táctiles en un dispositivo físico.
+5
+Refinamiento del Agua
+El lago debe tener un efecto visual de reflejo o ondulación sutil, no un color plano.
+5. COMPROMISOS DEL AUTOR (Lo que yo te entregaré)
+Para facilitar tu trabajo y mejorar la estética, yo me comprometo a proporcionar en los próximos 7 días:
+Sprite Sheets limpios: Personajes principales (Liam, Elara) en formato PNG con transparencia real, en ciclos de 4-8 frames (Idle, Walk, Jump), sin el borde blanco de las pegatinas originales.
+Assets de entorno aislados: Versiones limpias (sin fondo) de la cabaña, el templo y el Sauce del Reflejo, o las coordenadas exactas para que puedas generar versiones vectoriales/código que encajen perfectamente.
+Iconografía UI: Archivos PNG optimizados para las flores, malezas, velas y la rueda de sombreros, para que no tengas que dibujarlos por código.
+6. COMENTARIOS FINALES
+El prototipo v2 demuestra que la visión del juego es viable y atractiva en HTML5. La decisión de usar Canvas/JS en lugar de Godot para esta fase ha sido acertada por la ligereza. Ahora, el foco debe desplazarse de "hacer que funcione" a "hacer que se sienta mágico y profesional", puliendo las uniones entre el arte y el código.
+Quedo a la espera de la confirmación de este plan y del reporte de pruebas en móvil.
+Atentamente,

@@ -1,0 +1,98 @@
+# 📄 INFORME TÉCNICO — ADENDA AL SPRINT 8/9
+## *Rutas del Alma: El Juego* — Sistema de Resonancia Emocional de Callum (El Aura del Jardín)
+
+**Objetivo:** Extender el sistema de emociones a **Callum**. A diferencia de Aides (cuya emoción es *personal y reactiva*), la emoción de Callum es **ambiental y reflectante**. Callum es el sabio que observa; su estado de ánimo y su "Aura" cambian según la **salud global y la atmósfera del Jardín de Aides**. 
+
+Esto refuerza la metáfora del libro: *el sabio no vive aislado; su sabiduría respira junto con el entorno que intenta proteger.*
+
+---
+
+## 1. LOS 3 ESTADOS DE "AURA" DE CALLUM
+
+Callum no tiene "berrinches" ni bloqueos emocionales como Aides. Su estado es un **clima interno** que se manifiesta como un aura visual alrededor de su cabaña y de su propio personaje.
+
+| Estado de Callum | Condición del Jardín (Trigger) | Aura Visual y Ambiental | Efecto en el Gameplay |
+| :--- | :--- | :--- | :--- |
+| **🌟 Sabiduría Serena (Armonía)** | Salud del jardín > 70%. Pocas zarzas, flores floreciendo. | **Aura Dorada/Cálida.** Rayos de sol filtrados en la cabaña. Callum sonríe levemente, el vapor de su té sube en espirales perfectas. Música: capas de cuerdas suaves. | **Efecto "Té Potenciado":** El té de Callum restaura un 50% más de Luz/Calma. Las lecciones cuestan un 20% menos de recursos. |
+| **🍂 Preocupación Vigilante (Inquietud)** | Salud del jardín 40%-70%. Hay más de 3 zarzas Nivel 2 o plantas a punto de marchitarse. | **Aura Grisácea/Viento.** Hojas secas giran alrededor de la cabaña. Callum mira hacia el jardín con el ceño levemente fruncido, sostiene su taza con más fuerza. Música: un tono de viento o madera grave. | **Efecto "Lección Urgente":** Callum sugiere lecciones específicas para el problema actual. El té solo restaura lo básico. |
+| **🌧️ Tristeza Reflexiva (Melancolía)** | Salud del jardín < 40%. Muchas zarzas Nivel 3, plantas marchitas o muertas. | **Aura Azulada/Bruma.** La luz de la cabaña es tenue, hay una neblina baja en el suelo. Callum está sentado en silencio, mirando su taza vacía. Música: silencio o notas de piano muy espaciadas. | **Efecto "Sabiduría Cerrada":** Callum se niega a enseñar lecciones avanzadas hasta que el jugador ayude a limpiar el jardín. Solo ofrece consuelo (recupera un poco de Pétalos). |
+
+---
+
+## 2. CÓMO SE CALCULA EL "AURA" DEL JARDÍN
+
+El motor del juego debe evaluar el estado del jardín cada vez que el jugador se acerca a la cabaña de Callum (radio de 200px).
+
+```javascript
+function calcularAuraCallum() {
+  let salud = gardenData.salud_global; // 0 a 100
+  let zarzas_peligrosas = countThornsByLevel([2, 3]);
+  
+  if (salud > 70 && zarzas_peligrosas === 0) {
+    return "SABIDURIA_SERENA";
+  } else if (salud < 40 || zarzas_peligrosas >= 3) {
+    return "TRISTEZA_REFLEXIVA";
+  } else {
+    return "PREOCUPACION_VIGILANTE";
+  }
+}
+```
+
+---
+
+## 3. RAMIFICACIÓN DE DIÁLOGO SEGÚN EL AURA
+
+Cuando el jugador se sienta con Callum, **las opciones de diálogo y las respuestas de Callum cambian** según su Aura actual.
+
+### Escenario: El jugador llega a la cabaña y saluda.
+
+#### Si el Aura es "SABIDURÍA SERENA" 🌟
+*   **Callum:** *"El aire huele a tierra fértil hoy, amigo mío. Aides ha hecho un buen trabajo, y tú también. ¿Qué te trae por aquí? ¿A celebrar o a aprender?"*
+*   **Opción del jugador:** *"Quiero aprender una nueva lección."*
+*   **Respuesta:** Callum asiente con una sonrisa. *"La mente está clara para recibir. Dime, ¿qué semilla quieres plantar en tu entendimiento?"* (Se abre el menú de inversiones con descuento).
+
+#### Si el Aura es "PREOCUPACIÓN VIGILANTE" 🍂
+*   **Callum:** *"Siento el viento del norte en las hojas... El jardín está inquieto. Hay raíces que duelen y no han sido atendidas."*
+*   **Opción del jugador:** *"Solo venía a tomar un té y descansar."*
+*   **Respuesta:** Callum suspira y sirve la taza. *"Bebe. Pero no ignores el viento. A veces, descansar es también prepararse para la tormenta. ¿Seguro que no quieres que revisemos qué está fallando?"* (Callum sugiere ir al jardín antes de enseñar).
+
+#### Si el Aura es "TRISTEZA REFLEXIVA" 🌧️
+*   **Callum:** *(Sin levantar la vista de la taza)* *"Hoy el silencio del jardín es muy pesado. Hay demasiado olvido en la tierra."*
+*   **Opción del jugador:** *"Enséñame la Lección de la Cosecha a Tiempo."*
+*   **Respuesta:** Callum niega lentamente. *"No puedo enseñarte a cosechar cuando no hay nada que salvar. Primero, ve con Aides. Arrancad juntos lo que duele. Cuando el jardín respire, yo volveré a hablar."* (Bloqueo suave de mecánicas hasta mejorar el entorno).
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS Y VISUALES
+
+### 4.1 Sistema de Partículas y Filtros (El "Aura")
+Para que el jugador *sienta* el cambio sin que sea intrusivo:
+*   **Serenidad:** Añadir un filtro `CanvasModulate` con un tinte dorado muy sutil (`#FFD700` al 10% de opacidad) en la zona de la cabaña. Partículas de "polen brillante" flotando lentamente.
+*   **Preocupación:** Partículas de "hojas secas" moviéndose de izquierda a derecha (viento). Filtro de contraste ligeramente aumentado.
+*   **Tristeza:** Filtro azulado/grisáceo (`#4A5D75` al 15%). Partículas de "bruma" o "lluvia muy fina" en el fondo. La luz de la ventana de la cabaña parpadea más lento.
+
+### 4.2 Animaciones de Callum
+Callum necesita 3 variaciones de su animación `idle_sitting` (sentado tomando té):
+1.  **Sereno:** Respiración lenta, leve sonrisa, vapor del té constante.
+2.  **Preocupado:** Mira hacia la izquierda (hacia el jardín) cada 5 segundos, ceño ligeramente tenso.
+3.  **Triste:** Cabeza ligeramente inclinada hacia la taza, sin sonrisa, respiración más profunda y lenta.
+
+### 4.3 Integración con el Sistema de Aides
+El estado de Callum **no debe castigar al jugador**, sino **guiarlo**. 
+*   Si Callum está en "Tristeza Reflexiva", el juego debe marcar en el HUD del jugador una pista sutil: *"El sabio necesita ver el jardín florecer para compartir su sabiduría"*.
+*   Si el jugador usa la **Lámpara de Elara** sobre Callum cuando está triste, Elara puede decir: *"No es tu tristeza, Callum. Es el peso del jardín. Vamos a aliviarlo juntos."* Esto le da al jugador una herramienta para "romper" el bloqueo emocional mediante la empatía.
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ El estado emocional de Callum cambia dinámicamente según la salud del jardín y la cantidad de zarzas.
+*   ✅ El entorno visual (luces, partículas, filtros) alrededor de la cabaña refleja el estado de Callum.
+*   ✅ Los diálogos de Callum tienen al menos 3 ramas distintas según su estado.
+*   ✅ El estado de Callum afecta el coste de las lecciones y la eficacia del té.
+*   ✅ La Lámpara de Elara puede interactuar con Callum para ofrecer consuelo si está en estado de Tristeza.
+*   ✅ No hay errores de consola al cambiar de estado de Aura.
+
+---
+
+**¿Aprobado?** Esta capa añade una profundidad narrativa enorme: el jugador entiende que **no puede aislarse a "comprar mejoras" con el sabio si ignora el ecosistema que lo rodea**. Todo está conectado. Si das el visto bueno, el desarrollador puede integrar esto junto con las emociones de Aides en el mismo Sprint.

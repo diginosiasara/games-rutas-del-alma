@@ -1,0 +1,94 @@
+# 📊 RESUMEN TÉCNICO Y ESTRATÉGICO: RUTAS DEL ALMA - EL JUEGO
+**Estado del Proyecto · Noviembre 2026**
+
+Este documento consolida todas las decisiones técnicas, narrativas y de diseño tomadas hasta la fecha, establece el punto exacto en el que nos encontramos y traza la hoja de ruta hacia el lanzamiento.
+
+---
+
+## 1. DECISIONES CLAVE TOMADAS (El ADN del Juego)
+
+### 🛠️ A. Arquitectura y Tecnología
+*   **Motor para Prototipo:** HTML5 Canvas + JavaScript puro (Plan B del GDD). Permite iteración rápida, cero instalación y validación de mecánicas en navegador.
+*   **Motor para Producción (Futuro):** Godot 4.x (WebAssembly) o mantener JS optimizado, dependiendo del peso final de los *Sprite Sheets*.
+*   **Gestión de Assets:** Transición de ilustraciones estáticas con borde blanco a **Sprite Sheets limpios** (sin fondo, línea base alineada) para animaciones reales (Idle, Walk, Jump, Acciones).
+*   **Guardado:** `localStorage` para el prototipo (persistencia de estado del jardín, emociones, diálogos y recursos).
+
+### 🎮 B. Mecánicas Núcleo (Gameplay)
+*   **Pilar Cero Combate:** El conflicto se resuelve **escuchando, iluminando y cultivando**. No hay "Game Over" punitivo, solo retroalimentación narrativa.
+*   **Sistema de Doble Lámpara (Sinergia):**
+    *   *Liam (Dorada):* Hechos, acción, disipa ansiedad, revela raíces físicas.
+    *   *Elara (Violeta):* Emoción, empatía, disipa melancolía, revela cargas emocionales.
+    *   *Sinergia (Blanca):* Doble enfoque para catarsis o revelaciones profundas.
+*   **Los 6 Sombreros (De Bono):** No son solo objetos, son **filtros de percepción** que alteran la UI, el entorno y las opciones de diálogo. Se desbloquean progresivamente por zonas.
+*   **Economía Narrativa:**
+    *   *Grano de Luz:* Hechos, acción, jardinería exitosa.
+    *   *Pétalos de Eco:* Empatía, escucha, resolución de sombras.
+    *   *Inversión:* Los recursos se gastan en "Lecciones de Callum" con retorno de inversión (ROI) pasivo.
+
+### 🌱 C. Ecosistema y NPCs Vivos
+*   **Aides (El Espejo del Jugador):** No es un NPC estático. Tiene **Máquina de Estados Emocionales** (Serenidad, Ansiedad, Melancolía, Alegría) que afecta directamente la velocidad de crecimiento y rebrote de zarzas en el jardín. Tiene ciclo de trabajo/descanso y sistema de "Llamada remota".
+*   **Callum (El Mentor Ambiental):** Su estado de ánimo es un **Aura** (Serena, Vigilante, Triste) dictada por la salud global del jardín. Condiciona el acceso a lecciones y la eficacia del té.
+*   **El Consejero de Sombreros:** Actúa como **tutorial ambiental y sistema de pistas** (Stuck Detection). No interactúa directamente, susurra consejos según el sombrero necesario.
+*   **Ecología de la Negligencia:** Si el jugador ignora el jardín, las flores mueren y renacen como **Zarzas de Nivel Superior** (que requieren sinergia de luces para ser arrancadas).
+
+### 🗣️ D. Narrativa y Diálogos
+*   **Ramificación con Consecuencias:** Las conversaciones (con Aides, Callum, entre Liam y Elara) alteran variables ocultas (`vinculo_almico`, `callum_respeto`, `aides_confianza`).
+*   **Liam y Elara:** Tienen su propio árbol de diálogo. Sus decisiones definen el "Equilibrio de Luz" y desbloquean finales alternativos (El Mártir, La Mártir, El Oficio de la Luz).
+
+### 🚫 E. Delimitación de Alcance (Scope)
+*   **Clasificación:** PEGI 12.
+*   **Exclusión Temporal:** La *Casa de los Placeres* y sus tramas adultas (+18) quedan **fuera del alcance** del juego base para mantener el tono de fábula onírica y la accesibilidad web.
+
+---
+
+## 2. DÓNDE ESTAMOS (Estado Actual)
+
+### ✅ Lo que ya funciona (Prototipo v6/v7)
+1.  **Motor de Plataformas:** Movimiento fluido, *Coyote Time*, *Jump Buffer*, caída sin daño (teletransporte a velas).
+2.  **Sistema de Iluminación:** Lámparas de Liam y Elara funcionales con medidores de energía.
+3.  **Ciclo Básico de Jardín:** Arrancar zarzas, sembrar, regar y cosechar flores.
+4.  **Sistema de Diálogo:** Motor JSON funcional con opciones de Reflejar/Aconsejar/Juzgar.
+5.  **UI Base:** HUD de pergamino, rueda de sombreros (Blanco/Rojo), marcadores de recursos.
+6.  **Atmósfera:** Cielos dinámicos, partículas (polen, luciérnagas), reflejos en el agua.
+
+### ⚠️ Deuda Técnica y Visual Pendiente
+1.  **Assets de Personajes:** Tenemos 168 PNG estáticos, pero **faltan los Sprite Sheets** animados (Aides, Liam, Elara, Callum).
+2.  **Legibilidad:** Problemas de codificación UTF-8 (tildes rotas) y contraste en móviles.
+3.  **Accesibilidad del Lago:** Las plataformas ocultas son frustrantes en móvil; requiere el "Puente de Enredadera" y mejor *feedback* visual.
+4.  **Integración de Sistemas Avanzados:** Las máquinas de estados emocionales de Aides, el Aura de Callum y la inversión en lecciones están **diseñados en papel (Sprints 4-10) pero no codificados**.
+
+---
+
+## 3. HACIA DÓNDE VAMOS (Roadmap y Próximos Pasos)
+
+### 🎯 FASE 1: Cierre del Nivel 1 (Sprints 4 al 10)
+*Objetivo: Que el "Valle y el Jardín de la Mente" sea una experiencia completa, pulida y emocionalmente resonante.*
+1.  **Integración de Emociones:** Codificar la FSM de Aides y su impacto en el entorno.
+2.  **Sistema de Inversión:** Implementar el menú de Callum y el ROI de las lecciones.
+3.  **Mejora de UX/UI:** Corregir UTF-8, implementar el "Controlador Visual" de Aides y los susurros del Consejero.
+4.  **Animación:** Reemplazar el "movimiento simulado" por los primeros *Sprite Sheets* reales (prioridad: Aides en el jardín).
+5.  **Definition of Done (Nivel 1):** El jugador puede completar el ciclo de negligencia, invertir en una lección, gestionar las emociones de Aides y cruzar el lago sin frustración.
+
+### 🚀 FASE 2: Vertical Slice y Nivel 2
+*Objetivo: Expandir el mundo y validar la progresión.*
+1.  **Nivel 2 (El Templo y el Pueblo Sumergido):** Introducir mecánicas de gravedad alterada (agua), la Brújula Dorada y las Custodias.
+2.  **Desbloqueo de Sombreros:** Implementar Negro, Amarillo y Verde.
+3.  **Optimización Web:** Comprimir assets (WebP), implementar *Tilemaps* y asegurar 60 FPS en móviles gama media.
+
+### 🌍 FASE 3: Producción y Lanzamiento
+1.  **Niveles 3 y 4:** El Circo de los Nómadas y El Corredor del Alba (Cooperativo local Liam/Elara).
+2.  **Audio:** Integrar bandas sonoras dinámicas por capas (según el sombrero activo) y SFX de ambiente.
+3.  **Publicación:** Lanzamiento en **Itch.io** y portales de juegos narrativos independientes.
+4.  **Material Transmedia:** Uso de los mapas visuales y "sticker sheets" para campañas en redes sociales y cuadernos de práctica para lectores.
+
+---
+
+## 💡 CONCLUSIÓN DEL DIRECTOR DE PROYECTO
+
+Hemos pasado de una idea abstracta a un **sistema de juego coherente y profundamente alineado con la filosofía del libro**. 
+
+La gran victoria de este proyecto es que **la mecánica ES el mensaje**: el jugador no solo lee sobre la importancia de escuchar o cuidar la mente; *lo experimenta* a través de las lámparas, el jardín de Aides y los sombreros. 
+
+**El siguiente paso inmediato** es dar luz verde al desarrollador para que comience a codificar la **Máquina de Estados Emocionales de Aides (Sprint 8)** y la **Integración de las Lámparas en NPCs (Sprint 9)**, mientras el autor prepara los *Sprite Sheets* limpios en Aseprite.
+
+¿Procedemos a generar el **JSON de la Máquina de Estados de Aides** para que el desarrollador pueda empezar a codificar hoy mismo?

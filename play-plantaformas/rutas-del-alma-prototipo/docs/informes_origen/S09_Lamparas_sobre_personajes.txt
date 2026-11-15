@@ -1,0 +1,132 @@
+# 📄 INFORME TÉCNICO — SPRINT 9
+## *Rutas del Alma: El Juego* — Dinámica de las Lámparas sobre los Personajes (Interacción y Resonancia)
+**Versión de referencia:** Prototipo Web v8 · **Base narrativa:** Cap. 3 (La Luz Interior) y Cap. 14 (La revelación del Sauce del Reflejo) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+En *Rutas del Alma*, las lámparas no son simples linternas para ver en la oscuridad; son **herramientas de intervención psicológica y emocional**. Cuando el jugador enfoca la luz de Liam o de Elara sobre un personaje (NPC o el propio compañero), no solo lo "ilumina", sino que **altera su estado interno, desbloquea nuevas ramas de diálogo y modifica su comportamiento en el entorno**. 
+
+Esta mecánica materializa el pilar central del libro: *la atención que prestamos a los demás (y a nosotros mismos) tiene el poder de transformarlos*.
+
+---
+
+## 1. LA LÁMPARA DE LIAM (Luz Dorada / Claridad y Hechos)
+**Efecto narrativo:** Aporta estructura, disipa la confusión mental, reduce la ansiedad y revela la "verdad objetiva" del personaje.
+
+### 1.1 Efectos según el estado del personaje:
+
+| Personaje | Estado Inicial | Efecto al ser iluminado por Liam | Consecuencia en Gameplay |
+| :--- | :--- | :--- | :--- |
+| **Aides** | **Ansiedad / Prisa** (Se mueve erráticamente, tira el agua) | La luz dorada "ordena" sus pensamientos. Aides se detiene, respira hondo y su aura grisácea se vuelve dorada. | Reduce `carga_mental` en 30 puntos. Desbloquea la opción de diálogo: *"Vamos a hacer una lista de prioridades"*. |
+| **Callum** | **Preocupación Vigilante** (Ceño fruncido, mira al jardín) | La luz le recuerda que hay hechos concretos que se pueden solucionar. Su postura se endereza. | Cambia su Aura a "Sabiduría Serena" temporalmente (5 min). Reduce el coste de las lecciones en un 10%. |
+| **NPCs (Tomás, Javier)** | **Confundidos por Rumores** (Tienen un icono de "niebla" sobre la cabeza) | La luz disipa la niebla de los rumores sobre ellos. | Desbloquea opciones de diálogo basadas en **Hechos (Sombrero Blanco)**. Permiten avanzar en misiones secundarias. |
+| **Elara (Compañera)** | **Desbordada** (Medidor de calma bajo) | Liam ilumina a Elara para recordarle su propio propósito. | Recupera 20 puntos de Calma instantáneamente. |
+
+### 1.2 Feedback Sensorial (Liam)
+*   **Visual:** El personaje recibe un *rim light* (borde iluminado) dorado. Las partículas de "polvo/ansiedad" a su alrededor se disipan.
+*   **Auditivo:** El sonido ambiente de "viento o murmullos" se silencia abruptamente, replacedo por un tono de cristal firme y cálido.
+
+---
+
+## 2. LA LÁMPARA DE ELARA (Luz Violeta / Empatía y Emoción)
+**Efecto narrativo:** Aporta contención, valida el dolor, reduce la tristeza y revela la "verdad emocional" del personaje.
+
+### 2.1 Efectos según el estado del personaje:
+
+| Personaje | Estado Inicial | Efecto al ser iluminado por Elara | Consecuencia en Gameplay |
+| :--- | :--- | :--- | :--- |
+| **Aides** | **Melancolía / Tristeza** (Sentada en el suelo, no trabaja) | La luz violeta actúa como un "abrazo". Aides levanta la vista, sus ojos brillan y el entorno se suaviza. | Cambia su estado a "Serenidad". Recupera 40 puntos de `calma`. Desbloquea el diálogo de vulnerabilidad. |
+| **Callum** | **Tristeza Reflexiva** (Mirando la taza vacía, neblina azul) | La luz le dice "no estás solo en este peso". La neblina azul se disipa. | Desbloquea la opción de diálogo: *"No es tu tristeza, Callum. Es el peso del jardín"*. Recupera 15 Pétalos de Eco. |
+| **NPCs (Tomás, Javier)** | **A la defensiva / Cerrados** (Brazos cruzados, icono de "candado") | La luz ablanda su postura defensiva. Bajan la guardia. | Desbloquea opciones de diálogo basadas en **Emociones (Sombrero Rojo)**. Revelan secretos o miedos profundos. |
+| **Liam (Compañero)** | **Dudando de sí mismo** (Sombra personal activa) | Elara ilumina a Liam para validar su esfuerzo. | La sombra personal de Liam se reduce de tamaño. Recupera 20 puntos de Luz. |
+
+### 2.2 Feedback Sensorial (Elara)
+*   **Visual:** El personaje se envuelve en un *glow* (resplandor) violeta suave. Su animación de "respiración" se vuelve más lenta y pausada.
+*   **Auditivo:** Aparece un suave sonido de arpa o cuerdas graves, y los murmullos del entorno se transforman en susurros comprensivos.
+
+---
+
+## 3. LA SINERGIA: DOBLE ENFOQUE (Luz Blanca / Resonancia)
+**Efecto narrativo:** Integración de razón y emoción. Ocurre cuando el jugador (o la IA del compañero) mantiene **ambas lámparas enfocadas en el mismo personaje** durante más de 3 segundos.
+
+### 3.1 Efectos de la Resonancia:
+*   **En Aides:** Si Aides está en un estado crítico (ej. fatiga > 90% o bloqueo total), la doble luz provoca un **"Reinicio Emocional"**. Aides llora brevemente (animación de catarsis) y luego se levanta con una determinación nueva. **Reinicia todos sus contadores a valores óptimos (50/50)**.
+*   **En Callum:** Desbloquea el **"Diálogo de la Verdad Oculta"**. Callum revela un secreto fundamental sobre el pueblo sumergido o sobre el origen de las Custodias, otorgando al jugador un objeto de lore único (ej. *El Pergamino de la Transmutación*).
+*   **En el Jugador (Liam/Elara):** Si el jugador se ilumina a sí mismo (cambiando de personaje y enfocando al otro), obtiene el buff **"Clarividencia"** por 2 minutos: ve todas las interacciones posibles en el entorno resaltadas en blanco.
+
+### 3.2 Feedback Sensorial (Sinergia)
+*   **Visual:** El personaje se ilumina con una luz blanca cálida y cegadora (sin quemar). Aparecen partículas de "luciérnagas doradas y violetas" girando a su alrededor.
+*   **Auditivo:** Se escucha un acorde musical completo y resonante (la suma de las capas de Liam y Elara).
+
+---
+
+## 4. INTEGRACIÓN TÉCNICA (Para el Desarrollador)
+
+### 4.1 Detección de Foco (Raycasting)
+El motor debe usar un `Raycast2D` constante desde la posición de la lámpara activa.
+```javascript
+// Pseudocódigo para detectar personaje bajo la luz
+function updateLampFocus() {
+  let target = raycast(lampPosition, lampDirection, lampRange);
+  
+  if (target && target.isCharacter) {
+    applyLampEffect(target, currentLampType); // 'liam' o 'elara'
+    
+    // Lógica para doble enfoque
+    if (companionLamp.isFocusing(target)) {
+      applySynergyEffect(target);
+    }
+  }
+}
+```
+
+### 4.2 Modificadores de Diálogo (Árbol de Decisiones)
+Las lámparas actúan como **llaves de estado** en el JSON de diálogos.
+```json
+{
+  "id": "dialogo_aides_triste",
+  "condition": "aides.emotion_state == 'MELANCOLIA'",
+  "choices": [
+    {
+      "text": "Usar Lámpara de Elara",
+      "required_item": "lampara_elara",
+      "effect": { "aides_calma": "+40", "change_state": "SERENIDAD" },
+      "next_node": "aides_abrazo_emocional"
+    },
+    {
+      "text": "Hablar normalmente",
+      "effect": { "aides_calma": "-10" },
+      "next_node": "aides_se_cierra_mas"
+    }
+  ]
+}
+```
+
+### 4.3 Cooldown y Balanceo
+Para evitar que el jugador abuse de las luces para "curar" a los NPCs infinitamente:
+*   **Liam sobre NPCs:** Tiene un cooldown de 30 segundos por personaje.
+*   **Elara sobre NPCs:** Consume 10 puntos de su propio medidor de Calma (empatizar cansa).
+*   **Sinergia:** Solo se puede activar una vez por zona o por ciclo de día/noche.
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Enfocar la luz de Liam sobre Aides ansiosa reduce su carga mental y cambia su animación a una más calmada.
+*   ✅ Enfocar la luz de Elara sobre Aides triste la levanta del suelo y cambia su estado a Serenidad.
+*   ✅ Enfocar la luz sobre Callum cambia su Aura y desbloquea opciones de diálogo específicas.
+*   ✅ Mantener ambas luces sobre un personaje durante 3 segundos activa la animación y efectos de "Sinergia".
+*   ✅ Los efectos de luz tienen feedback visual (partículas, colores) y auditivo (cambio de ambiente) claros.
+*   ✅ El uso de las luces sobre personajes tiene costes o cooldowns para mantener el balance del juego.
+
+---
+
+## 6. IMPACTO EN LA NARRATIVA Y EL JUGADOR
+
+Esta dinámica enseña al jugador, a través de la mecánica, la lección más profunda del libro:
+1.  **No puedes resolver todo con lógica (Liam):** Si solo usas la luz dorada sobre una persona triste, la luz rebotará o será ineficaz. Aprenderás que a veces los hechos no consuelan.
+2.  **No puedes resolver todo con empatía (Elara):** Si solo usas la luz violeta sobre una persona ansiosa y perdida, la empatía la abrumará más. Aprenderás que a veces se necesita estructura y acción.
+3.  **La integración es la cura:** Solo al saber cuándo usar cada luz (o cómo combinarlas), el jugador podrá sanar el jardín de Aides, abrir el corazón de Callum y, en última instancia, entender su propio viaje interior.
+
+¿Aprobado? Si das el visto bueno, el desarrollador puede empezar por implementar el sistema de *Raycasting* y los modificadores de estado en el JSON de diálogos de Aides y Callum.

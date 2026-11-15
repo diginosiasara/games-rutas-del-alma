@@ -1,0 +1,258 @@
+# 📄 INFORME TÉCNICO — SPRINT 15
+## *Rutas del Alma: El Juego* — Integración de NPCs, Interiores y VFX (entrega Sprint 14)
+**Versión de referencia:** Prototipo Web v12 · **Artes evaluados:** 3 hojas (NPCs, Interiores, VFX) · **Fecha:** 14 nov 2026
+**Base narrativa:** Cap. 2 (El Sauce), Cap. 4 (Las Llaves del Pensamiento) · **Dependencias:** Sprints 6, 8, 10, 12, 14
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+La entrega del Sprint 14 **cubre el 80 % del brief** y añade los NPCs secundarios, los interiores de la cabaña y el catálogo de VFX. Sin embargo, contiene **4 errores de nomenclatura bloqueantes** y **3 desviaciones de dirección de arte** que impiden la integración directa. El desarrollador **no debe montar estos assets hasta que el artista corrija** lo marcado en rojo en las secciones 2 y 3.
+
+**Veredicto:** *Aprobado con devoluciones.* Integrar primero lo correcto (Tomás, Consejero, interiores, la mayoría de VFX); devolver a arte las auras de Liam y el duplicado de códigos.
+
+---
+
+## 1. INVENTARIO Y MAPEO
+
+### 1.1 Hoja 1 — NPCs secundarios ✅ (con 1 error de código)
+
+| Código | Pose | Verificación narrativa | Estado |
+| :--- | :--- | :--- | :--- |
+| **T-01** | Idle Desanimado | Tomás, Cap. 2: *"Hablaba mirando el suelo"* | ✅ Listo |
+| **T-02** | Hablando Dolor | Tomás: *"Lo perdí todo"* (cesta marchita visible) | ✅ Listo |
+| **T-03** | Idle Esperanzado | Tomás tras el sauce: *"quería probar otra forma de cultivar"* | ✅ Listo |
+| **T-04** | Escuchando | Tomás levantando la vista (coherente con el reflejo de Elara) | ✅ Listo |
+| **C-01** | Conejo Idle | Lazo rojo visible ✅ | ✅ Listo |
+| **C-02** | Conejo Corriendo (1, 2) | Secuencia de salto correcta | ✅ Listo |
+| **C-03** | Conejo Señalando | Pata extendida, gesto de guía | ✅ Listo |
+| **S-01** | Consejero Idle | ⚠️ Etiqueta en MAYÚSCULAS | 🟡 Corregir etiqueta |
+| **S-02** | Consejero Ofreciendo | Chistera blanca en la mano ✅ | ✅ Listo |
+| **S-03** | Consejero Explicando | Brazos abiertos, teatral | ✅ Listo |
+| **C-03 (duplicado)** | "Explicando 3" sobre el conejo | ❌ **ERROR: el conejo no explica** | 🔴 Devolver |
+
+### 1.2 Hoja 2 — Interiores cabaña + Sauce ✅ (faltan 2 elementos)
+
+| Código | Asset | Uso | Estado |
+| :--- | :--- | :--- | :--- |
+| **I-01** | Suelo madera (2 variantes) | Autotile interior | ✅ Listo |
+| **I-02** | Chimenea (2 frames fuego) | Fondo cabaña | ✅ Listo |
+| **I-03** | Mesa de té redonda | Escena Callum + Aides | ✅ Listo |
+| **I-04** | Estantería (libros, frascos, reloj arena) | Decorado | ✅ Listo |
+| **I-05** | Ventana con jardín | Muestra el exterior (necesario) | ✅ Listo |
+| **W-01** | Tronco Sauce retorcido | Ancla visual del Cap. 2 | ✅ Listo |
+| **W-02** | Ramas colgantes con hojas | Módulo repetible | ✅ Listo |
+| **W-03** | Círculo de 8 piedras blancas | Ritual Selene (Cap. 14 Ecos) | ✅ Listo |
+| **W-04** | Superficie lago con lotos | Base del Sauce | ✅ Listo |
+| **I-06** | **Banco de madera** | Escena del té (Sprint 12) | ❌ **FALTA** |
+| **I-07** | **Puerta de la cabaña** | Transición exterior→interior | ❌ **FALTA** |
+
+### 1.3 Hoja 3 — VFX ⚠️ (2 errores críticos de código y color)
+
+| Código | Efecto | Frames | Estado |
+| :--- | :--- | :--- | :--- |
+| **L-01** | Aura Liam | 4F | 🔴 **COLOR INCORRECTO** (rosa, no dorada) |
+| **L-02** | Aura Elara | 4F | 🟡 Correcta en color, pero **demasiado similar a L-01** |
+| **L-03** | Destello Revelación | 3F | ✅ Listo |
+| **G-01** | Ruptura Raíz | 4F | ✅ Listo |
+| **G-02** | Salpicadura Riego | 3F | ✅ Listo |
+| **G-03** | Polinización | 4F | ✅ Listo |
+| **L-04** | Partículas Empatía | 4F | ✅ Listo |
+| **G-02** | Vapor Té | 3F | 🔴 **CÓDIGO DUPLICADO** (debe ser E-02) |
+| **E-03** | Ondas Agua | 4F | ✅ Listo |
+| **E-04** | Luciérnagas | 2F | ✅ Listo |
+| **E-01** | Fuego Chimenea | 4F | ✅ Listo |
+
+---
+
+## 2. ERRORES DE NOMENCLATURA (BLOQUEANTES)
+
+### 2.1 Duplicado `G-02`
+- `G-02 Salpicadura Riego` y `G-02 Vapor Té` comparten código.
+- **Corrección:** Vapor es ambiental, no de jardín. Renombrar a **`E-02 Vapor Té`**.
+
+### 2.2 Duplicado `C-03`
+- `C-03 Explicando 3` (sobre el conejo) y `C-03 Señalando` (sobre el conejo) comparten código.
+- **Corrección:** El conejo **no explica** (el brief lo reserva al Consejero, S-03). Renombrar el primero a **`C-02 Corriendo 3`** (completar la secuencia de carrera a 3 frames) o eliminarlo si el conejo solo tiene 2 frames de carrera.
+
+### 2.3 Etiqueta inconsistente `S-01`
+- `S-01 CONSEJERO` en mayúsculas rompe la convención `código_pose`.
+- **Corrección:** `S-01 Idle`.
+
+### 2.4 Nomenclatura final corregida (tabla de referencia para el desarrollador)
+
+```
+npc_tomas_idle_desanimado_1f.png
+npc_tomas_talking_dolor_1f.png
+npc_tomas_idle_esperanzado_1f.png
+npc_tomas_listening_1f.png
+npc_conejo_idle_1f.png
+npc_conejo_run_3f.png          (frames 1,2,3 en una tira)
+npc_conejo_pointing_1f.png
+npc_consejero_idle_1f.png
+npc_consejero_offering_1f.png
+npc_consejero_explaining_1f.png
+tile_wood_floor_2v.png
+tile_chimney_fire_2f.png
+prop_tea_table_1f.png
+prop_bookshelf_1f.png
+prop_window_garden_1f.png
+prop_bench_1f.png              (PENDIENTE de arte)
+prop_cabin_door_1f.png         (PENDIENTE de arte)
+tree_willow_trunk_1f.png
+tree_willow_branches_1f.png
+prop_stone_circle_1f.png
+tile_lake_surface_lotos_4f.png
+vfx_aura_liam_gold_4f.png      (PENDIENTE de arte: color)
+vfx_aura_elara_violet_4f.png
+vfx_revelation_spark_3f.png
+vfx_root_break_4f.png
+vfx_water_splash_3f.png
+vfx_pollen_gold_4f.png
+vfx_empathy_bubbles_4f.png
+vfx_tea_steam_3f.png
+vfx_water_ripple_4f.png
+vfx_firefly_2f.png
+vfx_chimney_fire_4f.png
+```
+
+---
+
+## 3. DESVIACIONES DE DIRECCIÓN DE ARTE (BLOQUEANTES VISUALES)
+
+### 3.1 🔴 Aura de Liam es rosa, no dorada
+- El brief del Sprint 14 pedía: *"resplandor dorado que pulsa y se expande"*.
+- La hoja muestra **L-01 en rosa/magenta con centro amarillo**, idéntico en forma a L-02 (Elara).
+- **Consecuencia:** rompe el lenguaje cromático del juego (dorado = Liam/hechos, violeta = Elara/emoción). El jugador no podrá distinguir a quién pertenece el efecto.
+- **Corrección solicitada al artista:** L-01 debe ser **dorado puro** (`#FFD700` / `#F4D03F`), con rayos solares, **sin halo rosa**.
+
+### 3.2 🟡 L-01 y L-02 son morfológicamente idénticas
+- Ambas son "anillo con centro". Solo cambia el color del núcleo.
+- **Corrección:** diferenciar por **forma**, no solo por color (accesibilidad daltónica, Sprint 8):
+  - **Liam (dorado):** rayos rectos, sol naciente, borde duro.
+  - **Elara (violeta):** espirales suaves, neblina ondulante, borde difuso.
+
+### 3.3 🟡 Dimensiones de los VFX
+- El aura de Liam ocupa visualmente más de 32x32 px en la hoja.
+- **Corrección:** recortar a **bounding box 32x32** (o 48x48 si el artista lo justifica) y verificar que el anchor esté en el centro exacto.
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS DE INTEGRACIÓN
+
+### 4.1 NPCs — Animación procedural sobre 1 frame
+Al igual que los protagonistas (Sprint 13), Tomás y el Consejero son estáticos. Aplicar:
+
+| Personaje | Pose | Procedural |
+| :--- | :--- | :--- |
+| **Tomás** | T-01 Desanimado | Cabeca inclinada fija + respiración lenta (Y ±1 px, 3 s) |
+| **Tomás** | T-02 Dolor | Shake sutil de hombros (X ±2 px, 0.4 s) + vapor de "suspiro" (E-02) |
+| **Tomás** | T-03 Esperanzado | Respiración normal + brillo cálido en la maceta |
+| **Tomás** | T-04 Escuchando | Asentimiento lento (rotación ±2°, 2 s) |
+| **Conejo** | C-01 Idle | Parpadeo (swap de ojos, 2 frames derivados) + orejas (±3°) |
+| **Conejo** | C-02 Run | Tira horizontal de 3 frames, 12 FPS |
+| **Conejo** | C-03 Señalando | Pata fija + oreja que se mueve |
+| **Consejero** | S-01 Idle | Barba/vestido con viento (rotación ±2°) |
+| **Consejero** | S-02 Ofreciendo | Sombrero blanco con "pop" de escala 1.0→1.05→1.0 |
+| **Consejero** | S-03 Explicando | Brazos fijos + destello L-03 ocasional |
+
+### 4.2 Interiores — Autotile y orden de capas
+```
+Layer 0: I-01 suelo madera (autotile, 2 variantes)
+Layer 1: I-02 chimenea (fondo) + I-04 estantería + I-05 ventana
+Layer 2: I-03 mesa té + I-06 banco (PENDIENTE) + I-07 puerta (PENDIENTE)
+Layer 3: sprites de Callum (CA-03 Seated) y Aides (AI-08 Descanso)
+Layer 4: VFX E-02 vapor té (sobre las tazas)
+```
+**Regla:** el vapor (E-02) se emite desde la posición de las tazas de I-03, no desde el personaje.
+
+### 4.3 VFX — Object Pool y blending
+- **Auras (L-01, L-02):** `globalCompositeOperation = 'lighter'`, alpha oscilante 0.6–1.0, periodo 1 s.
+- **Destellos (L-03, G-03):** `lighter`, burst único de 3-4 frames, luego destruir (reciclar en pool).
+- **Partículas (L-04, E-04):** pool de 24 máximas, movimiento con `sin(t)` para flotación.
+- **Fuego/agua (E-01, E-03, G-02):** loop de frames, 8-12 FPS.
+- **Ruptura (G-01):** burst único, 0.4 s, con shake de cámara 2 px.
+
+```javascript
+// Ejemplo de carga del atlas VFX
+const VFX_ATLAS = {
+  aura_liam:    { sheet: 'vfx_aura_liam_gold_4f.png',   frames: 4, fps: 8,  blend: 'lighter' },
+  aura_elara:   { sheet: 'vfx_aura_elara_violet_4f.png',frames: 4, fps: 8,  blend: 'lighter' },
+  revelation:   { sheet: 'vfx_revelation_spark_3f.png', frames: 3, fps: 12, blend: 'lighter' },
+  // ... etc
+};
+```
+
+---
+
+## 5. LO QUE FALTA (DEVOLUCIÓN AL ARTISTA)
+
+| # | Elemento | Prioridad | Motivo |
+| :--- | :--- | :--- | :--- |
+| 1 | **I-06 Banco de madera** | 🔴 Alta | Escena del té Callum+Aides (Sprint 12, AI-08/CA-03) |
+| 2 | **I-07 Puerta cabaña** | 🔴 Alta | Transición exterior→interior |
+| 3 | **L-01 Aura Liam dorada** | 🔴 Alta | Corrección de color (sección 3.1) |
+| 4 | **L-01 vs L-02 diferenciadas por forma** | 🟡 Media | Accesibilidad daltónica |
+| 5 | **Renombrar G-02 vapor → E-02** | 🔴 Alta | Colisión de código |
+| 6 | **Renombrar C-03 conejo "explicando"** | 🔴 Alta | Colisión de código + error narrativo |
+| 7 | **Verificar bounding box 32x32 en VFX** | 🟡 Media | Rendimiento y anclaje |
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+1. ✅ Tomás aparece con sus 4 poses según el arco del Cap. 2 (desanimado → escuchando → esperanzado).
+2. ✅ El conejo guía al jugador en el Claro del Consejero con la secuencia de carrera y el gesto de señalar.
+3. ✅ El Consejero entrega los sombreros con la pose S-02 y explica con S-03.
+4. ✅ La cabaña tiene suelo, chimenea animada, mesa de té con vapor, estantería, ventana, banco y puerta.
+5. ✅ El Sauce tiene tronco, ramas, círculo de piedras y lago con lotos, anclados sin halo.
+6. ✅ Las auras de Liam (dorada) y Elara (violeta) son distinguibles por color **y forma**.
+7. ✅ Ningún código de archivo se repite (verificación con script de duplicados).
+8. ✅ Los VFX mantienen ≥ 50 FPS con 20 partículas activas en móvil gama media.
+9. ✅ Sin errores de consola en Chrome, Firefox y Safari.
+
+---
+
+## 7. ORDEN DE IMPLEMENTACIÓN (4 días)
+
+| Día | Tarea | Depende de |
+| :--- | :--- | :--- |
+| **1** | Renombrar archivos según tabla 2.4 + script anti-duplicados | Devoluciones 5, 6 |
+| **2** | Integrar Tomás y Consejero con poses procedurales | Día 1 |
+| **3** | Integrar interiores (sin banco/puerta, con placeholder) | Día 1 |
+| **4** | Integrar VFX correctos (L-01 dorada) + Sauce + pruebas FPS | Devoluciones 3, 4 |
+
+---
+
+## 8. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Impacto | Mitigación |
+| :--- | :--- | :--- |
+| Aura rosa de Liam se integra "porque ya está hecha" | Visual crítico | Bloquear merge hasta corrección del artista |
+| Códigos duplicados sobreescriben archivos en el build | Técnico | Script CI que falle si hay duplicados |
+| Banco y puerta faltantes rompen la escena del té | Narrativo | Placeholder de color + ticket abierto al artista |
+| VFX en bounding box > 32x32 desalinean el anchor | Visual | Recorte automático con padding transparente |
+| Conejo con 3 frames de carrera vs 2 del brief | Menor | Aceptar 3 (mejor animación), documentar desviación |
+
+---
+
+## 9. MENSAJE DE DEVOLUCIÓN AL ARTISTA (copiar y pegar)
+
+> **Asunto:** Sprint 14 — Aprobado con devoluciones (4 bloqueantes)
+> 
+> Gracias por la entrega. Tomás, Consejero, interiores y la mayoría de VFX están listos para integrar. Necesito 4 correcciones antes del merge:
+> 
+> 1. **Aura de Liam (L-01):** está en rosa, debe ser **dorado puro** (`#FFD700`). Es la firma cromática del personaje.
+> 2. **L-01 y L-02:** son idénticas en forma. Haz la de Liam con **rayos solares duros** y la de Elara con **espirales suaves** (accesibilidad daltónica).
+> 3. **Códigos duplicados:** `G-02` aparece en "Salpicadura" y "Vapor" → renombra el vapor a `E-02`. `C-03` aparece en "Explicando" y "Señalando" → el conejo no explica, renombra o elimina.
+> 4. **Faltan 2 interiores:** `I-06 banco de madera` y `I-07 puerta de la cabaña` (necesarios para la escena del té y la transición).
+> 
+> Verifica además que todos los VFX quepan en bounding box 32x32 con anchor central. Plazo: 3 días.
+
+---
+
+## 10. RECOMENDACIÓN FINAL
+
+**No abrir el Nivel 2 hasta cerrar estas devoluciones.** El lenguaje cromático de las lámparas (dorado/violeta) es la mecánica-firma del juego; una aura rosa de Liam rompería la legibilidad del sistema de iluminación entero. Con las 4 correcciones, el Nivel 1 quedará visualmente completo (protagonistas + NPCs + jardín + interiores + VFX) y listo para el Vertical Slice.
+
+**¿Aprobado?** Si confirmas, envío el **script de verificación de duplicados** (Node.js) y el **JSON de configuración del atlas VFX** con la nomenclatura corregida para que el desarrollador los ejecute el Día 1.

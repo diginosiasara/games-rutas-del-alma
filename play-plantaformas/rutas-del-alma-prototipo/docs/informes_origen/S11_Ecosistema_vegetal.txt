@@ -1,0 +1,243 @@
+# 📄 INFORME TÉCNICO — SPRINT 11
+## *Rutas del Alma: El Juego* — Integración del nuevo ecosistema vegetal (Hi-Bit)
+**Versión de referencia:** Prototipo Web v10 · **Arte evaluado:** Hoja de sprites de plantas (6 filas, ~45 assets) · **Fecha:** 14 nov 2026
+**Base narrativa:** Cap. 1 (El Jardín de la Mente) · **Dependencias:** Sprints 6 (iluminación), 7 (bucle Aides), 8 (emociones), 10 (desbloqueo)
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+El nuevo arte **resuelve el 90 % del hueco visual del jardín** señalado en el GDD. Ya no es necesario dibujar malezas y flores "por código" ni usar movimiento simulado: el paquete incluye el ciclo de vida completo, tres niveles de zarza con identidad cromática propia, la enredadera puente segmentada, partículas y —lo más valioso— **auras de reacción a la luz integradas en el propio sprite**.
+
+**Decisión de arquitectura:** este arte debe reemplazar *en bloque* el sistema provisional de plantas del prototipo, **antes** de tocar los personajes. El jardín es el corazón del Nivel 1 y ahora es lo primero que puede verse "de producción".
+
+---
+
+## 1. INVENTARIO Y MAPEO (Código de la Ficha → Sprite)
+
+| Código | Asset en la hoja | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- |
+| **FL-01** Grano de Luz | Fila 1, col 1–6 (naranja/amarillo) | Flor estándar, recompensa de hechos | ✅ Listo |
+| **FL-02** Pétalos de Eco | Fila 1, col 7–12 (violeta) | Flor rara, recompensa de empatía | ✅ Listo |
+| **ZB-01** Duda | Fila 2, col 1–2 (verde, ojos amarillos) | Zarza Nivel 1 | ✅ Listo |
+| **ZB-02** Resentimiento | Fila 2, col 3–4 (rojo, gema) | Zarza Nivel 2 | ✅ Listo |
+| **ZB-03** Desesperanza | Fila 2, col 5–6 (morado, humo) | Zarza Nivel 3 | ✅ Listo |
+| **CV-01** Tierra preparada | Fila 3, col 1 | Hueco tras arrancar | ✅ Listo |
+| **CV-02** Semilla | Fila 3, col 2 | Tras sembrar | ✅ Listo |
+| **CV-03** Brote | Fila 3, col 3–4 | Crecimiento fase 1 | ✅ Listo |
+| **CV-04** Crecimiento | Fila 3, col 5 | Crecimiento fase 2 | ✅ Listo |
+| **CV-05** Capullo | Fila 3, col 6–9 | 4 colores = 4 tipos de flor | ✅ Listo |
+| **CV-06** Flor marchita | Fila 3, col 10–12 | Negligencia | ✅ Listo |
+| **EN-01** Enredadera | Fila 4, col 1–8 | Puente del lago (7 estados) | ✅ Listo |
+| **PT-xx** Partículas | Fila 5 | Polen, humo, mariposas | ✅ Listo |
+| **EM-xx** Variantes emocionales | Fila 6 | Auras por estado de Aides | ✅ Listo |
+
+**Nota de coherencia:** la paleta del arte (dorados `#F4D03F`, violetas `#9B59B6`, rojos `#A93226`, verdes `#4A7C59`) **coincide con la paleta maestra de la Ficha de Producción Visual**. No hace falta reasignar colores; el desarrollador debe usar los hex del arte como fuente de verdad.
+
+---
+
+## 2. ESPECIFICACIONES DE INTEGRACIÓN
+
+### 2.1 Anchor point y línea base
+- **Todos los sprites de planta deben anclarse en la base central (raíz)**, no en el centro geométrico. La hoja ya respeta una línea base visualmente constante en las filas 1, 2, 3 y 6.
+- **Excepción:** la enredadera (fila 4) se ancla en la **base izquierda** para el segmento de arranque y en **ambos extremos** para el arco (ver 2.4).
+- Verificación: superponer en Aseprite/Photoshop los frames de una misma animación; la raíz no debe moverse más de 2 px.
+
+### 2.2 Resolución y escalado
+- El arte está en Hi-Bit (detalle alto). La resolución lógica del juego es 480×270.
+- **Regla:** escalar con `image-rendering: pixelated` / `nearest neighbor`. **Nunca** usar `bilinear` (destruye el Hi-Bit).
+- Tamaño de render sugerido: zarzas ≈ 48–64 px de ancho en escena; flores ≈ 24–32 px; enredadera ≈ 96–128 px de ancho por arco.
+- Si el sprite original es mayor, **pre-escalar en la build**, no en tiempo de ejecución (evita parpadeo sub-píxel).
+
+### 2.3 Transparencia
+- La hoja tiene fondo blanco. Antes de integrar, el desarrollador debe **extraer el alfa real** (el blanco no es transparente en el PNG de origen).
+- **Método recomendado:** `remove.bg` o script `ImageMagick` con `-fuzz 15% -transparent white`, seguido de revisión manual de los bordes oscuros de las zarzas (el halo blanco residual es el bug que ya tuvimos con la cabaña).
+- **Criterio:** al colocar un sprite sobre el fondo nocturno del lago, no debe verse ningún píxel blanco.
+
+---
+
+## 3. SISTEMA DE CAPAS DE ILUMINACIÓN (la clave del arte)
+
+El arte ya incluye, en la **fila 6**, las reacciones a la luz. Esto cambia la arquitectura del Sprint 6:
+
+### 3.1 Estrategia: "sprite con aura integrada" en lugar de "shader puro"
+En vez de calcular el *rim light* con código, el desarrollador debe usar **dos capas por planta**:
+```
+Capa A: sprite base (sin aura)
+Capa B: sprite con aura (misma posición, alpha modulado)
+```
+- **Estado normal:** Capa A visible al 100 %, Capa B oculta.
+- **Luz de Liam (dorado):** Capa B (aura dorada) aparece con `alpha` interpolado 0→1 en 0,3 s. Se superpone con `globalCompositeOperation = 'lighter'`.
+- **Luz de Elara (violeta):** Capa B (aura violeta) con el mismo método.
+- **Ventaja:** el artista ya decidió *dónde* brilla la planta; el código solo enciende la capa. Menos shader, más fidelidad.
+
+### 3.2 Mapeo de auras (fila 6)
+| Sprite con aura | Se activa con | Efecto narrativo |
+| :--- | :--- | :--- |
+| Flor naranja + aura dorada | Luz de Liam | Revela el "hecho" (centro luminoso) |
+| Flor violeta + aura violeta | Luz de Elara | Revela la "emoción" (halo) |
+| Zarza verde + aura dorada | Luz de Liam | Muestra la raíz débil (ZB-01) |
+| Zarza roja + aura roja | Luz de Liam | Muestra la gema/rizoma (ZB-02) |
+| Zarza morada + aura violeta | Luz de Elara | Muestra el humo que se libera (ZB-03) |
+| Zarza morada + aura negra | Luz de Liam | Contracción de espinas (alivio) |
+| Brote + aura dorada | Cualquier luz | "Promesa" (la planta responde) |
+
+### 3.3 Cooldown de encendido
+Para no "quemar" el efecto, el aura debe tener **respiración** (oscilar entre alpha 0,7 y 1,0 con un `sin(t)`), no quedarse fija al 100 %.
+
+---
+
+## 4. ANIMACIONES DERIVADAS DEL ARTE ESTÁTICO
+
+El arte es estático por estado, pero el juego necesita movimiento. **No se piden nuevos frames**; se generan con código sobre los sprites existentes:
+
+| Animación | Método sobre el sprite | Parámetros |
+| :--- | :--- | :--- |
+| **Idle (respiración)** | Escala Y 1.00↔1.03 + offset Y ±1 px | Periodo 2,5 s, `ease-in-out` |
+| **Viento** | Rotación ±3° alrededor del anchor (raíz) | Periodo 3 s, desfase por planta (semilla aleatoria) |
+| **Brote (CV-03→CV-04)** | Crossfade entre sprites + scale-in desde 0,8 | 0,8 s |
+| **Floración** | Crossfade capullo→flor + "pop" de escala 1.0→1.1→1.0 | 0,5 s |
+| **Marchitamiento** | Crossfade flor→marchita + tint a gris progresivo | 1,5 s |
+| **Arranque (zarza)** | Shake violento (offset X ±3 px, 4 frames) + fade-out + partículas de la fila 5 | 0,4 s |
+| **Rebrote (marchita→zarza)** | Crossfade marchita→ZB-01/02/03 + shake de entrada | 1,0 s |
+
+**Regla anti-"bailarín":** el offset de la respiración se aplica **arriba del anchor**, nunca en el centro, para que la raíz quede clavada al suelo.
+
+---
+
+## 5. PARTÍCULAS (fila 5) — Asignación y Object Pool
+
+| Sprite | Uso | Emisor | Comportamiento |
+| :--- | :--- | :--- | :--- |
+| Destellos dorados (col 1–3) | Polinización / floración | Flor madura | Suben y se desvanecen, 1–2/s |
+| Destellos violetas (col 4–5) | Reacción a Elara | Zarza/ZB-03 | Flotan lateralmente |
+| Humo gris (col 6–7) | Ansiedad / marchitamiento | Zarza Nivel 2 | Sube lento, se expande |
+| Humo morado (col 8–9) | Desesperanza | Zarza Nivel 3 | Sube rápido, turbulento |
+| Humo negro espiral (col 10–11) | Reacción a luz de Liam | Zarza al contraerse | Se disipa en 1 s |
+| Mariposas naranjas (col 12) | Estado Serenidad | Jardín | Vuelo con curva de Bézier |
+| Mariposas moradas (col 13) | Estado Alegría | Jardín | Vuelo más alto y rápido |
+
+**Implementación:** `ObjectPool` de 24 partículas máximas. Las mariposas **solo** aparecen si `aides.emotion_state` ∈ {Serenidad, Alegría} (conecta con el Sprint 8).
+
+---
+
+## 6. LA ENREDADERA PUENTE (fila 4) — Mecánica del lago
+
+La fila 4 da **7 estados de crecimiento**, perfectos para el "puente de enredadera" del Sprint 5:
+
+```
+Estado 0: montículo con brote (col 1)
+Estado 1: tallo corto curvado (col 2)
+Estado 2: tallo en "S" (col 3)
+Estado 3: tallo extendido (col 4)
+Estado 4: arco formándose (col 5)
+Estado 5: arco completo (col 6)
+Estado 6: arco con hojas densas (col 7) = PUENTE TRANSITABLE
+```
+
+**Reglas de código:**
+- El puente se construye **proceduralmente**: cada estado se posiciona interpolando entre el ancla de origen y el destino (una losa del lago).
+- Solo el **Estado 6** tiene plataforma física (`collision = true`); los estados 4–5 son visuales.
+- Crecimiento: 1 estado cada ~1,5 s → puente completo en ~10 s (coherente con el Sprint 5).
+- Si Aides no está en el equipo, el puente **no crece** (fallback del Sprint 10: losas autoiluminadas).
+
+---
+
+## 7. VARIANTES EMOCIONALES (fila 6) — Integración con el Sprint 8
+
+La fila 6 no son "estados emocionales de la planta", son **reacciones a la luz**. Para los estados de Aides (Serenidad/Ansiedad/Melancolía/Alegría) se aplica **color grading por código** sobre los sprites de las filas 1–3:
+
+| Estado de Aides | Tint aplicado al jardín | Partícula extra |
+| :--- | :--- | :--- |
+| Serenidad | Ninguno (color puro) | Mariposas naranjas |
+| Ansiedad | Desaturación 25 % + tinte rojizo en zarzas | Humo gris |
+| Melancolía | Tinte azulado + brillo 0,8 | Humo negro lento |
+| Alegría | Saturación +15 % | Destellos dorados + mariposas moradas |
+
+**Importante:** el tint se aplica a un `Container`/`Group` de plantas, no a cada sprite individual (rendimiento).
+
+---
+
+## 8. ESPECIFICACIÓN DE GUARDADO (localStorage)
+
+```javascript
+gardenData = {
+  plants: [
+    { id: "p01", x: 240, y: 180,
+      type: "thorn", level: 2,        // ZB-02
+      state: "growing",               // idle|growing|ready|wilted
+      elapsed: 42.3,                  // tiempo en estado
+      aura: null                      // null|liam|elara|both
+    },
+    { id: "p02", x: 310, y: 180,
+      type: "flower", color: "gold",  // FL-01
+      state: "ready", elapsed: 12.0
+    }
+  ],
+  vines: [ { id: "v01", from: "shore", to: "slab3", stage: 4 } ],
+  particles: "runtime"                // NO se guardan
+}
+```
+- `elapsed` se congela al cerrar (regla del Sprint 4: el tiempo de juego activo, no real).
+- `aura` se persiste para que, al recargar, la reacción a la luz no "parpadee" de nuevo.
+
+---
+
+## 9. CRITERIOS DE ACEPTACIÓN (Definition of Done)
+
+1. ✅ Las 6 filas del arte están integradas con alfa real (cero halo blanco sobre el lago nocturno).
+2. ✅ El ciclo zarza→tierra→semilla→brote→capullo→flor→marchita→rebrote funciona con los sprites correctos.
+3. ✅ La luz de Liam y Elara enciende las auras de la fila 6 (crossfade + respiración).
+4. ✅ La enredadera crece en 7 estados y solo el Estado 6 es transitable.
+5. ✅ Las partículas de la fila 5 aparecen según estado emocional de Aides.
+6. ✅ El jardín mantiene ≥ 50 FPS en móvil de gama media con 20 plantas + 24 partículas.
+7. ✅ El guardado restaura estados, tiempos y auras al recargar.
+8. ✅ Sin errores de consola en Chrome, Firefox y Safari.
+
+---
+
+## 10. ORDEN DE IMPLEMENTACIÓN (5 días)
+
+| Día | Tarea | Depende de |
+| :--- | :--- | :--- |
+| **1** | Extraer alfa, recortar sprites por código (FL, ZB, CV, EN, PT, EM) y montar atlas | — |
+| **2** | Reemplazar el sistema provisional de plantas; ciclo de vida con crossfades | Día 1 |
+| **3** | Sistema de capas de aura (Sprint 6) + respiración/viento | Día 2 |
+| **4** | Enredadera puente (Sprint 5) + partículas (Sprint 8) | Día 3 |
+| **5** | Color grading emocional + guardado + pruebas de FPS en móvil | Día 4 |
+
+---
+
+## 11. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Impacto | Mitigación |
+| :--- | :--- | :--- |
+| Halo blanco residual en zarzas (bordes oscuros) | Visual | Umbral de fuzz por sprite; revisión manual de ZB-02/03 |
+| Hi-Bit se pixela mal al escalar | Visual | Pre-escalar en build, `pixelated`, tamaños enteros |
+| 20 plantas × 2 capas de aura = 40 draws | Rendimiento | Atlas único + agrupar auras por zona |
+| Partículas en bucle infinito | Memoria | ObjectPool con límite duro de 24 |
+| El arte de plantas supera al de personajes (aún simulados) | Coherencia | **Prioridad:** este arte va primero; los sprite sheets de personajes quedan para el Sprint 12 |
+
+---
+
+## 12. LO QUE ESTE ARTE RESUELVE Y LO QUE AÚN FALTA
+
+**Resuelto por este paquete:**
+- ✅ Malezas y flores "provisionales" del GDD → arte de producción.
+- ✅ Reacciones a las lámparas → auras integradas (fila 6).
+- ✅ Enredadera puente → 7 estados (fila 4).
+- ✅ Partículas y mariposas → fila 5.
+- ✅ Identidad cromática de los 3 niveles de zarza → fila 2.
+
+**Aún pendiente (Sprint 12):**
+- ⏳ Sprite sheets de Liam, Elara y Aides (caminar, arrancar, regar, sentarse).
+- ⏳ Tileset de suelo y plataformas del valle.
+- ⏳ Retirar el halo blanco de la cabaña y el templo (decorado, no plantas).
+
+---
+
+## 13. RECOMENDACIÓN FINAL
+
+**Integrar este arte antes de abrir el Nivel 2.** El jardín es la mecánica-firma del juego; ahora puede verse "de producción" y validar el lenguaje visual (Hi-Bit, auras, partículas) que después se aplicará a los personajes. Si el Nivel 1 se ve así, el Vertical Slice cumple el pilar "cálido, onírico y sereno" del GDD.
+
+**¿Aprobado?** Si das el visto bueno, el desarrollador empieza por el Día 1 (extracción de alfa y atlas). ¿Quieres que prepare el **script de recorte automático** (ImageMagick/Node) para generar los archivos `plant_flower_light_idle_4f_32x32.png` con la nomenclatura de la Ficha, o el **JSON de configuración del ciclo de vida** con los tiempos por estado?

@@ -1,0 +1,356 @@
+He revisado los archivos que has adjuntado: el nuevo paquete `img.zip`, el prototipo `index (4).html` y la guía técnica de la versión 3.
+
+Hay una mejora importante respecto al material anterior: **ya dispones de ilustraciones de personajes con poses y acciones diferentes**, no solamente imágenes estáticas. Esto permite dar un salto visual considerable en el juego.
+
+También he detectado algo importante que debe conocer el desarrollador: los nuevos dibujos todavía no están preparados exactamente en el formato que espera el sistema de animación del prototipo.
+
+# **Informe técnico actualizado para el desarrollador**
+
+
+
+Nuevos recursos revisados
+
+Integración pendiente
+
+
+
+## **1. Inventario de nuevos recursos gráficos**
+
+El ZIP contiene 168 imágenes PNG distribuidas entre los tres personajes.
+
+| Personaje | Imágenes | Contenido                                                          |
+| --------- | -------- | ------------------------------------------------------------------ |
+| Aides     | 71       | Movimiento, expresiones, lectura, acciones de jardín y otras poses |
+| Liam      | 60       | Reposo, caminar, correr, saltar, ataque, defensa y expresiones     |
+| Elara     | 37       | Caminar, correr, saltar, magia, interacción y expresiones          |
+
+[Kael Windrunner - Character Life Simulation by Jabali AI](https://images.openai.com/static-rsc-4/JTEO0MMzhMBKlYopYS9fsl9On24ZykTGNdKZAn2m9Y-bnlR-JA38XE-l7ye11D7FsTtodgLqu9aL6M5Jt0Ef7gzsScwxqQ8_PXZaU3RL9m2SXl8y3NXfMbAvsOBILmN5M4uPLoCQRhuFKBXzsn4UoH4BmBSJJAcP8koJv1XR4SY?purpose=inline)
+
+**Liam**
+
+Mantener su identidad visual, capa verde, cabello plateado y lámpara dorada. Aprovechar las distintas poses para animar desplazamientos y acciones.
+
+[セキエン【木精たちの円舞】 - ガールズクリエイション（ガークリ）攻略 Wiki](https://images.openai.com/static-rsc-4/eHsS3cN3aZywbcNcRSK_cNjYTj23MOMjHt_OU64iZuuKxvsF23LTpX1umQSi18OgZzc7rjnhcBjenFLiXXziixnZRnlYjqfUMdCpjv9FLqhEA1yu_IjquBfBjYscqMdzJC0t5l0UANHOu9iMD5179xMT_I8dRprWxEaA3ObMsqs?purpose=inline)
+
+**Elara**
+
+Incorporar sus movimientos, expresiones y efectos mágicos, conservando la lámpara y su estética característica.
+
+[Free Fantasy Chibi Male Sprites Pixel Art by 2D Game Assets on Dribbble](https://images.openai.com/static-rsc-4/x4smi0awqZE1XW6X4OG3QakWgQKNOIcKLFqP8ghVm5gQc4fF_Fq3wwmA2PUpzUR7Znej1Lh0XAGZnYlpzmFCE6z4ipVFh45M9TXaU7BH-BvwO0RdOHGCg2mKDG3Lsc2_iPMw7Qfp9N6Eq2jPKNSA0TgRBr9WmHo6KKy7opBU9yY?purpose=inline)
+
+**Aides**
+
+Prioridad especial: aprovechar sus poses de jardinería para representar visualmente cómo arranca zarzas, siembra, riega, observa el crecimiento y recoge flores.
+
+*Las imágenes anteriores son referencias ilustrativas; el material que debe integrarse es el contenido original del ZIP.*
+
+## **2. Diagnóstico de integración: ZIP frente al prototipo**
+
+He comprobado el código de `index (4).html`.
+
+El prototipo ya tiene una función preparada para trabajar con sprite sheets:
+
+- `drawSheet()` selecciona los fotogramas.
+- `buildSheets()` reconoce los nombres de animación.
+- `drawChar()` utiliza las animaciones reales cuando están disponibles y conserva la animación simulada como alternativa.
+
+Sin embargo, hay una incompatibilidad:
+
+| Recurso                          | Situación                                                     |
+| -------------------------------- | ------------------------------------------------------------- |
+| PNG de Liam                      | Archivos individuales organizados por carpetas                |
+| PNG de Elara                     | Archivos individuales organizados por carpetas                |
+| PNG de Aides                     | Archivos individuales numerados, sin clasificación por acción |
+| Sprite sheets horizontales       | No se han entregado como tales                                |
+| Integración automática del ZIP   | No existe todavía                                             |
+| Imágenes nuevas dentro de ASSETS | Pendiente                                                     |
+
+**Requisito:** el desarrollador debe convertir o preparar las secuencias de imágenes en sprite sheets compatibles, o adaptar el cargador para utilizar los PNG individuales. No debe limitarse a sustituir las imágenes actuales por una imagen aleatoria de cada carpeta.
+
+## **3. Animaciones que deben implementarse**
+
+### **Liam**
+
+Prioridad alta
+
+- Idle: respiración y reposo.
+- Walk: caminar.
+- Run: correr.
+- Jump: salto con subida, suspensión y caída.
+- Interact: interacción con objetos.
+- Lamp: utilización de la lámpara dorada.
+- Expressions: expresiones faciales.
+
+### **Elara**
+
+- Idle: reposo.
+- Walk: caminar.
+- Run: correr.
+- Jump: salto.
+- Magic: animación de magia.
+- Interact: interacción.
+- Lamp: utilización de la lámpara morada.
+- Expressions: emociones y reacciones.
+
+### **Aides**
+
+Prioridad máxima en el jardín
+
+No basta con que Aides siga caminando detrás de Liam y Elara. Necesitamos que tenga animaciones específicas para su función narrativa.
+
+1. Caminar siguiendo al equipo.
+2. Agacharse delante de una zarza.
+3. Arrancar la zarza y extraerla del suelo.
+4. Preparar el terreno.
+5. Introducir la semilla.
+6. Regar con su regadera.
+7. Observar el crecimiento.
+8. Celebrar cuando aparece una flor.
+9. Recoger la flor.
+10. Sentarse y descansar.
+11. Leer o consultar el libro.
+12. Sentarse a tomar el té con Callum.
+
+Importante: el ZIP contiene ilustraciones de Aides realizando distintas acciones, pero el desarrollador debe identificar y ordenar las secuencias exactas antes de convertirlas en animaciones.
+
+## **4. Mecánica del jardín: requisito narrativo y visual**
+
+Esta mecánica debe conservarse y perfeccionarse.
+
+[Pixel Growing Flowers Farm Pack 16x32 - 18 plants set by PixelMoth](https://images.openai.com/static-rsc-4/au5sYCfj9q6ikGjCndYa4jY12EQ0uazxt11eHvxBM4yQHKh5mvYAkrScpOnHFKVRN8iM6xT0_qfMLQ0AtsqBa-gZ04GXiVq8bIDJx4-h8SX1EUcSSuUulKBim7GSOoNgqhc183HAdFfNZuIuUQ802jN0MW1G2H43hYGXJ9kJWQM?purpose=inline)
+
+[pixelmoth.itch.io](https://pixelmoth.itch.io/pixel-flowers-farm-pack-16x32-18-plants-set?utm_source=chatgpt.com)
+
+El ciclo de vida de cada planta debe ser:
+
+1. **Zarza**
+
+   Liam y Elara no realizan las tareas de jardinería. Aides es quien debe encargarse de ellas.
+2. **Arrancar**
+
+   Aides se desplaza hasta la zarza, se agacha, la arranca y deja el terreno preparado.
+3. **Sembrar**
+
+   Aides coloca la semilla en el hueco de tierra.
+4. **Regar**
+
+   Aides utiliza su regadera. Debe verse el agua caer sobre la tierra.
+5. **Brote**
+
+   Aparece progresivamente un pequeño brote.
+6. **Crecimiento**
+
+   La planta aumenta de tamaño y desarrolla hojas.
+7. **Floración**
+
+   Aparece la flor y se muestra su evolución visual.
+8. **Recogida**
+
+   Aides se acerca y recoge la flor. Se actualiza el contador.
+
+Los tiempos actuales de crecimiento son provisionales. Deben poder configurarse sin modificar las animaciones.
+
+## **5. Escena de Callum: separación del equipo**
+
+Esta escena debe respetar exactamente tu indicación narrativa.
+
+[魔女見習いスローライフ『Little Witch in the Woods』正式版がリリース。新エリアに加え、釣りやネコとの触れ合いなど森での暮らしを彩る新要素が追加 | ゲーム・エンタメ最新情報のファミ通.com](https://images.openai.com/static-rsc-4/bWbzf5LV1asXc1M02Dwd07O3tZpf4yy_xYx1UmsK7tgdswinwU_JuBmbREzilOrb2wYQG6G9IOVzkfx0NtKtzVL9qaTmob_CJGYSwYYTyZhHcTsF1ZdQKjoBEvsjyZTaI2wzfnBRg6SwPHYIRqHRXkzkjomAA-x-k8KO5tIU9BU?purpose=inline)
+
+[famitsu.com](https://www.famitsu.com/article/202509/52482?utm_source=chatgpt.com)
+
+Cuando el equipo llega a Callum:
+
+- Aides termina o deja organizadas las tareas pendientes del jardín.
+- Aides se queda con Callum.
+- Ambos se sientan a tomar el té.
+- Deben visualizarse las tazas, el vapor y una animación tranquila.
+- Aides deja de seguir al jugador.
+- Liam y Elara continúan su recorrido juntos.
+
+La separación debe quedar guardada en el progreso del juego.
+
+## **6. Especificaciones técnicas para los nuevos sprites**
+
+El desarrollador debe preparar:
+
+| Característica | Requisito                        |
+| -------------- | -------------------------------- |
+| Formato        | PNG                              |
+| Transparencia  | Canal alfa real                  |
+| Secuencias     | Fotogramas ordenados             |
+| Alineación     | Pies sobre una misma línea base  |
+| Dimensiones    | Uniformes por secuencia          |
+| Orientación    | Consistente                      |
+| Animaciones    | Idle, Walk, Run, Jump y acciones |
+| Carga          | Compatible con Canvas            |
+| Optimización   | Sin pérdida visual apreciable    |
+
+La guía original del prototipo establece tiras horizontales de 4–8 fotogramas, con una altura recomendada de 230 px por fotograma.
+
+## **7. Pruebas y criterios de aceptación**
+
+| Prueba   | Resultado exigido                           |
+| -------- | ------------------------------------------- |
+| Liam     | Animaciones reales funcionando              |
+| Elara    | Animaciones reales funcionando              |
+| Aides    | Animaciones específicas de jardinería       |
+| Zarzas   | Arranque visible                            |
+| Semillas | Siembra y riego visibles                    |
+| Plantas  | Evolución progresiva                        |
+| Flores   | Recogida por Aides                          |
+| Callum   | Escena de té correctamente representada     |
+| Equipo   | Liam y Elara continúan juntos               |
+| Guardado | Recuperación del estado del jardín y equipo |
+| Móvil    | Sin pérdida importante de fluidez           |
+
+# INFORME DE ACTUALIZACIÓN GRÁFICA Y FUNCIONAL
+
+## Rutas del Alma: El Juego — Integración de nuevos artes y animaciones
+
+**Versión de referencia:** Prototipo Web v3\
+**Archivos evaluados:** `index (4).html`, `img.zip` y `LEEME_SPRITES_Y_RENDIMIENTO.md`\
+**Fecha:** Noviembre de 2026
+
+### 1. OBJETIVO
+
+Actualizar el apartado gráfico y de animación del videojuego utilizando los nuevos recursos gráficos de Liam, Elara y Aides.
+
+El objetivo es abandonar progresivamente las animaciones simuladas y utilizar las ilustraciones originales para conseguir personajes más expresivos, naturales y coherentes con el universo narrativo.
+
+### 2. INVENTARIO DE RECURSOS
+
+El ZIP contiene 168 archivos PNG:
+
+- Aides: 71 imágenes.
+- Liam: 60 imágenes.
+- Elara: 37 imágenes.
+
+Las imágenes presentan transparencia y diferentes poses, expresiones y acciones.
+
+Actualmente están organizadas como archivos individuales y no como sprite sheets horizontales compatibles directamente con el formato de nombres que espera el prototipo.
+
+**Acción:** clasificar, ordenar y preparar las secuencias antes de incorporarlas al juego. No modificar ni descartar los originales.
+
+### 3. ANIMACIÓN DE PERSONAJES
+
+**Liam**
+
+- Reposo.
+- Caminar.
+- Correr.
+- Saltar.
+- Interactuar.
+- Utilizar la lámpara dorada.
+- Expresiones faciales.
+
+**Elara**
+
+- Reposo.
+- Caminar.
+- Correr.
+- Saltar.
+- Utilizar magia.
+- Interactuar.
+- Utilizar la lámpara morada.
+- Expresiones faciales.
+
+**Aides**
+
+- Caminar y seguir al equipo.
+- Agacharse.
+- Arrancar zarzas.
+- Sembrar semillas.
+- Regar.
+- Observar los brotes.
+- Celebrar la floración.
+- Recoger flores.
+- Leer y descansar.
+- Tomar el té con Callum.
+
+Las animaciones deben activarse según el estado real del personaje y la acción que esté realizando.
+
+### 4. MECÁNICA DEL JARDÍN
+
+Aides es la responsable del cuidado del jardín.
+
+El ciclo obligatorio de cada planta será:
+
+1. Identificación de una zarza.
+2. Desplazamiento de Aides hasta ella.
+3. Arranque de la zarza.
+4. Preparación del terreno.
+5. Siembra de la semilla.
+6. Riego.
+7. Aparición del brote.
+8. Crecimiento progresivo.
+9. Floración.
+10. Recogida de la flor.
+
+Cada etapa debe tener una representación visual diferenciada.
+
+El crecimiento debe continuar aunque el jugador se aleje de la zona.
+
+Los tiempos de crecimiento deben ser configurables.
+
+### 5. ESCENA DE CALLUM
+
+Cuando el equipo llega a Callum:
+
+- Aides se queda con él.
+- Aides y Callum toman el té.
+- Se incorpora una animación de descanso y vapor de las tazas.
+- Aides deja de seguir al jugador.
+- Liam y Elara continúan juntos el recorrido.
+
+Esta transición debe reflejarse también en el sistema de guardado.
+
+### 6. INTEGRACIÓN TÉCNICA
+
+El prototipo ya contiene funciones para reconocer sprite sheets mediante `buildSheets()`, `drawSheet()` y `drawChar()`.
+
+Se solicita:
+
+- Aprovechar la arquitectura existente.
+- Preparar las imágenes en secuencias compatibles.
+- Mantener una línea base común para los pies.
+- Evitar deformaciones entre fotogramas.
+- Mantener la escala de los personajes.
+- Incorporar las nuevas animaciones al objeto de recursos.
+- Mantener una alternativa de animación si falta algún recurso.
+- Optimizar la carga y el renderizado para dispositivos móviles.
+
+No se debe sustituir el sistema completo del juego ni modificar mecánicas que ya funcionan sin una justificación técnica.
+
+### 7. CRITERIOS DE ACEPTACIÓN
+
+- Los tres personajes utilizan sus nuevos recursos gráficos.
+- Las animaciones corresponden a las acciones ejecutadas.
+- Aides realiza visualmente todas las tareas del jardín.
+- Las plantas muestran sus diferentes fases de crecimiento.
+- La recogida de flores actualiza el inventario.
+- Aides se queda con Callum tomando el té.
+- Liam y Elara continúan juntos.
+- El guardado recupera correctamente el progreso.
+- Se mantienen los controles de escritorio y móvil.
+- No aparecen errores de carga de recursos ni de consola.
+
+### 8. DOCUMENTACIÓN Y ENTREGA
+
+La próxima entrega debe incluir:
+
+1. HTML actualizado y jugable.
+2. Recursos gráficos integrados.
+3. Relación de sprites y animaciones incorporados.
+4. Registro de pruebas funcionales.
+5. Resultados de rendimiento en dispositivos reales, cuando se hayan realizado.
+6. Relación de elementos pendientes.
+
+### 9. PRIORIDAD
+
+La prioridad de esta iteración es conseguir que los personajes dejen de parecer ilustraciones estáticas con movimiento artificial y pasen a tener animaciones propias.
+
+Especial atención a Aides: su papel en el jardín es una parte fundamental de la experiencia narrativa y debe percibirse claramente en pantalla.
+
+**La finalidad no es solamente mejorar los gráficos, sino conseguir que las acciones de los personajes transmitan la historia.**
+
+**Mi recomendación:** no empezaría todavía el Nivel 2. Primero cerraría esta iteración visual y funcional del Nivel 1, especialmente las animaciones de Aides y el ciclo completo del jardín. Así tendremos una base sólida para ampliar el juego sin arrastrar problemas gráficos y técnicos.

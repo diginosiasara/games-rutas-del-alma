@@ -1,0 +1,362 @@
+# 📄 INFORME TÉCNICO — SPRINT 18
+## *Rutas del Alma: El Juego* — Integración de Assets Niveles 2, 3, 4 y NPCs Adicionales
+**Versión de referencia:** Prototipo Web v15 · **Artes evaluados:** 5 hojas de sprites (Niveles 2-4 + NPCs) · **Fecha:** 14 nov 2026
+**Base narrativa:** Capítulos 6-9 (*Rutas del Alma*), 10-19 (*Ecos del Alma*), 31-37 (*Senderos de Luna*) · **Dependencias:** Sprints 11-17
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+La entrega del Sprint 18 **cubre el 95% del brief** y proporciona los assets necesarios para construir los Niveles 2, 3 y 4, además de los NPCs secundarios (Javier, María, Lucía). La calidad artística es consistente con el estilo Hi-Bit establecido en sprints anteriores.
+
+**Veredicto:** *Aprobado con correcciones menores.* Hay un error de código duplicado (MA-03) y varios assets grandes que deben tratarse como fondos, no como sprites interactivos.
+
+---
+
+## 1. INVENTARIO Y MAPEO DE ASSETS
+
+### 1.1 Hoja 1 — Nivel 2: Templo y Custodias ✅
+
+| Código | Asset | Frames | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **TM-01** | Templo exterior | 1 (fondo) | Escenario principal, Cap. 7 | ✅ Listo (tratado como fondo) |
+| **TM-02** | Templo interior | 1 (fondo) | Cámara del Gran Libro | ✅ Listo (tratado como fondo) |
+| **TM-03** | Cámara oculta | 1 (fondo) | Descubrimiento del cofre | ✅ Listo (tratado como fondo) |
+| **TM-04** | Inscripciones en piedra | 3 variantes | Puzzles de Sombrero Blanco | ✅ Listo |
+| **TM-05** | Gran Libro de Fábulas | 2 frames | Objeto interactivo, se reescribe solo | ✅ Listo |
+| **TM-06** | Brújula dorada | 4 frames | Objeto coleccionable, gira | ✅ Listo |
+| **TM-07** | Cofre del templo | 3 frames | Apertura para revelar mapas | ✅ Listo |
+| **CU-01** | Custodia posada (idle) | 4 poses | Guardianas del templo | ✅ Listo |
+| **CU-02** | Custodia despegando | 3 poses | Transición de estado | ✅ Listo |
+| **CU-03** | Custodia volando | 4 frames ciclo | Vuelo sobre el pueblo (Cap. 16) | ✅ Listo |
+| **CU-04** | Custodia aterrizando | 3 poses | Regreso al templo | ✅ Listo |
+| **CU-05** | Custodia custodiando | 2 poses | Sobre el cofre/libro | ✅ Listo |
+
+### 1.2 Hoja 2 — Nivel 2: Presa y Pueblo Sumergido ✅
+
+| Código | Asset | Frames | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **PS-01** | La Presa (cascada) | 1 (fondo) | Escenario Cap. 6 | ✅ Listo (tratado como fondo) |
+| **PS-02** | Pueblo Sumergido | 1 (fondo) | Ruinas bajo el agua | ✅ Listo (tratado como fondo) |
+| **PS-03** | Casa Sumergida (interior) | 1 (fondo) | Exploración de Javier | ✅ Listo (tratado como fondo) |
+| **PS-04** | Objetos Antiguos | 5 variantes | Coleccionables (vasija, pico, joya, vasija, llave) | ✅ Listo |
+| **PS-05** | Burbujas de Aire | 3 frames | Efecto submarino | ✅ Listo |
+| **PS-06** | Corriente de Agua | 4 frames tile | Tile animado para agua | ✅ Listo |
+
+### 1.3 Hoja 3 — Nivel 3: Circo de los Nómadas ✅
+
+| Código | Asset | Frames | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **CR-01** | Carpa principal exterior | 1 (fondo) | Escenario Cap. 9/10 | ✅ Listo (tratado como fondo) |
+| **CR-02** | Carpa interior pista central | 1 (fondo) | Función del circo | ✅ Listo (tratado como fondo) |
+| **CR-03** | Carromato azul | 1 | Transporte de nómadas | ✅ Listo |
+| **CR-04** | Carromato abierto interior | 1 | Interior habitable | ✅ Listo |
+| **CR-05** | Puesto de adivina | 1 | Cuenco de agua, cartas | ✅ Listo |
+| **CR-06** | Puesto del narrador | 1 | Libro, lámpara | ✅ Listo |
+| **AR-01** | Acróbata (cuerda floja) | 6 frames | Función del circo | ✅ Listo |
+| **AR-02** | Malabarista (lamparillas) | 4 frames | Función del circo | ✅ Listo |
+| **AR-03** | Mago (palomas de papel) | 4 frames | Función del circo | ✅ Listo |
+| **AR-04** | Coro de niños (máscaras) | 3 frames | Función del circo | ✅ Listo |
+| **AR-05** | Narrador | 2 frames | Cuenta historias | ✅ Listo |
+| **RL-01** | Peine de hueso tallado | 1 | Reliquia coleccionable | ✅ Listo |
+| **RL-02** | Campana rota (bronce) | 1 | Reliquia coleccionable | ✅ Listo |
+| **RL-03** | Máscaras de papel | 3 variantes | Alegría, tristeza, misterio | ✅ Listo |
+| **RL-04** | Lamparillas | 2 frames | Llama parpadeante | ✅ Listo |
+
+### 1.4 Hoja 4 — Nivel 4: Corredor del Alba ✅
+
+| Código | Asset | Frames | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **CA-01** | Entrada del corredor | 1 (fondo) | Arco con flores, amanecer | ✅ Listo (tratado como fondo) |
+| **CA-02** | Columnas | 2 variantes | Flanquean el corredor | ✅ Listo |
+| **CA-03** | Mosaico de estrellas | 1 | Suelo del corredor | ✅ Listo |
+| **CA-04** | Puerta de bronce | 1 | Final del corredor, Cap. 8 | ✅ Listo |
+| **CA-05** | Espejo | 2 frames | Reflejo de Liam/Elara | ✅ Listo |
+| **CA-06** | Luz del amanecer | 4 frames | Efecto de transición | ✅ Listo |
+
+### 1.5 Hoja 5 — NPCs Adicionales ⚠️ (1 error de código)
+
+| Código | Asset | Frames | Uso en el juego | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **JV-01** | Javier idle explorador | 1 | Cap. 5-9, 10-11 | ✅ Listo |
+| **JV-02** | Javier caminando | 1 | Desplazamiento | ✅ Listo |
+| **JV-03** | Javier examinando ruinas | 1 | Con lupa y cuaderno | ✅ Listo |
+| **JV-04** | Javier médico | 1 | Con maletín, Cap. 21+ | ✅ Listo |
+| **JV-05** | Javier atendiendo | 1 | Con vendas | ✅ Listo |
+| **MA-01** | María idle sentada | 1 | Anciana sabia, Cap. 5, 9, 10 | ✅ Listo |
+| **MA-02** | María contando historias | 1 | Gesto con manos | ✅ Listo |
+| **MA-03** | María caminando | 1 | **DUPLICADO** (aparece 2 veces) | 🔴 Corregir |
+| **LU-01** | Lucía idle | 1 | Joven artista, Cap. 6 | ✅ Listo |
+| **LU-02** | Lucía dibujando | 1 | Con cuaderno | ✅ Listo |
+| **LU-03** | Lucía comparando mapas | 1 | Con mapa antiguo | ✅ Listo |
+
+---
+
+## 2. ERRORES DE NOMENCLATURA (BLOQUEANTES)
+
+### 2.1 Duplicado `MA-03`
+- `MA-03 Caminando` aparece dos veces en la hoja de NPCs (fila 2, columna 4 y fila 3, columna 2).
+- **Corrección:** Renombrar el segundo a **`MA-04 Caminando con bastón`** (la pose es ligeramente diferente: en una lleva el bastón en la mano derecha, en otra en la izquierda).
+
+### 2.2 Nomenclatura final corregida (tabla de referencia para el desarrollador)
+
+```
+bg_temple_exterior_1f.png
+bg_temple_interior_1f.png
+bg_hidden_chamber_1f.png
+tile_inscription_3v.png
+prop_grand_book_2f.png
+prop_compass_gold_4f.png
+prop_chest_temple_3f.png
+npc_custodian_idle_4f.png
+npc_custodian_takeoff_3f.png
+npc_custodian_fly_4f.png
+npc_custodian_land_3f.png
+npc_custodian_guard_2f.png
+bg_dam_1f.png
+bg_submerged_village_1f.png
+bg_submerged_house_1f.png
+prop_ancient_object_5v.png
+vfx_bubble_3f.png
+tile_water_current_4f.png
+bg_circus_tent_exterior_1f.png
+bg_circus_tent_interior_1f.png
+prop_wagon_blue_1f.png
+prop_wagon_open_1f.png
+prop_fortune_teller_1f.png
+prop_storyteller_1f.png
+npc_acrobat_6f.png
+npc_juggler_4f.png
+npc_magician_4f.png
+npc_choir_3f.png
+npc_narrator_2f.png
+prop_bone_comb_1f.png
+prop_broken_bell_1f.png
+prop_paper_mask_3v.png
+prop_lantern_2f.png
+bg_corridor_entrance_1f.png
+tile_column_2v.png
+tile_mosaic_stars_1f.png
+prop_bronze_door_1f.png
+prop_mirror_2f.png
+vfx_dawn_light_4f.png
+npc_javier_idle_explorer_1f.png
+npc_javier_walk_1f.png
+npc_javier_examining_1f.png
+npc_javier_doctor_1f.png
+npc_javier_attending_1f.png
+npc_maria_idle_seated_1f.png
+npc_maria_storytelling_1f.png
+npc_maria_walk_1f.png
+npc_maria_walk_cane_1f.png          (renombrado de MA-03 duplicado)
+npc_lucia_idle_1f.png
+npc_lucia_drawing_1f.png
+npc_lucia_comparing_maps_1f.png
+```
+
+---
+
+## 3. ESPECIFICACIONES TÉCNICAS DE INTEGRACIÓN
+
+### 3.1 Fondos vs. Sprites Interactivos
+
+**Regla crítica:** Los assets marcados como "fondo" (TM-01, TM-02, TM-03, PS-01, PS-02, PS-03, CR-01, CR-02, CA-01) **no son sprites interactivos**. Son ilustraciones grandes (128x128 px o más) que deben usarse como:
+- **Fondos de parallax** (capa lejana, media, cercana)
+- **Pantallas de transición** entre zonas
+- **Escenarios de cutscenes**
+
+**Implementación:**
+```javascript
+// Ejemplo para el Templo Exterior
+const bg_temple = {
+  image: 'bg_temple_exterior_1f.png',
+  type: 'parallax',
+  layers: [
+    { speed: 0.2, y: 0 },      // Montañas lejanas
+    { speed: 0.5, y: 50 },     // Colina del templo
+    { speed: 1.0, y: 100 }     // Templo principal
+  ]
+};
+```
+
+### 3.2 Sprites Animados (Múltiples Frames)
+
+Los siguientes assets tienen animaciones reales y deben integrarse como spritesheets:
+
+| Asset | Frames | FPS | Loop |
+| :--- | :--- | :--- | :--- |
+| **TM-05** Gran Libro | 2 | 4 | Sí (cada 5s) |
+| **TM-06** Brújula | 4 | 8 | Sí (continuo) |
+| **TM-07** Cofre | 3 | 6 | No (una vez al abrir) |
+| **CU-01** Custodia idle | 4 | 6 | Sí |
+| **CU-02** Despegando | 3 | 8 | No |
+| **CU-03** Volando | 4 | 10 | Sí |
+| **CU-04** Aterrizando | 3 | 8 | No |
+| **CU-05** Custodiando | 2 | 4 | Sí |
+| **PS-05** Burbujas | 3 | 6 | Sí |
+| **PS-06** Corriente agua | 4 | 8 | Sí |
+| **AR-01** Acróbata | 6 | 10 | Sí |
+| **AR-02** Malabarista | 4 | 8 | Sí |
+| **AR-03** Mago | 4 | 6 | No (cada 8s) |
+| **AR-04** Coro | 3 | 4 | Sí |
+| **AR-05** Narrador | 2 | 3 | Sí |
+| **RL-04** Lamparillas | 2 | 4 | Sí |
+| **CA-05** Espejo | 2 | 2 | Sí (cada 3s) |
+| **CA-06** Luz amanecer | 4 | 6 | No (transición) |
+
+### 3.3 NPCs Estáticos (Animación Procedural)
+
+Javier, María y Lucía son estáticos (1 frame cada pose). Aplicar animación procedural como en el Sprint 13:
+
+| Personaje | Pose | Procedural |
+| :--- | :--- | :--- |
+| **Javier** | JV-01 Idle | Respiración + lupa que brilla sutilmente |
+| **Javier** | JV-02 Caminando | Offset X ±2 px, balanceo de bolso |
+| **Javier** | JV-03 Examinando | Cabeza inclinada, lupa cerca del suelo |
+| **Javier** | JV-04 Médico | Postura firme, maletín a un lado |
+| **Javier** | JV-05 Atendiendo | Inclinación hacia adelante, manos con vendas |
+| **María** | MA-01 Idle sentada | Respiración lenta, libro en regazo |
+| **María** | MA-02 Contando | Gesto de manos (rotación ±5°) |
+| **María** | MA-03/04 Caminando | Paso lento con bastón (offset Y ±3 px) |
+| **Lucía** | LU-01 Idle | Cuaderno en manos, mirada al frente |
+| **Lucía** | LU-02 Dibujando | Mano moviéndose (rotación ±3°) |
+| **Lucía** | LU-03 Comparando | Ceño fruncido, mapa extendido |
+
+---
+
+## 4. INTEGRACIÓN POR NIVEL
+
+### 4.1 Nivel 2: El Templo y el Pueblo Sumergido
+
+**Estructura de capas:**
+```
+Layer 0: PS-06 Corriente de agua (tile animado, fondo)
+Layer 1: PS-01 La Presa (fondo parallax)
+Layer 2: PS-02 Pueblo Sumergido (fondo parallax)
+Layer 3: PS-03 Casa Sumergida (fondo parallax)
+Layer 4: TM-04 Inscripciones (sprites interactivos, puzzles)
+Layer 5: TM-05 Gran Libro (sprite interactivo, Cap. 7)
+Layer 6: TM-06 Brújula (sprite coleccionable)
+Layer 7: TM-07 Cofre (sprite interactivo, Cap. 7)
+Layer 8: CU-xx Custodias (sprites animados, guardianas)
+Layer 9: PS-04 Objetos antiguos (coleccionables)
+Layer 10: PS-05 Burbujas (VFX, loop)
+Layer 11: JV-xx Javier (NPC, Cap. 6, 10, 21+)
+Layer 12: MA-xx María (NPC, Cap. 5, 9, 10)
+Layer 13: LU-xx Lucía (NPC, Cap. 6)
+```
+
+**Mecánicas clave:**
+- **Puzzle de inscripciones (TM-04):** El jugador usa el Sombrero Blanco para leer los glifos. Cada variante revela una pista diferente.
+- **Gran Libro (TM-05):** Se reescribe solo (animación de 2 frames cada 5s). Al interactuar, muestra el mensaje del Cap. 7.
+- **Brújula (TM-06):** Gira continuamente (4 frames). Al recogerla, desbloquea la capacidad de encontrar rutas ocultas.
+- **Cofre (TM-07):** Se abre con animación de 3 frames al resolver el puzzle de inscripciones.
+- **Custodias (CU-xx):** No son enemigas. Observan al jugador. Si el jugador se acerca demasiado, vuelan (CU-02 → CU-03) y regresan (CU-04 → CU-01).
+
+### 4.2 Nivel 3: El Circo de los Nómadas
+
+**Estructura de capas:**
+```
+Layer 0: CR-01 Carpa exterior (fondo parallax)
+Layer 1: CR-02 Carpa interior (fondo parallax)
+Layer 2: CR-03 Carromato azul (decorado)
+Layer 3: CR-04 Carromato abierto (decorado)
+Layer 4: CR-05 Puesto de adivina (interactivo, Cap. 10)
+Layer 5: CR-06 Puesto del narrador (interactivo, Cap. 10)
+Layer 6: AR-01 Acróbata (sprite animado, función)
+Layer 7: AR-02 Malabarista (sprite animado, función)
+Layer 8: AR-03 Mago (sprite animado, función)
+Layer 9: AR-04 Coro (sprite animado, función)
+Layer 10: AR-05 Narrador (sprite animado, función)
+Layer 11: RL-01 Peine (coleccionable)
+Layer 12: RL-02 Campana (coleccionable)
+Layer 13: RL-03 Máscaras (coleccionables, 3 variantes)
+Layer 14: RL-04 Lamparillas (VFX, loop)
+```
+
+**Mecánicas clave:**
+- **Función del circo (AR-01 a AR-05):** Los artistas actúan en bucle. El jugador puede observar cada acto para desbloquear una historia (Cap. 10).
+- **Reliquias (RL-01, RL-02, RL-03):** Coleccionables que María interpreta (Cap. 10).
+- **Lamparillas (RL-04):** VFX que aparecen durante la función del malabarista.
+
+### 4.3 Nivel 4: El Corredor del Alba
+
+**Estructura de capas:**
+```
+Layer 0: CA-01 Entrada (fondo parallax)
+Layer 1: CA-02 Columnas (tile, 2 variantes)
+Layer 2: CA-03 Mosaico (tile, suelo)
+Layer 3: CA-06 Luz amanecer (VFX, transición)
+Layer 4: CA-04 Puerta de bronce (sprite interactivo, final)
+Layer 5: CA-05 Espejo (sprite interactivo, Cap. 8)
+```
+
+**Mecánicas clave:**
+- **Mosaico de estrellas (CA-03):** El jugador toca la estrella azul (la que "no existe") para activar las inscripciones en las paredes.
+- **Espejo (CA-05):** Muestra el reflejo de Liam/Elara (animación de 2 frames). Al interactuar, revela su "yo futuro integrado".
+- **Puerta de bronce (CA-04):** Se abre al completar el puzzle del mosaico.
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (Definition of Done)
+
+1. ✅ Todos los fondos (TM-01, TM-02, TM-03, PS-01, PS-02, PS-03, CR-01, CR-02, CA-01) se integran como parallax, no como sprites interactivos.
+2. ✅ Los sprites animados (TM-05, TM-06, TM-07, CU-xx, PS-05, PS-06, AR-xx, RL-04, CA-05, CA-06) funcionan con sus frames correctos y FPS especificados.
+3. ✅ Los NPCs estáticos (JV-xx, MA-xx, LU-xx) tienen animación procedural aplicada.
+4. ✅ El código duplicado MA-03 se renombra a MA-04.
+5. ✅ Las Custodias (CU-xx) no son enemigas: observan y vuelan si el jugador se acerca.
+6. ✅ El Gran Libro (TM-05) se reescribe solo (animación de 2 frames cada 5s).
+7. ✅ La brújula (TM-06) gira continuamente (4 frames).
+8. ✅ El cofre (TM-07) se abre al resolver el puzzle de inscripciones.
+9. ✅ Los artistas del circo (AR-xx) actúan en bucle durante la función.
+10. ✅ El espejo (CA-05) muestra el reflejo de Liam/Elara.
+11. ✅ Sin errores de consola en Chrome, Firefox y Safari.
+12. ✅ El juego mantiene ≥ 50 FPS en móvil de gama media con todos los assets activos.
+
+---
+
+## 6. ORDEN DE IMPLEMENTACIÓN (5 días)
+
+| Día | Tarea | Depende de |
+| :--- | :--- | :--- |
+| **1** | Renombrar MA-03 duplicado + extraer alfa de todos los sprites | — |
+| **2** | Integrar fondos de parallax (TM-01, TM-02, TM-03, PS-01, PS-02, PS-03, CR-01, CR-02, CA-01) | Día 1 |
+| **3** | Integrar sprites animados del Nivel 2 (TM-05, TM-06, TM-07, CU-xx, PS-05, PS-06) | Día 1 |
+| **4** | Integrar sprites animados del Nivel 3 (AR-xx, RL-04) y Nivel 4 (CA-05, CA-06) | Día 1 |
+| **5** | Integrar NPCs estáticos (JV-xx, MA-xx, LU-xx) con animación procedural + pruebas de FPS | Días 2-4 |
+
+---
+
+## 7. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Impacto | Mitigación |
+| :--- | :--- | :--- |
+| Fondos grandes (128x128 px) ralentizan el render | Rendimiento | Usar como parallax estático, no como sprites animados |
+| Custodias interpretadas como enemigas | Narrativo | Documentar en código: `isHostile = false` |
+| MA-03 duplicado causa conflicto de nombres | Técnico | Renombrar a MA-04 antes de integrar |
+| Animaciones de NPCs estáticos se sienten "rígidas" | Visual | Ajustar parámetros de respiración/balanceo para cada pose |
+| Peso total del build > 4 MB | Rendimiento | Comprimir PNG a PNG-8 indexado; usar WebP si el motor lo soporta |
+
+---
+
+## 8. LO QUE ESTE PAQUETE RESUELVE Y LO QUE AÚN FALTA
+
+**Resuelto por este paquete:**
+- ✅ Assets completos para Niveles 2, 3 y 4.
+- ✅ NPCs secundarios (Javier, María, Lucía) con poses específicas.
+- ✅ Animaciones reales para Custodias, artistas del circo, objetos mágicos.
+- ✅ Fondos de parallax para todos los escenarios clave.
+
+**Aún pendiente (Sprint 19):**
+- ⏳ Integración de audio (música y SFX por nivel).
+- ⏳ Sistema de guardado en la nube (Firebase/Supabase).
+- ⏳ Pruebas de rendimiento en 10 dispositivos móviles reales.
+- ⏳ Pulido final de UI y accesibilidad.
+
+---
+
+## 9. RECOMENDACIÓN FINAL
+
+**Integrar este paquete antes de abrir el Sprint 19 (audio y pulido).** Los Niveles 2, 3 y 4 ya tienen todos los assets visuales necesarios para ser construidos. Con la integración de estos sprites, el juego tendrá una identidad visual completa y coherente desde el Nivel 1 hasta el Nivel 4.
+
+**¿Aprobado?** Si das el visto bueno, el desarrollador empieza por el Día 1 (renombrar MA-03 y extraer alfa). ¿Quieres que prepare el **script de verificación de duplicados** (Node.js) y el **JSON de configuración de animaciones** para que el desarrollador los ejecute el Día 1?

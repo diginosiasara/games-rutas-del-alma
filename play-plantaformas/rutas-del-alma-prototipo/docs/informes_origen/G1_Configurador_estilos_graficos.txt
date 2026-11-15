@@ -1,0 +1,531 @@
+# **Informe técnico para el desarrollador: configurador de estilos gráficos del videojuego**
+
+**Proyecto:** El Legado de las Lámparas Mágicas / Rutas del Alma\
+**Funcionalidad:** Selector entre Pixel Art e Ilustración Digital 2D de Fantasía\
+**Referencia visual y funcional:** Alex Kidd in Miracle World DX\
+**Prioridad:** Alta\
+**Tipo de intervención:** Ampliación del motor gráfico y del sistema de configuración visual.
+
+## **1. Objetivo del desarrollo**
+
+Se solicita incorporar al videojuego un **configurador de estilo gráfico** que permita al jugador elegir cómo quiere visualizar la aventura.
+
+La aplicación deberá ofrecer dos estilos visuales independientes:
+
+[Game pixel art of a colorful Pixel Art | pxlart](https://images.openai.com/static-rsc-4/tctjny1cPVfLjChDt6LWbj1x-TTFAytRtcNYvIZLPyd-_CpXz3DblhbpOViTHsVIIq0Pg45K84gDdv1gL0kdiRvL5T-_MTBXo2ASSuz73vaf8SLPuFwHEWGJ0E3GrwQwkiDz2Y4a2emoiTw2qKDfYV061siyOo9YzWFd5dV469w?purpose=inline)
+
+**Estilo 1. Pixel Art**
+
+Gráficos construidos mediante píxeles, sprites y animaciones de estética retro. Debe conservar una apariencia coherente, con personajes, escenarios y efectos diseñados expresamente para este estilo.
+
+[REVIEW: Candle – Save or Quit](https://images.openai.com/static-rsc-4/O_8iV1UfJy-djYzfAUWMwxQk3FGxzL1BPUk3IBbUUL0KCkt-aSlZ-cKKNiZSf5GW6TI4U_1b4_z1ZfhneGumRyUYbwy8s_kazGS3rplpwwka2GWUgScqw9XgNgYQYqgeUKKg_qwYbHI9qON3Y8gSAt2jv_OXmloe0yz4-YXqLRc?purpose=inline)
+
+**Estilo 2. Ilustración digital 2D de fantasía**
+
+Gráficos de alta resolución, con personajes ilustrados, escenarios pintados digitalmente, iluminación, sombras, profundidad y animaciones más fluidas.
+
+El jugador podrá cambiar entre ambos estilos sin perder su progreso, sin reiniciar el nivel y sin modificar las mecánicas del juego.
+
+**La decisión fundamental:** cambiará la representación visual, no el videojuego que hay debajo.
+
+## **2. Referencia: qué debe tomarse de Alex Kidd in Miracle World DX**
+
+La referencia de diseño es especialmente interesante por su posibilidad de alternar entre la presentación renovada y la representación clásica durante la partida.
+
+En este caso hay que distinguir dos cuestiones:
+
+- Alex Kidd DX utiliza una versión renovada de pixel art, no una ilustración pintada convencional.
+- Su principal aportación como referencia funcional es permitir cambiar de presentación gráfica manteniendo la estructura de juego.&#x20;
+
+  [image](https://www.google.com/s2/favicons?domain=https://www.nintendolife.com\&sz=32)
+
+  Nintendo Life+2
+
+
+
+Para nuestro proyecto se propone llevar esa idea un paso más allá:
+
+| Referencia                                   | Aplicación en nuestro videojuego                             |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| Cambio entre presentación clásica y renovada | Cambio entre Pixel Art e Ilustración 2D                      |
+| Conservación de la jugabilidad               | Las mecánicas no cambian                                     |
+| Personajes reconocibles en ambos estilos     | Liam, Elara, Aides y demás personajes mantienen su identidad |
+| Escenarios equivalentes                      | Mismos mapas, plataformas y elementos interactivos           |
+| Cambio visual durante la partida             | Selector accesible desde pausa y configuración               |
+
+No se trata de copiar los gráficos de Alex Kidd, sino de adoptar su concepto de doble presentación visual.
+
+## **3. Requisitos funcionales del configurador**
+
+### **3.1. Selector de estilo gráfico**
+
+Debe incorporarse una opción en el menú principal y en el menú de configuración.
+
+**CONFIGURACIÓN VISUAL**
+
+Propuesta de interfaz para el videojuego
+
+**Selecciona el estilo gráfico**
+
+[Explore Fantasy Pixel Art](https://images.openai.com/static-rsc-4/lPIdwRRtCeJ2osKQEf7mE3k1dSyEEvIpWhuPqUcQDzFGyOxbfi3sjqAOYQ4onmghrBcsppcxFBfgp7lKTAAtM_lPhsMZvO6_J-3fzhSyV4eXV44IB24u5qs5u5MY--eOx5qkVlVQ5rdMRhZVoSlfiUdwCvLMl_o7LE1AKTmSkmQ?purpose=inline)
+
+**Pixel Art**
+
+Estilo clásico
+
+[Images of mystical    park of fun cartoon style. | Deep Dream Generator](https://images.openai.com/static-rsc-4/TOPBv6L1BM--M2QacUVZ05GlKhqma8YTg3-hPWNUpPWERZ2oPKE5BGSOWoAC0P_9rOt6588dN9zQkzT6B-CCWfrkcnFfhhMPa-NiwGh0Y1QK0fg9tADg6_RMYFYqC9bl2wnQz6vzAsOJ1h5ewFt74hEdZplGpnZvyVbqIxT5pQE?purpose=inline)
+
+**Ilustración 2D**
+
+Estilo ilustrado
+
+**Opciones adicionales**
+
+Cambiar durante la partida
+
+Activado
+
+Guardar preferencia
+
+Activado
+
+Vista previa antes de aplicar
+
+Activado
+
+Diseño conceptual. Los controles y estados definitivos deben conectarse al sistema de configuración del juego.
+
+El configurador debe incluir:
+
+- Dos opciones visuales claramente identificadas.
+- Imagen de muestra de cada estilo.
+- Vista previa del personaje y del escenario.
+- Botón para aplicar los cambios.
+- Opción para restaurar el estilo predeterminado.
+- Guardado automático de la preferencia.
+- Posibilidad de cambiar de estilo desde el menú de pausa.
+
+### **3.2. Cambio durante la partida**
+
+El jugador debe poder cambiar de estilo sin perder:
+
+- Posición de Liam y Elara.
+- Estado de las lámparas.
+- Energía.
+- Estado de las plantas.
+- Flores recogidas.
+- Malezas transformadas.
+- Progreso de los diálogos.
+- Personajes desbloqueados.
+- Checkpoints.
+- Estado de los niveles.
+- Objetos recogidos.
+
+El cambio debe realizarse sin reiniciar el nivel.
+
+El sistema debe conservar el estado lógico y reconstruir únicamente la presentación gráfica.
+
+## **4. Definición artística de los dos estilos**
+
+### **4.1. Estilo Pixel Art**
+
+[Pixel Art Forest Level Background for Games | AI Art Generator | Easy-Peasy.AI](https://images.openai.com/static-rsc-4/DDqeMHHQj0XV2be-r6tXgGGZVfBB__s3RcjaIZJLuUbaPr1rZ6Y4NecSAI3Pv0EI-FD6MfFHjhEWUYzS9mGlHA55qhs0eIM8BY3JQmRI-U0ROMmn_65Fo_xk7HOitT1yzMOsPhfuQJfdDycR0Kv5Yc4cmyyhdCtmG78lnkBvDG4?purpose=inline)
+
+[Phoenotopia: Awakening | STOVE Store](https://images.openai.com/static-rsc-4/HhIEvOVFkuwbVYWus0FUjiU2F9UOCZhvJ1WXXeNt2VKg5BhYYOIiQW8dWWItZgOP-47z5jbJpvlG8Pd3H6pGz5hIbX1BSjtN_ByG5Jx9QJ4iyDmA2sfBxg1MIPiGrZjGGs9CMDlIeenAQnOeBm1u-MJIK0gZNbMgb74T0_CfqG4?purpose=inline)
+
+[Evil Magic Circle Game Asset Design | AI Art Generator | Easy-Peasy.AI](https://images.openai.com/static-rsc-4/ynnJLCd2jjM6IJmc34nGN0w3gj0K_GpLtuNmaQ2p5XYBljXByZpdxUXmsXuJ3sb7x5QdI3uqncXwEJ8cDJQjCILm6M3UxZZv1cjPpWYq3V7r8NRDkoAtRo7dFrkyD4QVV7_N-tbnTy_PGA94Fh2Od7Y6FQ49kuKrnrUfM0tWNF4?purpose=inline)
+
+8
+
+El estilo Pixel Art deberá contemplar:
+
+- Sprites de personajes.
+- Animaciones por fotogramas.
+- Escenarios construidos con tiles y elementos gráficos.
+- Paletas de colores controladas.
+- Efectos de luz adaptados al pixel art.
+- Partículas pixeladas.
+- Elementos de interfaz coherentes.
+- Animaciones de lámparas, flores, sombras y objetos.
+
+La resolución de trabajo debe definirse por el equipo artístico y técnico. No se debe pixelar mediante filtros cualquier ilustración de alta resolución: el estilo debe diseñarse como un conjunto gráfico propio.
+
+### **4.2. Estilo Ilustración digital 2D de fantasía**
+
+[Misspell on Steam](https://images.openai.com/static-rsc-4/pQnQ_2M9fyy9kLD-RxlARa6klhVGkdIob78wgKyfrFtW-mH0e2xcyHwS3uFIARtLwJFh93BpCZnWebeOPT73ZFbu5ao2Wlggg0gEN366XfqTYZAT4mLoO4QL8D2OST6At_nBwMeaDIeq3CSiR187HZoSZecL2ub3PnVIKuvP5Yo?purpose=inline)
+
+[Create 2d game character illustration by Lukasdeatonae | Fiverr](https://images.openai.com/static-rsc-4/ymiIJkEQ-oGMYUPvgQSKi0gl2QTV-1aVsvr7hT1LVCjlIEdcbgHasQfq87xxqwN2ogXrjsklXk-TDinNzgx1D9QDNGfn4QzSYN0EjNZWKnhdWCUg4MIb5QDe5WrrCwe3HisKxzE0TMOKHbNF2YGKmA60hMmJXDID0_H94R8suDo?purpose=inline)
+
+[THE KNIGHT WITCH DELUXE EDITION - PS5 — VIDEOGAMESPLUS.CA](https://images.openai.com/static-rsc-4/mQjDXa0Z0kbbziyt5DjHAZrEjOuzq3fRwtnRfGxJsS4kmm_CiUVY9nXBXelGB1SVnjndW9FRLBMFjTBRv2PJt5n_WRavAChyTYN9jzPu60rT2_CKcIvyzntTflMP6r0epjnjsIg73nKdfZZT4US0GxKTqYTRx4hEHddJEDle4DY?purpose=inline)
+
+14
+
+Este estilo debe transmitir la sensación de estar recorriendo un cuento ilustrado que cobra vida.
+
+Características:
+
+- Personajes dibujados digitalmente.
+- Contornos y volúmenes bien definidos.
+- Fondos con mayor profundidad visual.
+- Iluminación ambiental.
+- Sombras suaves y proyectadas.
+- Texturas de vegetación, madera, piedra y agua.
+- Efectos de partículas y brillos.
+- Animaciones con transiciones suaves.
+- Escenarios con varias capas de profundidad.
+- Mayor riqueza visual en las lámparas mágicas y sus efectos.
+
+La dirección artística debe conservar el tono fantástico, emotivo y narrativo del proyecto. No debe convertirse en un estilo realista oscuro ni perder la personalidad de cuento.
+
+## **5. Requisito esencial: los dos estilos deben representar el mismo juego**
+
+No se deben desarrollar dos videojuegos independientes.
+
+Se necesita un único sistema de juego y dos sistemas de representación gráfica.
+
+**Arquitectura conceptual**
+
+**Motor del videojuego**
+
+Movimiento · Colisiones · Física · Inventario · Diálogos · Progreso
+
+**Gestor de presentación visual**
+
+Selecciona el estilo activo y gestiona los recursos gráficos
+
+**Renderizador Pixel Art**
+
+Sprites y tiles pixelados
+
+**Renderizador Ilustrado**
+
+Sprites HD y fondos pintados
+
+**Mismo estado del juego**
+
+Una única fuente de verdad para personajes, objetos y escenarios
+
+### **5.1. Separación entre lógica y gráficos**
+
+El desarrollador deberá separar:
+
+- Datos y estado del juego.
+- Coordenadas y físicas.
+- Colisiones.
+- Animaciones lógicas.
+- Recursos visuales.
+- Renderizadores.
+- Interfaz gráfica.
+
+Cada elemento del mundo debe tener una identidad lógica única, independientemente del estilo seleccionado.
+
+Por ejemplo, Liam debe seguir teniendo el mismo identificador, posición, velocidad, colisión y estado de animación en ambos estilos. Lo único que cambia es el conjunto de recursos y la forma de dibujarlo.
+
+### **5.2. Correspondencia de recursos**
+
+Cada elemento debe disponer de una versión gráfica para cada estilo.
+
+| Elemento        | Pixel Art          | Ilustración 2D       |
+| --------------- | ------------------ | -------------------- |
+| Liam            | Sprite pixelado    | Personaje ilustrado  |
+| Elara           | Sprite pixelado    | Personaje ilustrado  |
+| Aides           | Sprite pixelado    | Personaje ilustrado  |
+| Lámpara dorada  | Pixel Art          | Ilustración con luz  |
+| Lámpara violeta | Pixel Art          | Ilustración con luz  |
+| Flores          | Sprites            | Flores ilustradas    |
+| Malezas         | Sprites            | Vegetación ilustrada |
+| Sombras         | Efectos pixelados  | Efectos suaves       |
+| Pueblo          | Tiles y fondos     | Escenario pintado    |
+| Lago            | Animación pixelada | Agua ilustrada       |
+| Interfaz        | Estética retro     | Estética de cuento   |
+
+**Condición:** no puede haber elementos importantes que desaparezcan, cambien de posición o pierdan su funcionalidad al cambiar de estilo.
+
+## **6. Aplicación a los personajes y las lámparas mágicas**
+
+El cambio gráfico debe tener especial cuidado con los protagonistas y los elementos centrales de la historia.
+
+### **6.1. Liam**
+
+- Mantener su diseño reconocible en ambos estilos.
+- Conservar las proporciones y la silueta.
+- Mantener las animaciones de caminar, saltar y utilizar la lámpara.
+- Representar la luz dorada con la misma intensidad funcional.
+- Mantener sus efectos sobre los elementos del escenario.
+
+### **6.2. Elara**
+
+- Mantener su identidad visual.
+- Conservar las animaciones y los movimientos.
+- Representar la luz violeta y su interacción con las sombras.
+- Mantener los efectos de transformación y descubrimiento.
+- Evitar que los efectos visuales oculten obstáculos o personajes.
+
+### **6.3. Aides**
+
+- Conservar las animaciones de acompañamiento.
+- Mantener sus acciones de plantar y regar.
+- Mostrar las diferentes fases de crecimiento de las plantas.
+- Representar visualmente las flores según la luz que hayan recibido.
+
+### **6.4. Flores y crecimiento mágico**
+
+Las flores deben conservar exactamente sus propiedades y estados en ambos estilos:
+
+- Flores normales.
+- Flores doradas.
+- Flores violetas.
+- Flores combinadas.
+
+Si una planta recibe la luz de Liam, Elara o ambos, su resultado debe ser idéntico a nivel de juego con independencia del estilo gráfico.
+
+En el estilo ilustrado se podrán añadir detalles de pétalos, iluminación, partículas y texturas, pero no modificar la lógica de crecimiento.
+
+## **7. Adaptación al código actual**
+
+El prototipo auditado utiliza un único documento HTML, un Canvas 2D y un mundo de juego de aproximadamente 3200 × 360 píxeles, con una resolución lógica de dibujo de 480 × 270.
+
+La implementación deberá partir de esta estructura existente y evitar duplicar el motor de juego.
+
+### **7.1. Módulos que deben incorporarse**
+
+Se recomienda organizar la nueva funcionalidad de la siguiente forma:
+
+```
+js/
+│
+├── graphics/
+│   ├── graphics-manager.js
+│   ├── graphics-config.js
+│   ├── pixel-renderer.js
+│   ├── illustration-renderer.js
+│   ├── asset-registry.js
+│   ├── animation-manager.js
+│   └── transition-manager.js
+│
+└── config/
+    └── visual-settings.js
+
+assets/
+│
+├── pixel-art/
+│   ├── characters/
+│   ├── objects/
+│   ├── environments/
+│   ├── effects/
+│   └── ui/
+│
+└── illustration-2d/
+    ├── characters/
+    ├── objects/
+    ├── environments/
+    ├── effects/
+    └── ui/
+```
+
+Esta organización es una propuesta de ampliación. Los archivos y funciones actuales deberán integrarse progresivamente, sin sustituir el código funcional que ya existe.
+
+### **7.2. Gestor de estilos gráficos**
+
+El módulo `graphics-manager.js` debe encargarse de:
+
+1. Leer la configuración visual.
+2. Identificar el estilo seleccionado.
+3. Cargar los recursos correspondientes.
+4. Comprobar que están disponibles.
+5. Activar el renderizador adecuado.
+6. Mantener el estado del juego.
+7. Gestionar el cambio visual.
+8. Guardar la preferencia.
+
+El renderizador no debe modificar las posiciones, las colisiones ni las variables de juego.
+
+### **7.3. Configuración técnica orientativa**
+
+Ejemplo de configuración:
+
+```
+const graphicsConfig = {
+  activeStyle: "pixel-art",
+
+  availableStyles: {
+    "pixel-art": {
+      enabled: true,
+      renderer: "pixel",
+      assetPath: "assets/pixel-art/"
+    },
+
+    "illustration-2d": {
+      enabled: true,
+      renderer: "illustration",
+      assetPath: "assets/illustration-2d/"
+    }
+  },
+
+  transition: {
+    enabled: true,
+    duration: 300
+  },
+
+  persistence: true
+};
+```
+
+La configuración definitiva debe integrarse con el sistema de preferencias existente, evitando crear un segundo mecanismo de almacenamiento incompatible.
+
+## **8. Cambio visual sin interrupción del juego**
+
+El cambio de estilo debe realizarse de manera controlada.
+
+Secuencia propuesta:
+
+1. El jugador selecciona el nuevo estilo.
+2. El sistema comprueba que los recursos están cargados.
+3. Se prepara el nuevo renderizador.
+4. Se conserva el estado actual del juego.
+5. Se realiza una transición visual breve.
+6. Se activa el nuevo renderizador.
+7. Se guarda la preferencia.
+
+La transición puede utilizar un fundido o una interpolación breve. No debe reiniciar la partida ni cambiar el estado de las animaciones lógicas.
+
+Si faltan recursos, el sistema debe mantener el estilo anterior y mostrar un mensaje de error.
+
+### **8.1. Rendimiento y resolución**
+
+Los dos estilos deben funcionar en la resolución y escala de pantalla disponibles.
+
+**Pixel Art:**
+
+- Escalado entero siempre que sea posible.
+- Evitar interpolación borrosa.
+- Mantener píxeles nítidos.
+- Controlar el filtrado de texturas.
+
+**Ilustración 2D:**
+
+- Permitir recursos de alta resolución.
+- Utilizar escalado proporcional.
+- Optimizar fondos y texturas.
+- Controlar el consumo de memoria.
+- Evitar cargar simultáneamente todos los recursos si no es necesario.
+
+En ambos estilos se deben mantener los límites de rendimiento establecidos para la plataforma de destino.
+
+## **9. Requisitos artísticos para el equipo gráfico**
+
+El equipo artístico debe entregar dos versiones coordinadas de cada elemento.
+
+No basta con generar una imagen diferente de cada personaje: deben existir recursos completos y animados.
+
+| Entregable             | Requisito                                            |
+| ---------------------- | ---------------------------------------------------- |
+| Personajes principales | Liam, Elara y Aides en ambos estilos                 |
+| Personajes secundarios | Versiones equivalentes                               |
+| Animaciones            | Caminar, saltar, reposo e interacciones              |
+| Objetos                | Lámparas, flores, sombreros y elementos interactivos |
+| Escenarios             | Todos los niveles y sus elementos                    |
+| Efectos                | Luz, sombras, magia, partículas y agua               |
+| Interfaz               | Menús, diálogos, botones y HUD                       |
+| Iconos                 | Inventario, estados y acciones                       |
+| Fondos                 | Capas compatibles con parallax cuando proceda        |
+
+### **9.1. Guía de coherencia visual**
+
+El equipo debe definir una guía de estilo que establezca:
+
+- Paleta de colores.
+- Proporciones de personajes.
+- Siluetas.
+- Escala de los objetos.
+- Tamaño relativo de los elementos.
+- Dirección de iluminación.
+- Animaciones.
+- Efectos visuales.
+- Contraste entre fondo y primer plano.
+
+El diseño ilustrado debe conservar la identidad de los personajes del estilo Pixel Art. No se deben realizar rediseños arbitrarios que cambien su aspecto reconocible.
+
+## **10. Plan de implementación**
+
+| Fase | Tarea                                            | Resultado                 |
+| ---- | ------------------------------------------------ | ------------------------- |
+| F1   | Auditoría y catálogo de recursos actuales        | Inventario gráfico        |
+| F2   | Definición de la guía artística de ambos estilos | Especificación visual     |
+| F3   | Desarrollo del gestor de estilos                 | Selector funcional        |
+| F4   | Separación de renderizado y lógica               | Arquitectura común        |
+| F5   | Integración del renderizador Pixel Art           | Primer estilo operativo   |
+| F6   | Integración del renderizador ilustrado           | Segundo estilo operativo  |
+| F7   | Cambio dinámico durante la partida               | Alternancia sin reiniciar |
+| F8   | Adaptación de interfaz y efectos                 | Experiencia coherente     |
+| F9   | Optimización y pruebas                           | Versión validada          |
+
+**Recomendación:** antes de producir todas las ilustraciones, desarrollar un nivel piloto completo con los dos estilos. Esto permitirá comprobar el coste artístico, la calidad de la transición y el rendimiento antes de adaptar el resto del juego.
+
+## **11. Pruebas y criterios de aceptación**
+
+El desarrollador debe demostrar que:
+
+- El jugador puede seleccionar Pixel Art.
+- El jugador puede seleccionar Ilustración digital 2D.
+- Ambos estilos tienen recursos completos para el nivel piloto.
+- Los personajes conservan su identidad.
+- Las colisiones son exactamente las mismas.
+- Las plataformas mantienen sus posiciones.
+- Los movimientos y saltos no cambian.
+- Las lámparas conservan sus efectos funcionales.
+- Las flores mantienen sus propiedades.
+- Los diálogos y eventos funcionan igual.
+- El jugador puede cambiar de estilo durante la partida.
+- El cambio no reinicia el nivel.
+- El cambio no altera el progreso.
+- La preferencia queda guardada.
+- El sistema informa si faltan recursos gráficos.
+- La interfaz se adapta a los dos estilos.
+- Ambos modos funcionan en las resoluciones de pantalla previstas.
+- No se producen caídas de rendimiento inaceptables.
+
+## **12. Resultado final esperado**
+
+Requisito de aceptación del proyecto
+
+El resultado debe ser un videojuego con dos presentaciones gráficas completas, seleccionables por el jugador:
+
+- **Pixel Art:** una experiencia retro, colorida y coherente.
+- **Ilustración digital 2D de fantasía:** una experiencia visual más rica, con escenarios pintados, personajes ilustrados, iluminación y efectos mágicos.
+
+Ambas presentaciones deben compartir exactamente el mismo mundo, los mismos personajes, las mismas mecánicas, los mismos diálogos y el mismo progreso.
+
+**No se acepta como solución** aplicar un filtro sobre los gráficos actuales para simular otro estilo. Se necesitan dos conjuntos de recursos artísticos y sus correspondientes sistemas de representación.
+
+### **Decisión técnica para el desarrollador**
+
+Recomiendo que el primer entregable sea un prototipo del mismo escenario con:
+
+1. Liam en ambos estilos.
+2. Elara en ambos estilos.
+3. Aides en ambos estilos.
+4. Una lámpara dorada y otra violeta.
+5. Un conjunto de flores y malezas.
+6. Un fondo completo del pueblo o del bosque.
+7. Una demostración del cambio entre estilos sin reiniciar el juego.
+
+Una vez aprobado ese prototipo visual y técnico, se podrá extender el sistema al resto de niveles.
+
+**Referencias consultadas para la propuesta:** entrevista al equipo de desarrollo sobre el arte y la arquitectura de Alex Kidd DX&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.nintendolife.com\&sz=32)
+
+Nintendo Life+1
+
+&#x20;y descripción oficial de sus modos gráficos&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://store.steampowered.com\&sz=32)
+
+store.steampowered.com
+
+.
+
+
+
+Puedo convertir esta especificación en un backlog de desarrollo con tareas separadas para programación, arte 2D, animación y pruebas de calidad.

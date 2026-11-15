@@ -1,0 +1,238 @@
+# 📄 INFORME TÉCNICO — SPRINT 27
+## *Rutas del Alma: El Juego* — Análisis y Ajuste de Dificultad en Plataformas del Lago
+**Versión de referencia:** Prototipo Web v24 · **Análisis basado en:** Video de gameplay (cruce del lago nocturno) · **Fecha:** 14 nov 2026
+**Dirigido a:** Desarrollador Lead / Diseñador de Gameplay / QA
+**Dependencias:** Sprints 5 (Accesibilidad del lago), 21 (Multi-dispositivo), 23 (Percusión)
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+El análisis del video revela que **la sección del cruce del lago es significativamente más difícil de lo que el tono del juego permite**. Aunque el mensaje *"Aquí caer no cuesta nada"* intenta suavizar la experiencia, la realidad mecánica contradice esto: el jugador debe ejecutar **5-6 saltos precisos en secuencia** para alcanzar una sola flor, con plataformas pequeñas, separadas por huecos amplios, y sin indicadores visuales de ayuda.
+
+**Problema central:** La dificultad actual genera **frustración mecánica** en lugar de **desafío narrativo**. En un juego donde "no hay derrota punitiva", el jugador no debería sentir que está luchando contra los controles.
+
+> *"El jardín no se cuida con ansiedad. El camino tampoco."* — Principio rector.
+
+---
+
+## 1. ANÁLISIS DE PROBLEMAS DETECTADOS
+
+### 1.1 Problemas de Diseño de Nivel
+
+| Problema | Evidencia en el video | Impacto en el jugador |
+| :--- | :--- | :--- |
+| **Distancia entre plataformas** | Los huecos parecen ser de 80-100 px, cerca del límite del salto máximo | Requiere saltos "al límite", sin margen de error |
+| **Tamaño de plataformas** | Las losas son estrechas (~60 px de ancho) | Aterrizaje impreciso, especialmente en móvil |
+| **Altura de la flor objetivo** | La rosa está en la 3ª plataforma, requiriendo 3 saltos perfectos | Frustración acumulativa: un fallo = volver al inicio |
+| **Falta de indicadores de trayectoria** | No hay guía visual de hasta dónde llega el salto | El jugador "adivina" si puede alcanzar la plataforma |
+| **Plataformas estáticas** | No hay movimiento ni ayuda dinámica | Todo depende de la precisión del salto |
+| **Sin progresión parcial** | Si fallas el 3er salto, vuelves al inicio (aunque sea a la vela) | Sensación de "tiempo perdido", no de aprendizaje |
+
+### 1.2 Problemas de Feedback Visual
+
+| Problema | Evidencia | Consecuencia |
+| :--- | :--- | :--- |
+| **Plataformas poco visibles** | En la oscuridad nocturna, las losas se confunden con el fondo | El jugador no sabe dónde puede aterrizar |
+| **Sin indicador de "salto posible"** | No hay brillo o señal en plataformas alcanzables | Incertidumbre constante |
+| **Flor sin "atracción visual"** | La rosa no emite partículas ni brillo que la destaque | El objetivo no es claro desde lejos |
+| **Sin trail de movimiento** | No hay estela que muestre la trayectoria del salto | Imposible ajustar el salto en el aire |
+
+### 1.3 Problemas de Accesibilidad
+
+| Problema | Impacto |
+| :--- | :--- |
+| **Dificultad en móvil** | Los controles táctiles tienen menos precisión que el teclado |
+| **Sin modo "Historia" para plataformas** | No hay opción para reducir la dificultad de saltos |
+| **Sin checkpoints intermedios** | Un fallo en el 5º salto = volver al inicio completo |
+
+---
+
+## 2. PROPUESTA DE AJUSTES DE DIFICULTAD
+
+### 2.1 Principios de Rediseño
+
+1. **El desafío debe ser narrativo, no mecánico:** La dificultad debe venir de *qué decisión tomar*, no de *cuánta precisión tener*.
+2. **Progresión, no repetición:** Cada intento debe acercar al jugador al éxito, aunque falle.
+3. **Señales claras, no sorpresas:** El jugador debe poder anticipar si un salto es posible.
+4. **Múltiples caminos al éxito:** No debe haber una única ruta "correcta".
+
+### 2.2 Ajustes Concretos (Priorizados)
+
+#### 🔴 CRÍTICO (Implementar inmediatamente)
+
+| Ajuste | Implementación Técnica | Efecto esperado |
+| :--- | :--- | :--- |
+| **Reducir distancia entre plataformas** | De 80-100 px a **50-60 px** máximo | Los saltos son alcanzables sin precisión extrema |
+| **Aumentar tamaño de plataformas** | De 60 px a **80-90 px** de ancho | Mayor margen de error en aterrizaje |
+| **Añadir checkpoint intermedio** | Colocar una **vela pequeña** en la 2ª plataforma | Si fallas el 3er salto, vuelves a la 2ª, no al inicio |
+| **Indicador de plataformas alcanzables** | Brillo dorado sutil en losas dentro del rango de salto | El jugador sabe dónde puede ir |
+
+#### 🟠 ALTO (Implementar en Sprint 27)
+
+| Ajuste | Implementación Técnica | Efecto esperado |
+| :--- | :--- | :--- |
+| **Trail de salto** | Estela de partículas doradas que muestra la trayectoria durante 0.3s | El jugador puede ajustar en el aire |
+| **Flor con "atracción visual"** | Partículas brillantes + brillo pulsante en la rosa | El objetivo es claro desde lejos |
+| **Plataformas con animación de "respiración"** | Escala 1.0 ↔ 1.05 en bucle | Las losas se sienten "vivas" y más visibles |
+| **Modo Historia para plataformas** | Toggle en menú: saltos más cortos, plataformas más grandes | Accesibilidad para jugadores casuales |
+
+#### 🟡 MEDIO (Implementar en Sprint 28)
+
+| Ajuste | Implementación Técnica | Efecto esperado |
+| :--- | :--- | :--- |
+| **Plataformas móviles suaves** | Algunas losas se mueven verticalmente ±10 px | Ayuda al jugador a alcanzar la siguiente |
+| **Enredadera puente (alternativa)** | Si el jugador tiene a Aides, puede crear un puente (Sprint 5) | Ruta alternativa sin saltos |
+| **Asistencia de Elara** | Si fallas 2 veces, Elara dice: *"Respira, lo intentamos juntos"* y las plataformas brillan más | Feedback narrativo de apoyo |
+
+---
+
+## 3. ESPECIFICACIONES TÉCNICAS DETALLADAS
+
+### 3.1 Configuración de Plataformas (JSON)
+
+```javascript
+const lakePlatforms = {
+  // Configuración actual (problemática)
+  current: {
+    gap: 90,           // px entre plataformas
+    width: 60,         // px de ancho
+    height: 16,        // px de alto
+    maxJumpDistance: 95 // px máximo de salto
+  },
+  
+  // Configuración propuesta (ajustada)
+  proposed: {
+    gap: 55,           // -39% de distancia
+    width: 85,         // +42% de ancho
+    height: 16,
+    maxJumpDistance: 95,
+    checkpointAt: 1,   // vela en la 2ª plataforma (índice 1)
+    visualAid: {
+      reachableGlow: true,    // brillo en losas alcanzables
+      flowerParticles: true,  // partículas en la flor
+      jumpTrail: true         // estela de salto
+    }
+  }
+};
+```
+
+### 3.2 Sistema de Indicadores Visuales
+
+```javascript
+function updatePlatformIndicators(player, platforms) {
+  platforms.forEach(platform => {
+    const distance = Math.abs(player.x - platform.x);
+    const isReachable = distance <= player.maxJumpDistance;
+    
+    if (isReachable) {
+      platform.glowIntensity = 0.6 + Math.sin(Date.now() * 0.003) * 0.2;
+      platform.glowColor = '#FFD700'; // dorado
+    } else {
+      platform.glowIntensity = 0.2;
+      platform.glowColor = '#888888'; // gris
+    }
+  });
+}
+```
+
+### 3.3 Sistema de Checkpoints Intermedios
+
+```javascript
+const lakeCheckpoints = [
+  { x: 100, y: 200, type: 'candle', active: true },   // inicio
+  { x: 250, y: 180, type: 'candle_small', active: true }, // intermedio (NUEVO)
+  { x: 400, y: 160, type: 'flower', active: false }   // objetivo
+];
+
+function onPlayerFall(player) {
+  const lastCheckpoint = lakeCheckpoints
+    .filter(cp => cp.active && cp.x < player.x)
+    .sort((a, b) => b.x - a.x)[0];
+  
+  player.respawn(lastCheckpoint.x, lastCheckpoint.y);
+  showFeedback("La vela te recoge. Aquí caer no cuesta nada.");
+}
+```
+
+### 3.4 Modo Historia (Accesibilidad)
+
+```javascript
+const difficultyModes = {
+  normal: {
+    platformGap: 55,
+    platformWidth: 85,
+    jumpAssist: false
+  },
+  story: { // Modo Historia
+    platformGap: 40,    // -27% adicional
+    platformWidth: 100, // +18% adicional
+    jumpAssist: true,   // magnetismo suave al aterrizar
+    autoCheckpoint: true // checkpoint automático cada 2 plataformas
+  }
+};
+```
+
+---
+
+## 4. MÉTRICAS DE ÉXITO (CÓMO MEDIR SI FUNCIONA)
+
+### 4.1 Métricas Cuantitativas
+
+| Métrica | Objetivo | Cómo medir |
+| :--- | :--- | :--- |
+| **Tasa de éxito en el cruce** | > 80% de jugadores lo completan en el 1er intento | Analytics de eventos |
+| **Intentos promedio** | < 2 intentos para completar | Contador de respawns |
+| **Tiempo en la sección** | 30-60 segundos (no más de 2 min) | Timer de sección |
+| **Tasa de abandono** | < 5% de jugadores cierran el juego aquí | Event de "rage quit" |
+
+### 4.2 Métricas Cualitativas
+
+| Pregunta | Método de validación |
+| :--- | :--- |
+| ¿El jugador siente que "cae sin costo"? | Playtest: observar si sonríen o suspiran al caer |
+| ¿El objetivo (flor) es claro desde el inicio? | Eye-tracking o pregunta directa en playtest |
+| ¿Las plataformas se ven "alcanzables"? | Encuesta post-playtest: "¿Sabías dónde podías saltar?" |
+
+---
+
+## 5. PLAN DE IMPLEMENTACIÓN (3 días)
+
+| Día | Tarea | Entregable |
+| :--- | :--- | :--- |
+| **Día 1** | Ajustar parámetros de plataformas (distancia, tamaño) + añadir checkpoint intermedio | Nivel jugable con dificultad reducida |
+| **Día 2** | Implementar indicadores visuales (brillo en losas alcanzables, partículas en flor) | Feedback visual mejorado |
+| **Día 3** | Añadir Modo Historia + trail de salto + pruebas con 5 usuarios | Validación de accesibilidad |
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (Definition of Done)
+
+1. ✅ Un jugador sin experiencia completa el cruce en ≤ 2 intentos.
+2. ✅ Las plataformas alcanzables brillan sutilmente en dorado.
+3. ✅ Existe al menos un checkpoint intermedio (vela pequeña).
+4. ✅ La flor objetivo emite partículas brillantes visibles desde lejos.
+5. ✅ El Modo Historia reduce la distancia entre plataformas un 27% adicional.
+6. ✅ No hay errores de consola en Chrome, Firefox y Safari.
+7. ✅ ≥ 50 FPS en móvil de gama media con todos los efectos activos.
+
+---
+
+## 7. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Impacto | Mitigación |
+| :--- | :--- | :--- |
+| Plataformas muy juntas hacen el juego "aburrido" | Engagement | Mantener al menos 2 saltos necesarios; no hacerlo trivial |
+| Indicadores visuales distraen de la atmósfera nocturna | Inmersión | Usar opacidad baja (0.3-0.6) y colores cálidos que integren con la escena |
+| Modo Historia "rompe" el desafío | Balance | Dejarlo como opción opt-in, no forzado |
+| Checkpoints intermedios reducen la sensación de logro | Satisfacción | Añadir feedback positivo al alcanzar cada checkpoint ("¡Bien hecho!") |
+
+---
+
+## 8. NOTA DE DIRECCIÓN DE DISEÑO
+
+> *"En Rutas del Alma, la dificultad no debe ser un muro que el jugador escala con frustración, sino un río que cruza con confianza. Si el jugador cae, debe sentir que el agua lo sostiene, no que lo hunde. Si salta, debe sentir que el viento lo acompaña, no que lo traiciona. El lago no es un examen de precisión: es una invitación a confiar en que, aunque falles, siempre hay una vela que te recoge."*
+
+---
+
+**¿Aprobado?** Si das el visto bueno, el desarrollador puede empezar por el Día 1 (ajustar parámetros de plataformas y añadir checkpoint intermedio). ¿Quieres que prepare el **código específico de los ajustes de plataformas** o el **mockup visual de los indicadores de brillo** en HTML/CSS para que el desarrollador los integre directamente?

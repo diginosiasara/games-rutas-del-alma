@@ -1,0 +1,151 @@
+# ✅ VISTO BUENO AL INFORME + ADENDAS CRÍTICAS
+**Proyecto:** *Rutas del Alma: El Juego* — Iteración visual v4  
+**Documento evaluado:** INFORME DE ACTUALIZACIÓN GRÁFICA Y FUNCIONAL  
+**Fecha:** 14 de noviembre de 2026  
+**Resolución:** **APROBADO CON CONDICIONES** (4 puntos bloqueantes antes de enviar al desarrollador)
+
+---
+
+## 1. VALIDACIÓN GENERAL
+
+El informe está **muy bien estructurado** y cubre los siete frentes necesarios para cerrar la iteración visual:
+
+| Sección | Estado | Comentario |
+|---|---|---|
+| Inventario de recursos | ✅ Correcto | 168 PNG clasificados por personaje |
+| Diagnóstico de incompatibilidad | ✅ Acertado | El cargador actual espera tiras horizontales; el ZIP trae archivos sueltos |
+| Animaciones por personaje | ✅ Completo | Cubre idle, walk, run, jump y acciones específicas |
+| Mecánica del jardín | ✅ Excelente | El ciclo zarza→arranque→siembra→riego→brote→flor→recogida es la columna vertebral narrativa |
+| Escena de Callum | ✅ Clara | La separación del equipo está bien descrita |
+| Especificaciones técnicas | ⚠️ Incompleta | Ver adenda 2 |
+| Criterios de aceptación | ✅ Sólidos | 11 pruebas medibles |
+
+**Tu recomendación estratégica es correcta:** no abrir Nivel 2 hasta cerrar la iteración visual de Nivel 1. Abrir un nivel nuevo con animaciones simuladas en el primero sería arrastrar deuda técnica al resto del proyecto.
+
+---
+
+## 2. ADENDA CRÍTICA 1 — DERECHOS DE AUTOR (BLOQUEANTE) 🚨
+
+El informe incluye tres imágenes de referencia con fuentes externas:
+
+> *"Kael Windrunner - Character Life Simulation by Jabali AI"*  
+> *"Free Fantasy Chibi Male Sprites Pixel Art by 2D Game Assets on Dribbble"*  
+> *"魔女見習いスローライフ『Little Witch in the Woods』..."*
+
+**Problema:** estas imágenes **no son del ZIP**. Son referencias visuales que has añadido para ilustrar el estilo deseado. Si el desarrollador las interpreta como material a integrar, estaríamos:
+
+1. Incorporando assets con licencia desconocida o comercial.
+2. Confundiendo el inventario real (168 PNG de img.zip) con material externo.
+
+**Acción requerida antes de enviar:**
+
+> **Aclarar explícitamente al desarrollador:**  
+> *"Las tres imágenes con fuentes externas (Jabali AI, Dribbble, Famitsu) son **referencias de estilo**, NO assets a integrar. El único material a usar es el contenido de img.zip. Cualquier otra fuente queda excluida por derechos."*
+
+---
+
+## 3. ADENDA CRÍTICA 2 — PRESUPUESTO DE PESO (BLOQUEANTE) 🚨
+
+El informe no menciona el impacto de integrar 168 PNG. Recordemos el presupuesto del GDD:
+
+- **Límite total del build:** < 15 MB comprimido (Brotli)
+- **v3 actual:** ~870 KB
+- **168 PNG originales (sin comprimir):** estimación conservadora de 200–400 KB cada uno → **33–67 MB en crudo**
+
+**Riesgo:** si el desarrollador mete los 168 PNG tal cual, el juego no cargará en móvil 4G en 5 segundos y romperá el criterio NF1 del informe de Fase 1.
+
+**Acción requerida:** añadir esta sección al informe:
+
+> ### 6.1 Presupuesto de assets v4
+> 
+> | Concepto | Límite |
+> |---|---|
+> | Peso total del build v4 | ≤ 4 MB (Brotli) |
+> | Peso máximo por sprite sheet | ≤ 120 KB |
+> | Resolución por frame | 230 px de alto, ancho variable |
+> | Formato | PNG-8 indexado con alfa, o WebP con transparencia |
+> | Frames por animación | 4–8 (no más) |
+> | Animaciones por personaje | 6–8 máximo en v4 |
+> 
+> **Regla:** si una animación del ZIP no cabe en el presupuesto, **se descarta o se fusiona** (ej: "observar brote" + "celebrar floración" → una sola animación de 6 frames). Prioridad absoluta: las 4 animaciones del jardín (arrancar, sembrar, regar, recoger).
+
+---
+
+## 4. ADENDA CRÍTICA 3 — LÍNEA BASE Y ESCALA (BLOQUEANTE) 🚨
+
+El informe dice correctamente: *"Alineación: pies sobre una misma línea base"*. Pero no define **cómo** se verifica ni qué hacer si el ZIP no la cumple.
+
+**Riesgo real:** los PNG generados por IA suelen tener variaciones de escala entre poses (una imagen de "agacharse" puede ser 15% más alta que una de "idle" porque el personaje está de pie en otra pose). Si se montan en una tira horizontal sin corregir, el personaje "bailará" verticalmente al animar.
+
+**Acción requerida:** añadir al informe:
+
+> ### 6.2 Protocolo de alineación
+> 
+> 1. Antes de montar cualquier tira, medir la posición del pie en cada frame (línea horizontal en el pixel más bajo del personaje).
+> 2. Si la variación entre frames de una misma animación es > 4 px, **recortar o padding** para alinear.
+> 3. Si la variación de altura total entre animaciones del mismo personaje es > 10%, **escalar uniformemente** la animación más alta hasta coincidir con la idle.
+> 4. Entregar una **captura de superposición** (overlay de todos los frames de una animación en el mismo punto) como prueba visual de alineación.
+
+---
+
+## 5. ADENDA CRÍTICA 4 — PLAN DE FALLBACK (RECOMENDADO) 🟡
+
+El informe dice: *"Mantener una alternativa de animación si falta algún recurso"*. Bien, pero falta el criterio de decisión.
+
+**Acción sugerida:**
+
+> ### 6.3 Fallback por animación
+> 
+> | Si falta... | Se usa... |
+> |---|---|
+> | Walk real | Animación simulada v3 (balanceo + escala) |
+> | Jardinería de Aides | Aides aparece estático + partículas de tierra/agua (efecto de código) |
+> | Té con Callum | Dos sprites estáticos + vapor dibujado por código |
+> | Jump real | Sprite de idle + parábola de código |
+> 
+> **Regla:** el fallback nunca bloquea la entrega. Se marca en el changelog como "pendiente de arte" y se completa en v5.
+
+---
+
+## 6. CHECKLIST DE APROBACIÓN PARA ENVIAR AL DESARROLLADOR
+
+Antes de reenviar el informe, verifica que incluyas:
+
+- [ ] **Aclaración de derechos** (Adenda 1) — al inicio del documento, en negrita.
+- [ ] **Presupuesto de peso** (Adenda 2) — como sección 6.1.
+- [ ] **Protocolo de alineación** (Adenda 3) — como sección 6.2.
+- [ ] **Plan de fallback** (Adenda 4) — como sección 6.3.
+- [ ] **Definition of Done explícita** — ver sección 7 abajo.
+- [ ] **Plazo de entrega** — sugerido: 2 semanas.
+- [ ] **Canal de dudas** — un único punto de contacto para preguntas sobre poses ambiguas del ZIP.
+
+---
+
+## 7. DEFINITION OF DONE (PROPUESTA)
+
+Para que la iteración v4 se considere cerrada, deben cumplirse **todos** estos puntos:
+
+1. ✅ Los tres personajes usan animaciones reales del ZIP en al menos 5 acciones cada uno.
+2. ✅ Aides ejecuta visualmente el ciclo completo del jardín (arrancar → sembrar → regar → observar → recoger).
+3. ✅ Las plantas muestran al menos 4 estados visuales distintos (zarza, tierra preparada, brote, flor).
+4. ✅ La escena de Callum muestra a Aides sentada con taza y vapor, y Liam/Elara continúan solos.
+5. ✅ El guardado restaura: equipo actual, estado de cada planta, flores recogidas, posición del jugador.
+6. ✅ Peso total del build ≤ 4 MB comprimido.
+7. ✅ FPS ≥ 50 en móvil de gama media (medido con el contador del menú).
+8. ✅ Sin errores en consola en Chrome, Firefox y Safari.
+9. ✅ Changelog documentando qué poses del ZIP se asignaron a cada animación (para auditoría futura).
+10. ✅ Lista de animaciones pendientes para v5 (las que no caben en presupuesto).
+
+---
+
+## 8. RECOMENDACIÓN FINAL
+
+**Envía el informe con las cuatro adendas.** No empieces Nivel 2 hasta que la iteración v4 pase la Definition of Done. La razón es narrativa, no solo técnica:
+
+> El jardín de Aides es la **primera mecánica donde el jugador siente que el mundo responde a sus decisiones**. Si se ve con animaciones simuladas, el pilar "escuchar en lugar de combatir" (pilares del GDD) pierde credibilidad visual. Vale la pena invertir dos semanas en cerrar esto antes de ampliar el mapa.
+
+**Siguiente paso tras v4 aprobado:** preparar el **brief de Nivel 2** (Templo y Pueblo Sumergido) con las mismas condiciones de presupuesto y alineación, y decidir si el peine y la campana rota (reliquias del informe técnico, no del libro) entran como coleccionables o se descartan definitivamente.
+
+---
+
+¿Quieres que redacte el **mensaje de envío al desarrollador** con las adendas integradas en el informe, o prefieres que prepare el **changelog plantilla** que debe devolverte con la entrega v4?

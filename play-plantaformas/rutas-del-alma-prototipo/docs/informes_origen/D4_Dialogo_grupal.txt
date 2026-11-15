@@ -1,0 +1,180 @@
+# 📄 INFORME TÉCNICO — SISTEMA DE DIÁLOGO GRUPAL (AIDES + CALLUM)
+## *Rutas del Alma: El Juego* — Dinámica Triangular y Consecuencias Compartidas
+**Versión de referencia:** Prototipo Web v7 · **Base narrativa:** Cap. 1 (El Jardín de la Mente) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Este informe define el sistema de interacción cuando **Aides y Callum están en la misma escena** (por ejemplo, en la cabaña tomando el té o en el borde del jardín). 
+
+A diferencia de los diálogos individuales, aquí se implementa una **Dinámica Triangular**. Callum actúa como mentor que "cede la palabra" a Aides. La intervención del jugador (Liam/Elara) no solo afecta a Aides, sino que **Callum evalúa cómo el jugador ayuda (o entorpece) el aprendizaje de su aprendiz**.
+
+---
+
+## 1. NUEVA VARIABLE DE ESTADO: `callum_respeto`
+
+Cuando se interactúa con ambos, se introduce una variable oculta que mide la opinión de Callum sobre la madurez del jugador:
+
+| Variable | Descripción | Efecto en el Gameplay |
+| :--- | :--- | :--- |
+| **`callum_respeto`** | Cuánto valora Callum la forma en que el jugador se relaciona con Aides. | Alto (>80): Callum comparte secretos del "Jardín del Valle" y desbloquea el **Té de la Claridad** (recarga ambas lámparas). Bajo (<30): Callum despide al jugador educadamente pero cierra la cabaña. |
+
+---
+
+## 2. ÁRBOL DE DIÁLOGO 1: "LA LECCIÓN EN EL JARDÍN" (Mentoría)
+
+**Contexto:** Callum está de pie frente a una planta extraña. Aides está a su lado, con la regadera en la mano, dudando. El jugador se acerca.
+**Mecánica clave:** Callum hace una pregunta a Aides. Aides mira al jugador buscando ayuda. **Lo que el jugador haga definirá si Aides aprende o se bloquea.**
+
+```json
+{
+  "id": "grupo_jardin_01_leccion",
+  "speaker": "Callum",
+  "text": "Aides, observa esta enredadera. Sus espinas miran hacia abajo, pero sus flores buscan el sol. ¿Qué nos dice sobre su naturaleza?",
+  "portrait": "callum_pensativo",
+  "secondary_portrait": "aides_dudando",
+  "choices": [
+    {
+      "id": "g1_opcion_a_dejar_pensar",
+      "text": "[Silencio / Sombrero Azul] Esperar. Dejar que Aides encuentre la respuesta a su ritmo.",
+      "hat_required": "Azul (Organización) o Ninguno",
+      "consequences": {
+        "aides_confianza": "+15",
+        "callum_respeto": "+10",
+        "player_petalos": "+5"
+      },
+      "next_node": "aides_responde_sola",
+      "gameplay_effect": "Aides piensa, duda, y finalmente sonríe: 'Que duele crecer, pero que la luz merece la pena'. Callum asiente, orgulloso. Se desbloquea la acción 'Poda Consciente'."
+    },
+    {
+      "id": "g1_opcion_b_dar_pista",
+      "text": "[Sombrero Blanco] 'Fíjate en la dirección de las espinas, Aides. ¿Qué protegen?'",
+      "hat_required": "Blanco (Hechos)",
+      "consequences": {
+        "aides_confianza": "+5",
+        "callum_respeto": "+5",
+        "player_grano": "+5"
+      },
+      "next_node": "aides_descubre",
+      "gameplay_effect": "Aides sigue la pista y descubre la respuesta. Callum comenta: 'Buena guía, no le diste el pez, le enseñaste a pescar'."
+    },
+    {
+      "id": "g1_opcion_c_responder_por_ella",
+      "text": "[Sin sombrero / Impaciencia] 'Es obvio, Callum. Las espinas protegen la raíz del frío.'",
+      "hat_required": "Ninguno",
+      "consequences": {
+        "aides_confianza": "-10",
+        "callum_respeto": "-15",
+        "vinculo_jugador": "-5"
+      },
+      "next_node": "callum_reprime",
+      "gameplay_effect": "Aides baja la mirada, avergonzada. Callum suspira: 'La respuesta es correcta, pero le has robado el descubrimiento. El jardín no crece por prisa'."
+    }
+  ]
+}
+```
+
+### Ramificaciones:
+*   **Si elige A (Esperar):** Callum y Aides comparten una mirada de complicidad. El jugador gana el rol de "Observador respetuoso".
+*   **Si elige B (Pista):** Se refuerza el trabajo en equipo. Aides gana confianza moderada.
+*   **Si elige C (Imponer):** Callum invita al jugador a "tomar un té y reflexionar" (expulsión suave de la escena por 2 minutos de tiempo de juego).
+
+---
+
+## 3. ÁRBOL DE DIÁLOGO 2: "LA PAUSA DEL TÉ" (Reflexión Compartida)
+
+**Contexto:** Están sentados en el banco frente a la cabaña. Tazas humeantes. El jugador se sienta con ellos.
+**Mecánica clave:** Aides comparte una vulnerabilidad. Callum observa cómo el jugador sostiene esa vulnerabilidad.
+
+```json
+{
+  "id": "grupo_te_02_vulnerabilidad",
+  "speaker": "Aides",
+  "text": "A veces siento que, si dejo de regar un solo día, todo lo que he construido se convertirá en zarzas otra vez. Me da miedo descansar.",
+  "portrait": "aides_triste",
+  "secondary_portrait": "callum_escuchando",
+  "choices": [
+    {
+      "id": "g2_opcion_a_validar_emocion",
+      "text": "[Sombrero Rojo] 'Ese miedo es real, Aides. Yo también lo siento a veces cuando apago la lámpara.'",
+      "hat_required": "Rojo (Emoción)",
+      "consequences": {
+        "aides_confianza": "+10",
+        "callum_respeto": "+15",
+        "player_petalos": "+10"
+      },
+      "next_node": "conexion_profunda",
+      "gameplay_effect": "Aides sonríe con alivio. Callum sirve más té: 'Reconocer el miedo compartido es la mejor agua para las raíces'. Se desbloquea el 'Té de la Calma' (recupera medidor de Elara)."
+    },
+    {
+      "id": "g2_opcion_b_pregunta_poderosa",
+      "text": "[Sombrero Verde] '¿Y si el descanso no fuera abandonar el jardín, sino dejar que la tierra respire?'",
+      "hat_required": "Verde (Creatividad)",
+      "consequences": {
+        "aides_confianza": "+20",
+        "callum_respeto": "+10",
+        "leccion_aprendida": "descanso_fertil"
+      },
+      "next_node": "cambio_de_paradigma",
+      "gameplay_effect": "Aides se queda pensativa y luego asiente lentamente. Callum sonríe: 'Has plantado una semilla nueva en su mente hoy'."
+    },
+    {
+      "id": "g2_opcion_c_minimizar",
+      "text": "[Sombrero Negro mal usado] 'No seas exagerada. Las plantas no son tan delicadas.'",
+      "hat_required": "Negro (Cautela)",
+      "consequences": {
+        "aides_confianza": "-20",
+        "callum_respeto": "-20",
+        "aides_fatiga": "+10"
+      },
+      "next_node": "cierre_defensivo",
+      "gameplay_effect": "Aides se levanta: 'Tengo que volver al jardín'. Callum se queda sentado, mirando su taza en silencio. La escena termina abruptamente."
+    }
+  ]
+}
+```
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 4.1 UI de Diálogo Triangular
+*   **Retratos Duales:** Cuando hay dos NPCs en escena, la caja de diálogo debe mostrar dos retratos pequeños en la esquina superior izquierda (ej. Callum a la izquierda, Aides a la derecha).
+*   **Indicador de Habla:** El retrato del personaje que está hablando actualmente debe tener un borde dorado brillante o estar ligeramente más grande (`scale: 1.1`).
+*   **Reacción del Oyente:** Mientras uno habla, el otro NPC debe tener una animación de "escucha activa" (asentir levemente, parpadear, o mirar al jugador).
+
+### 4.2 Sistema de "Interrupción Respetuosa"
+Si el jugador intenta hablar mientras Callum está en medio de una frase larga (tutorial):
+*   El juego no corta la frase.
+*   Aparece un pequeño icono de "Reloj de arena" sobre la cabeza del jugador.
+*   Si el jugador espera a que termine (barra de diálogo vacía por 1 segundo), gana un bonus de `+5 petalos_eco` (Recompensa por escucha activa).
+
+### 4.3 Lógica de Variables Cruzadas
+El código debe evaluar las consecuencias en cascada:
+```javascript
+// Ejemplo de lógica para la Opción C (Imponer)
+function aplicarConsecuenciaImpo() {
+  gameState.aides_confianza -= 10;
+  gameState.callum_respeto -= 15;
+  
+  // Efecto ambiental: El jardín se oscurece un 10% temporalmente
+  scene.setTint(0xaaaaaa, 0.1); 
+  
+  // Callum cierra el diálogo grupal
+  dialogueSystem.endGroupSession();
+}
+```
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Cuando Callum y Aides están juntos, se activan nodos de diálogo específicos (`grupo_*`), no los individuales.
+*   ✅ El jugador puede elegir "No intervenir" (Silencio) y esto se considera una opción válida y a menudo premiada por Callum.
+*   ✅ Los retratos de ambos personajes se muestran en la UI, indicando quién habla.
+*   ✅ Las decisiones afectan a `aides_confianza` y `callum_respeto` de forma independiente.
+*   ✅ Si el jugador es autoritario (Opción C en ambos árboles), Callum termina la interacción de forma pacífica pero firme (expulsión temporal).
+
+---
+
+¿Quieres que prepare el **JSON completo de la escena de la Cabaña** (donde Aides se queda a vivir con Callum y el jugador debe despedirse o unirse a ellos para el té final) para cerrar el arco del Nivel 1?

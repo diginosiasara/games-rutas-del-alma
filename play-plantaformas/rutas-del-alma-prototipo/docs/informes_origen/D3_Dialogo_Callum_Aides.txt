@@ -1,0 +1,223 @@
+# 📄 DISEÑO DE SISTEMA DE DIÁLOGO: CALLUM Y AIDES
+## *Rutas del Alma: El Juego* — Ramificación y Consecuencias Narrativas
+**Base narrativa:** Capítulo 1 (El Jardín de la Mente) y Capítulo 4 (Las Llaves del Pensamiento)  
+**Objetivo:** Crear un sistema de diálogo interactivo donde las respuestas de Aides a las enseñanzas de Callum alteren el estado del jardín, los recursos del jugador y las animaciones de los personajes.
+
+---
+
+## 1. VARIABLES DE ESTADO AFECTADAS POR EL DIÁLOGO
+
+Antes de diseñar las ramas, definimos qué "mueve" cada conversación en el motor del juego:
+
+| Variable | Descripción | Efecto en el Gameplay |
+| :--- | :--- | :--- |
+| **`grano_luz`** | Hechos, claridad, acción. | Desbloquea mejoras físicas (herramientas, farolillos). |
+| **`petalos_eco`** | Emoción, escucha, empatía. | Desbloquea mejoras sociales (sombreros, profundidad de diálogo). |
+| **`aides_fatiga`** | Cansancio mental/físico de Aides. | Si es alta (>80%), Aides se mueve más lento y falla al regar. |
+| **`jardin_salud`** | Porcentaje de salud del ecosistema. | Determina la velocidad de rebrote de las zarzas. |
+| **`leccion_aprendida`** | Flag booleano o enum. | Desbloquea nuevas acciones de Aides (ej. `regar_automatico`). |
+
+---
+
+## 2. ÁRBOL DE DIÁLOGO 1: "HECHOS Y JUICIOS" (La Primera Lección)
+
+**Contexto:** Aides mira su jardín descuidado. Callum se acerca y le ofrece té.
+**Ubicación:** Cabaña de Callum / Borde del jardín.
+
+```json
+{
+  "id": "callum_aides_01_hechos_juicios",
+  "speaker": "Callum",
+  "text": "Lo que ya ha brotado son los hechos de tu vida, Aides. Lo que siembras sobre ellos son tus juicios. Algunos darán flores; otros, maleza. Tu tarea es distinguirlos.",
+  "portrait": "callum_serene",
+  "choices": [
+    {
+      "id": "c1_opcion_a_reflexion",
+      "text": "Entonces... ¿mis juicios son los que realmente están ahogando mis flores?",
+      "hat_required": "Ninguno",
+      "consequences": {
+        "grano_luz": "+5",
+        "petalos_eco": "+2",
+        "jardin_salud": "+10",
+        "leccion_aprendida": "distincion_basica"
+      },
+      "next_node": "callum_respuesta_a",
+      "gameplay_effect": "Las malezas actuales reducen su nivel de resistencia en un 20%."
+    },
+    {
+      "id": "c1_opcion_b_defensa",
+      "text": "¿Y los hechos no importan? ¡Mira este desastre, es real!",
+      "hat_required": "Rojo (Emoción)",
+      "consequences": {
+        "grano_luz": "0",
+        "petalos_eco": "+5",
+        "aides_fatiga": "+15",
+        "leccion_aprendida": "reconocimiento_emocional"
+      },
+      "next_node": "callum_respuesta_b",
+      "gameplay_effect": "Aides expresa frustración. Las zarzas no se debilitan, pero Aides gana un 10% de velocidad de movimiento temporal por adrenalina."
+    },
+    {
+      "id": "c1_opcion_c_accion",
+      "text": "¿Qué hago con los juicios malos? ¿Los arranco con rabia?",
+      "hat_required": "Negro (Cautela)",
+      "consequences": {
+        "grano_luz": "+3",
+        "petalos_eco": "0",
+        "aides_fatiga": "+10",
+        "leccion_aprendida": "intento_prematuro"
+      },
+      "next_node": "callum_respuesta_c",
+      "gameplay_effect": "Aides intenta arrancar una zarza a la fuerza. La zarza se regenera al 50% y Aides pierde energía."
+    }
+  ]
+}
+```
+
+### Ramificaciones (Nodos Siguientes):
+
+*   **Si elige A (Reflexión):**
+    *   **Callum:** *"Exacto. Observa la maleza sin juzgarla. Solo mírala. Al hacerlo, le quitas el poder que le diste."*
+    *   **Consecuencia final:** Se desbloquea la acción **"Observar"** para Aides. Al usarla, las zarzas muestran su punto débil (raíz) sin necesidad de la lámpara de Liam.
+*   **Si elige B (Defensa/Emoción):**
+    *   **Callum:** *"Los hechos importan. Pero tu rabia es otra semilla. Si riegas la maleza con rabia, crecerá más fuerte."*
+    *   **Consecuencia final:** Aides baja la cabeza. Se desbloquea la acción **"Respirar"**. Aides recupera 20 de calma, pero el tiempo de juego avanza 10 minutos (las plantas crecen).
+*   **Si elige C (Acción/Rabia):**
+    *   **Callum:** *"Arranca el resto sin rencor, Aides. La maleza también te enseña dónde falta luz. Si usas rabia, solo rompes la tierra."*
+    *   **Consecuencia final:** Aides se disculpa. Se desbloquea la mecánica de **"Luz Solar"** (Aides pedirá a Liam que ilumine la zona antes de arrancar).
+
+---
+
+## 3. ÁRBOL DE DIÁLOGO 2: "EL CUIDADO CONSTANTE" (La Escena del Té)
+
+**Contexto:** Aides ha estado trabajando sin parar. Su medidor de fatiga está alto. Callum la invita a sentarse en el banco.
+**Mecánica especial:** Si el jugador fuerza a Aides a seguir trabajando, el diálogo cambia.
+
+```json
+{
+  "id": "callum_aides_02_el_te",
+  "speaker": "Callum",
+  "text": "Recuerda: el jardín necesita cuidado constante. Pero el jardinero también. Siéntate, Aides. El té se enfría.",
+  "portrait": "callum_sosteniendo_taza",
+  "conditions": {
+    "aides_fatiga_mayor_que": 60
+  },
+  "choices": [
+    {
+      "id": "c2_opcion_a_descanso",
+      "text": "Tienes razón, Callum. Solo un momento. (Sentarse y beber)",
+      "hat_required": "Azul (Organización)",
+      "consequences": {
+        "aides_fatiga": "-50",
+        "petalos_eco": "+5",
+        "grano_luz": "+2",
+        "jardin_salud": "+5",
+        "leccion_aprendida": "ciclo_descanso"
+      },
+      "next_node": "callum_respuesta_descanso",
+      "gameplay_effect": "Aides entra en estado 'EN_CASA_DESCANSANDO'. Las plantas del jardín crecen un 20% más rápido durante 2 minutos de tiempo real."
+    },
+    {
+      "id": "c2_opcion_b_trabajo",
+      "text": "No puedo, Callum. Si me detengo, las zarzas volverán a crecer.",
+      "hat_required": "Ninguno",
+      "consequences": {
+        "aides_fatiga": "+30",
+        "grano_luz": "+5",
+        "petalos_eco": "-5",
+        "leccion_aprendida": "negacion_descanso"
+      },
+      "next_node": "callum_respuesta_trabajo",
+      "gameplay_effect": "Aides sigue trabajando, pero su animación de 'regar' tiene un 30% de probabilidad de fallar (derramar agua)."
+    }
+  ]
+}
+```
+
+### Ramificaciones (Nodos Siguientes):
+
+*   **Si elige A (Descanso - Recomendado):**
+    *   **Callum:** *"La maleza vuelve si te descuidas, sí. Pero un jardinero agotado siembra dudas, no flores. Mira el vapor del té. Sube, se expande y se va. Así deben irse tus preocupaciones."*
+    *   **Consecuencia final:** Aides aprende **"Riego Automático"**. Cuando el jugador se aleja del jardín, Aides riega las plantas maduras automáticamente para evitar que se marchiten.
+*   **Si elige B (Trabajo Forzado):**
+    *   **Callum:** *(Suspira y deja la taza en el banco)* *"Haces bien en ser diligente. Pero el agua que derramas por cansancio no llega a las raíces. Vuelve cuando tus manos dejen de temblar."*
+    *   **Consecuencia final:** Aides no aprende el riego automático. Además, Callum no le da la "Semilla de Enredadera" (necesaria para el puente del lago en el Sprint 5). El jugador tendrá que cruzar el lago saltando.
+
+---
+
+## 4. ÁRBOL DE DIÁLOGO 3: "LA MALEZA QUE ENSEÑA" (Interacción en el Jardín)
+
+**Contexto:** Aides encuentra una zarza de Nivel 2 (Resentimiento) que es difícil de arrancar. Callum aparece de forma etérea (como un recuerdo o guía).
+
+```json
+{
+  "id": "callum_aides_03_maleza_luz",
+  "speaker": "Aides",
+  "text": "¡Esta zarza no sale! Está demasiado arraigada. ¡La odio!",
+  "portrait": "aides_frustrada",
+  "speaker_2": "Callum (Voz en off / Fantasma)",
+  "text_2": "La maleza también te enseña dónde falta luz, Aides. No luches contra ella. Pregúntale qué necesita.",
+  "choices": [
+    {
+      "id": "c3_opcion_a_preguntar",
+      "text": "¿Qué necesitas? ¿Dónde te duele la tierra?",
+      "hat_required": "Rojo (Emoción)",
+      "consequences": {
+        "petalos_eco": "+10",
+        "jardin_salud": "+15",
+        "leccion_aprendida": "empatia_raices"
+      },
+      "next_node": "callum_respuesta_empatia",
+      "gameplay_effect": "La zarza se encoge y se vuelve Nivel 1. Aides la arranca con una sola animación suave."
+    },
+    {
+      "id": "c3_opcion_b_iluminar",
+      "text": "Necesita luz. (Pedir a Liam que use la lámpara)",
+      "hat_required": "Blanco (Hechos)",
+      "consequences": {
+        "grano_luz": "+10",
+        "energia_liam": "-20",
+        "leccion_aprendida": "sinergia_luz"
+      },
+      "next_node": "callum_respuesta_luz",
+      "gameplay_effect": "La raíz brilla en dorado. Aides la arranca fácilmente. Se obtiene un 'Grano de Luz' extra."
+    }
+  ]
+}
+```
+
+---
+
+## 5. INTEGRACIÓN TÉCNICA PARA EL DESARROLLADOR
+
+Para que este sistema funcione sin romper el bucle de juego, se deben seguir estas reglas en el código:
+
+1.  **Pausa del Tiempo:** Cuando se abre un diálogo con Callum, el tiempo de juego (`gameTime`) y el crecimiento de las plantas (`plantGrowthTimer`) deben pausarse, **excepto** si la consecuencia del diálogo indica que el tiempo debe avanzar (como en la Opción B del Diálogo 1).
+2.  **Sistema de "Ecos" en el Entorno:**
+    *   Si el jugador elige consistentemente opciones de **Grano de Luz** (Hechos), el jardín de Callum se verá más geométrico, ordenado, con líneas rectas.
+    *   Si elige **Pétalos de Eco** (Emociones), el jardín de Callum se verá más salvaje, con flores de colores vibrantes y mariposas.
+    *   *Esto se logra cambiando el `sprite_sheet` del fondo del jardín según la variable `player_balance`.*
+3.  **Animaciones de Callum:**
+    *   Callum no debe tener animaciones complejas de movimiento. Debe estar siempre en pose `idle_sitting` (sentado) o `idle_standing` (de pie con bastón).
+    *   La "acción" de Callum es servir té. Se debe crear una animación de 12 frames donde el vapor de la taza sube en bucle (`loop_vapor`).
+4.  **Guardado de Estado:**
+    ```json
+    "dialogue_state": {
+      "callum_aides_01": "completed_option_A",
+      "callum_aides_02": "completed_option_A",
+      "callum_aides_03": "locked"
+    }
+    ```
+    Esto asegura que si el jugador recarga la partida, Callum no repita las lecciones básicas, sino que pase a consejos avanzados o simplemente salude.
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Las tres conversaciones están implementadas en el `dialogue.json`.
+*   ✅ Las consecuencias modifican las variables `grano_luz`, `petalos_eco` y `aides_fatiga` en tiempo real.
+*   ✅ La elección en el Diálogo 2 (Descanso vs. Trabajo) afecta la obtención de la "Semilla de Enredadera" (crítico para el Nivel 1).
+*   ✅ Los retratos de Callum y Aides cambian según la emoción de la opción elegida (ej. Aides frustrada vs. Aides serena).
+*   ✅ No hay errores de consola al cambiar de nodo de diálogo.
+
+¿Quieres que prepare el **JSON completo y validado** de estos tres árboles para que el desarrollador solo tenga que copiarlo y pegarlo en el archivo `data/dialogue.json` del prototipo?

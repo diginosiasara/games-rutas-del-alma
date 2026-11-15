@@ -1,0 +1,103 @@
+¡Excelente iniciativa! Introducir un sistema de economía (puntos/monedas) en un juego narrativo y psicológico como *Rutas del Alma* es un reto fascinante. **No podemos usar "monedas de oro" tradicionales ni "puntos de experiencia para subir de nivel de ataque"**, porque romperían la metáfora central del libro: aquí no se combate, se cultiva, se escucha y se comprende.
+
+Por ello, he diseñado un sistema de economía dual basado en los pilares del libro: **los Hechos (Liam) y las Emociones (Elara)**, y en la metáfora del **Jardín de la Mente**.
+
+Aquí tienes la propuesta detallada para el desarrollador:
+
+---
+
+# 📄 INFORME DE DISEÑO: SISTEMA DE ECONOMÍA NARRATIVA
+## *Rutas del Alma: El Juego* — "El Cultivo de la Resonancia"
+
+### 1. CONCEPTO CENTRAL: ADIÓS A LAS MONEDAS DE ORO
+En lugar de una moneda única, el juego utiliza **dos recursos complementarios** que el jugador debe recolectar y gestionar. Esto refuerza la mecánica de los "Seis Sombreros" y la dualidad de los protagonistas. 
+
+Los recursos son:
+1.  **Grano de Luz (Grano)**: Representa los **hechos, la acción y la claridad** (Dominio de Liam / Sombrero Blanco).
+2.  **Pétalos de Eco (Pétalos)**: Representan la **empatía, la escucha y la emoción** (Dominio de Elara / Sombrero Rojo).
+
+---
+
+### 2. CÓMO SE OBTIENEN (LA "MINERÍA" DEL JUEGO)
+
+#### 🌾 Grano de Luz (Se obtiene a través de la Acción y la Verdad)
+*   **Iluminar lo oculto:** Cada vez que el jugador usa la lámpara de Liam para revelar una plataforma oculta, una inscripción o disipar niebla, obtiene *Grano*.
+*   **Jardinería exitosa:** Aides entrega *Grano* al completar el ciclo de una planta (cosechar la flor antes de que se marchite).
+*   **Desmentir rumores:** Usar el Sombrero Blanco para separar el "grano de la paja" en los diálogos de los vecinos.
+*   **Exploración:** Encontrar reliquias físicas (mapas, brújulas, cofres).
+
+#### 🌸 Pétalos de Eco (Se obtienen a través de la Escucha y la Emoción)
+*   **Sanar sombras:** Cada vez que el jugador usa la lámpara de Elara y elige la respuesta empática correcta (reflejar/preguntar) para disolver una sombra, obtiene *Pétalos*.
+*   **Diario del Jugador:** Al completar una entrada de reflexión en el Diario al final del nivel, el jugador recibe una bonificación de *Pétalos*.
+*   **Conexión emocional:** Usar el Sombrero Rojo para desbloquear opciones de diálogo profundas con NPCs (Tomás, Callum, Aides).
+*   **Cuidado del entorno:** Regar las plantas de otros NPCs o dejar que Aides descanse en la cabaña.
+
+---
+
+### 3. CÓMO SE GASTAN (LA "TIENDA" DEL JUEGO)
+
+No hay una "tienda" tradicional. Los recursos se invierten en **mejoras del entorno, herramientas y profundización narrativa**.
+
+#### 🛠️ Inversión de Grano (Mejoras Físicas y de Herramientas)
+*   **En la Cabaña de Callum:**
+    *   *Té de Hierbas Raras:* Recarga instantánea de la lámpara de Liam o acelera el crecimiento de las plantas de Aides.
+    *   *Herramientas de Jardín:* Mejora la regadera de Aides (riega un área más grande) o la azada (arranca zarzas de nivel 2 más rápido).
+*   **En el Entorno:**
+    *   *Reparar puentes/escaleras:* Desbloquear atajos físicos en el mapa.
+    *   *Farolillos:* Comprar farolillos para iluminar zonas oscuras de forma permanente (ahorrando energía de la lámpara).
+
+#### 💖 Inversión de Pétalos (Mejoras Sociales y Narrativas)
+*   **Con el Consejero de Sombreros:**
+    *   *Desbloquear Sombreros Avanzados:* Pagar *Pétalos* para desbloquear los efectos pasivos de los sombreros Negro, Amarillo, Verde y Azul.
+    *   *Ampliar el tiempo de uso:* Aumentar la duración del efecto de un sombrero antes de que se agote.
+*   **En los Diálogos (Mecánica de "Profundidad"):**
+    *   Si el jugador falla una respuesta empática y la sombra se cierra, puede gastar *Pétalos* para usar la habilidad **"Segunda Oportunidad"** (forzar un reinicio del turno de diálogo).
+*   **En el Diario:**
+    *   *Tinta Dorada:* Gastar *Pétalos* para desbloquear preguntas "premium" en el Diario, que otorgan *buffs* pasivos permanentes (ej. "El medidor de calma de Elara se regenera un 10% más rápido").
+
+---
+
+### 4. MECÁNICA OCULTA: "EL EQUILIBRIO DEL JARDÍN" (Sistema de Reputación Interna)
+
+El juego no muestra una barra de "Bien vs. Mal", sino que mide el **Equilibrio entre Grano y Pétalos** en el inventario del jugador.
+
+*   **Si el jugador acapara solo Grano (Demasiada lógica/acción):** 
+    *   *Efecto:* El jardín de Aides produce flores grandes, pero no atraen mariposas (coleccionables extra). Los NPCs lo ven como "eficaz pero frío". Las sombras son más difíciles de disolver.
+*   **Si el jugador acapara solo Pétalos (Demasiada emoción/pasividad):** 
+    *   *Efecto:* Las sombras se disuelven muy fácil, pero las plantas del jardín crecen lentas y las zarzas reaparecen más rápido. Los NPCs lo ven como "comprensivo pero ineficaz".
+*   **Estado "Jardín en Armonía" (Equilibrio 50/50):**
+    *   Si el jugador mantiene ambos recursos en cantidades similares, el juego activa un estado visual: el entorno brilla con un tono dorado-violeta suave, la música cambia a una capa más rica, y Aides deja regalos especiales (semillas raras) en la puerta de la cabaña.
+
+---
+
+### 5. INTEGRACIÓN EN LA INTERFAZ (UI/UX)
+
+Para mantener la estética de "libro antiguo y pergamino", los recursos no deben parecer barras de videojuego arcade.
+
+*   **Ubicación:** En el HUD superior izquierdo (junto al medidor de Luz).
+*   **Visualización:**
+    *   **Grano:** Un pequeño icono de una espiga de trigo dorada o una moneda con el símbolo del Sol.
+    *   **Pétalos:** Un icono de una flor de loto o una gota de rocío con brillo violeta.
+*   **Animación:** Cuando el jugador recoge recursos, no debe haber un sonido de "caja registradora". 
+    *   *Sonido para Grano:* Un tintineo suave de cristal o campanilla lejana.
+    *   *Sonido para Pétalos:* Un suspiro de viento o una nota de arpa suave.
+
+---
+
+### 6. INSTRUCCIONES TÉCNICAS PARA EL DESARROLLADOR
+
+1.  **Variables de Estado:** Crear `playerData.grano` y `playerData.petalos` en el sistema de guardado (`localStorage`).
+2.  **Eventos de Transacción:** Crear una función global `addResource(type, amount)` y `spendResource(type, amount)` que dispare partículas visuales (el número flotando hacia el HUD).
+3.  **Sistema de Tienda (NPCs):** Modificar los diálogos de Callum y el Consejero de Sombreros para incluir nodos de "Intercambio" donde se evalúe si el jugador tiene suficientes recursos antes de mostrar la opción de compra.
+4.  **Balanceo Inicial (Nivel 1):**
+    *   *Coste de Té de Callum:* 10 Grano.
+    *   *Coste de desbloqueo de Sombrero Rojo:* 15 Pétalos.
+    *   *Recompensa por sombra disuelta:* 3-5 Pétalos.
+    *   *Recompensa por flor cosechada:* 3-5 Grano.
+
+---
+
+### ¿Por qué esta dinámica es perfecta para tu libro?
+Porque **gamifica la psicología**. El jugador aprende inconscientemente que para avanzar en la vida (y en el juego) no basta con tener razón (Grano/Hechos), ni basta con ser empático (Pétalos/Emociones). **Necesita cultivar ambos**. Si falla en uno, el "jardín" (su mente/su progreso) se desequilibra. 
+
+¿Te encaja esta propuesta? Si la apruebas, puedo redactar el **JSON de la tienda de Callum y del Consejero** con los precios y los efectos exactos para que el desarrollador solo tenga que copiar y pegar.

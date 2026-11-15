@@ -1,0 +1,103 @@
+# 📄 INFORME TÉCNICO — SPRINT 6
+## *Rutas del Alma: El Juego* — Feedback visual de plantas bajo la iluminación de las lámparas
+**Versión de referencia:** Prototipo Web v6/v7 · **Base narrativa:** Cap. 1 (El Jardín de la Mente) y Cap. 4 (Las Llaves del Pensamiento) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+El objetivo de este sprint es que las plantas (flores y zarzas) **no sean elementos estáticos**, sino que reaccionen visualmente a la luz de Liam y Elara, y a los Sombreros del Pensamiento. 
+
+Esto refuerza la metáfora central del libro: *"el jardín es la mente"*. Iluminar una planta no solo sirve para verla en la oscuridad, sino para **comprender su estado objetivo (Liam) o su carga emocional (Elara)**, y para tomar mejores decisiones de cuidado.
+
+---
+
+## 1. FEEDBACK VISUAL BASE (Sin sombreros)
+
+### 1.1 Lámpara de Liam (Luz Dorada / Acción)
+**Efecto narrativo:** Revela la *verdad objetiva* y el estado físico de la planta.
+**Implementación visual:**
+*   **Borde dorado (Rim Light):** Al apuntar la luz, la planta dibuja un contorno dorado brillante de 2-3 px.
+*   **Textura nítida:** Si la planta está en penumbra, la luz de Liam aumenta su contraste y saturación al 100%, revelando detalles (espinas en la zarza, pétalos caídos en la flor marchita).
+*   **Indicador de "Raíz" (Solo en Zarzas):** Si la luz de Liam incide sobre una zarza durante más de 1.5 segundos, se ilumina sutilmente la base de la planta (la raíz). Esto indica visualmente al jugador *desde dónde* debe arrancarla para que no vuelva a crecer inmediatamente.
+
+### 1.2 Lámpara de Elara (Luz Violeta / Emoción)
+**Efecto narrativo:** Revela la *carga emocional* o el "alma" de la planta.
+**Implementación visual:**
+*   **Aura suave (Glow):** Un halo violeta/rosado difuminado alrededor de la planta.
+*   **Efecto "Respiración":** La planta realiza un ciclo de escala muy sutil (de 1.0 a 1.03 y vuelta a 1.0 en 2 segundos), como si estuviera viva y sintiendo la presencia de Elara.
+*   **Partículas emocionales:** 
+    *   *Flor sana:* Emite pequeñas burbujas o destellos azul claro (calma).
+    *   *Zarza:* Emite un humo grisáceo muy tenue (ansiedad/miedo).
+    *   *Flor marchita:* Emite una lágrima o partícula oscura que cae al suelo y se desvanece (tristeza/abandono).
+
+---
+
+## 2. FEEDBACK AVANZADO: PLANTAS + SOMBREROS DEL PENSAMIENTO
+
+Cuando el jugador equipa un sombrero y apunta con cualquiera de las dos lámparas, la visualización de la planta cambia para ofrecer **información estratégica** sobre cómo cuidarla.
+
+| Sombrero Activo | Efecto Visual en la Planta | Información que revela al jugador |
+| :--- | :--- | :--- |
+| **Blanco (Hechos)** | Aparece un pequeño icono flotante o texto minimalista sobre la planta. | Muestra datos fríos: *"Fase: Floración"*, *"Tiempo para marchitar: 45s"*, *"Necesita agua"*. |
+| **Rojo (Emociones)** | La planta se tiñe ligeramente con un filtro de color cálido o frío. | Revela cómo se "siente" el jardín: las flores sanas brillan en tonos cálidos (alegría), las marchitas en tonos azules fríos (culpa/abandono). |
+| **Negro (Cautela)** | Las plantas en riesgo (a punto de marchitarse o zarzas grandes) pulsan en **rojo intermitente**. | Alerta de peligro inminente: *"¡Atención! Esta flor se marchitará en 10 segundos"*. |
+| **Amarillo (Optimismo)** | Las plantas emiten un resplandor dorado intenso y partículas de estrellas. | Muestra la recompensa: *"Al recogerla: +15 Calma"*, *"Al arrancar la zarza: desbloquea semilla rara"*. |
+| **Verde (Creatividad)** | En los huecos de tierra vacíos, la luz verde dibuja el **fantasma (silueta)** de una planta alternativa. | Sugiere posibilidades: muestra qué tipo de flor podría crecer ahí si se usa una semilla diferente. |
+| **Azul (Organización)** | Las plantas se conectan con líneas tenues si están cerca, formando "grupos". | Ayuda a planificar el riego: permite ver de un vistazo qué zonas del jardín necesitan atención prioritaria. |
+
+---
+
+## 3. MATRIZ DE INTERACCIÓN (Estados de la planta)
+
+Cómo debe comportarse visualmente cada estado de la planta bajo la luz:
+
+| Estado de la Planta | Luz de Liam (Dorada) | Luz de Elara (Violeta) |
+| :--- | :--- | :--- |
+| **Zarza (Maleza)** | Resalta las espinas. Muestra el punto débil (raíz) para arrancar. | Emite humo gris. Si se usa el Sombrero Rojo, la zarza "tiembla" (miedo). |
+| **Tierra preparada** | Brillo dorado en el surco, indicando que está lista para la semilla. | Un suave pulso violeta, como un latido esperando vida. |
+| **Semilla / Brote** | Muestra un pequeño medidor de progreso de crecimiento sobre ella. | Emite partículas verdes tenues (esperanza). |
+| **Flor en Floración** | Resplandor máximo. Los pétalos se ven vibrantes y detallados. | "Respira" lentamente. Emite burbujas de calma. |
+| **Flor Marchita** | Muestra las hojas secas y el tallo doblado con alto contraste. | Emite una partícula oscura (lágrima). Con Sombrero Negro, parpadea en rojo. |
+| **Flor Recogida (Hueco)** | El hueco brilla suavemente, invitando a plantar de nuevo. | Un destello violeta de agradecimiento al ser recogida. |
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS (HTML5 Canvas / WebGL)
+
+Para que estos efectos funcionen fluidos en móvil y web sin romper el límite de los 4 MB:
+
+### 4.1 Sistema de Iluminación (Shaders vs. Canvas 2D)
+*   **Opción A (Recomendada para prototipo ligero):** Usar `globalCompositeOperation = 'lighter'` (o `'screen'`) en el Canvas 2D para dibujar los conos de luz. Para el borde dorado de Liam, dibujar el sprite de la planta dos veces: la primera con un filtro de color dorado y desplazado 2px (simulando *rim light*), y la segunda con el sprite normal encima.
+*   **Opción B (Para Vertical Slice / Producción):** Implementar un **Fragment Shader** (GLSL) básico en WebGL que reciba el sprite de la planta y la posición de la luz, calculando el *bloom* y el tinte de color en tiempo real. Es más costoso pero visualmente superior.
+
+### 4.2 Sistema de Partículas (Performance)
+*   Las partículas (burbujas de calma, humo gris, estrellas) deben usar un **Object Pool** (grupo de objetos reutilizables). Nunca crear y destruir partículas (`new Particle() / destroy()`), sino ocultarlas y reactivarlas.
+*   **Límite móvil:** Máximo 30 partículas activas en pantalla simultáneamente. Si hay muchas plantas, reducir la tasa de emisión (emission rate) a la mitad en dispositivos táctiles.
+
+### 4.3 Efecto "Respiración" (Elara)
+*   No usar escalado real del sprite (`scale.x = 1.03`) porque puede pixelar los bordes en el canvas.
+*   **Solución:** Usar una onda senoidal en el tiempo (`Math.sin(Date.now() * 0.002)`) para aplicar un ligero desplazamiento en el eje Y (`offsetY`) o un cambio de `alpha` (opacidad) entre 0.9 y 1.0. Es más barato y da la misma sensación de "vida".
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN
+
+1.  **Diferenciación clara:** Un jugador puede distinguir a simple vista si está mirando una planta con la luz de Liam (dorada, nítida) o de Elara (violeta, suave).
+2.  **Utilidad gameplay:** La luz de Liam sobre una zarza revela visualmente la raíz, facilitando la mecánica de "arrancar" (Aides lo hace mejor si la raíz está iluminada).
+3.  **Sombreros funcionales:** Al cambiar al Sombrero Negro, las plantas a punto de marchitarse (menos de 15s) parpadean en rojo.
+4.  **Rendimiento:** Al iluminar 5 plantas simultáneamente con partículas activas, el juego mantiene ≥ 50 FPS en un móvil de gama media.
+5.  **Estética:** Los efectos de luz no tapan el sprite original de la planta; se integran como capas (layers) superiores con modos de fusión adecuados.
+
+---
+
+## 6. ORDEN DE IMPLEMENTACIÓN SUGERIDO
+
+1.  **Día 1:** Implementar el cono de luz básico y el tinte de color (Dorado para Liam, Violeta para Elara) sobre los sprites de las plantas.
+2.  **Día 2:** Añadir el efecto de "Respiración" (opacidad/offset) para la luz de Elara y el "Rim light" (borde) para la luz de Liam.
+3.  **Día 3:** Integrar las partículas básicas (burbujas para flores, humo para zarzas) con Object Pool.
+4.  **Día 4:** Programar la lógica de los Sombreros (especialmente el Negro para el aviso de marchitamiento y el Blanco para los datos flotantes).
+5.  **Día 5:** Pruebas de rendimiento en móvil y ajuste de parámetros (tamaños de luz, cantidad de partículas).
+
+---
+
+¿Quieres que prepare el **código base en JavaScript/Canvas** para el efecto de "Rim Light" (borde dorado) y el "Glow" (aura violeta) para que el desarrollador pueda copiarlo y pegarlo directamente en el prototipo?

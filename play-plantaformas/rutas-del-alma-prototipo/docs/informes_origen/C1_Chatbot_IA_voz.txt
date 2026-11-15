@@ -1,0 +1,523 @@
+# **Informe técnico: integración del chatbot IA, lectura en voz alta y configurador de agentes**
+
+**Proyecto:** El Legado de las Lámparas Mágicas / Rutas del Alma\
+**Ámbito:** Interfaz de conversación, asistencia basada en el contenido del libro, síntesis de voz y gestión de modelos de inteligencia artificial.
+
+## **1. Situación actual y objetivo**
+
+El archivo `index (8).html` contiene diálogos narrativos programados para los personajes y las interacciones del juego, pero no incorpora actualmente un chatbot de IA conectado a un modelo externo o local.
+
+En la revisión del código no se han encontrado integraciones con Ollama, Antigravity, APIs de modelos, una carpeta `modelos-ia` ni funciones de lectura en voz alta mediante `SpeechSynthesis`.
+
+Por tanto, esta funcionalidad debe plantearse como un nuevo módulo, integrado con la aplicación actual sin interferir con las mecánicas del videojuego.
+
+El objetivo es incorporar un **chatbot inteligente que conozca el contenido completo del libro**, permita conversar sobre él, leer las respuestas en voz alta y configurar qué agente de IA se utiliza, dónde se ejecuta y cómo responde.
+
+## **2. Funcionalidades que debe incorporar el chat**
+
+### **2.1. Interfaz de conversación**
+
+El chat debe permitir:
+
+- Escribir preguntas y recibir respuestas de la IA.
+- Consultar personajes, escenarios, acontecimientos, objetos y relaciones narrativas.
+- Preguntar por capítulos, escenas y acontecimientos del libro.
+- Solicitar explicaciones, resúmenes y aclaraciones.
+- Mantener el contexto de la conversación.
+- Consultar el contenido del libro sin tener que volver a introducirlo.
+- Mostrar el estado del agente: conectado, cargando, respondiendo o desconectado.
+- Permitir iniciar una conversación nueva y consultar el historial.
+- Interrumpir una respuesta que esté generándose.
+
+La interfaz debe ser adaptable a escritorio, tablet y móvil.
+
+### **2.2. Lectura en voz alta**
+
+Requisito funcional
+
+El chat debe incluir la posibilidad de escuchar las respuestas, además de leerlas en pantalla.
+
+Se deben incorporar:
+
+- Botón para escuchar cada respuesta.
+- Botón para pausar y reanudar.
+- Botón para detener la reproducción.
+- Selector de voz disponible.
+- Configuración de velocidad de lectura.
+- Configuración de volumen, cuando el motor de voz lo permita.
+- Posibilidad de leer una respuesta completa o un fragmento seleccionado.
+- Lectura de los mensajes del usuario, si se activa esta opción.
+
+La lectura debe funcionar de manera independiente del modelo de IA. Es decir, cambiar de Ollama a otro proveedor no debe eliminar la posibilidad de escuchar las respuestas.
+
+Se puede utilizar inicialmente la API de síntesis de voz del navegador (`SpeechSynthesis`), con una arquitectura que permita incorporar posteriormente un motor de voz local o externo.
+
+### **2.3. Configurador del tipo de respuesta**
+
+El usuario debe poder elegir cómo quiere que responda el chatbot.
+
+No debe limitarse a un único estilo de conversación. Se necesita un configurador accesible desde la propia interfaz del chat.
+
+Propuesta de perfiles:
+
+| Perfil         | Comportamiento                                                  |
+| -------------- | --------------------------------------------------------------- |
+| Conversacional | Respuestas naturales y cercanas                                 |
+| Explicativo    | Explicaciones detalladas y razonadas                            |
+| Resumido       | Respuestas breves y directas                                    |
+| Narrativo      | Lenguaje literario y contextualizado con el libro               |
+| Educativo      | Explicaciones didácticas y ejemplos                             |
+| Reflexivo      | Preguntas que invitan a pensar y profundizar                    |
+| Creativo       | Propuestas e ideas nuevas, diferenciadas del contenido original |
+| Técnico        | Respuestas estructuradas, precisas y especializadas             |
+
+También debe permitir ajustar:
+
+- Longitud de respuesta.
+- Nivel de detalle.
+- Tono y estilo.
+- Idioma.
+- Creatividad.
+- Uso de ejemplos.
+- Si debe limitarse al contenido del libro o puede aportar conocimiento general.
+
+**Importante:** los perfiles deben modificar las instrucciones del agente, no el contenido original del libro. Cuando el chatbot invente una propuesta creativa, deberá identificarla como tal y no presentarla como un acontecimiento que realmente aparece en la obra.
+
+## **3. Configurador de agentes de IA y selección del modelo**
+
+Esta es una de las partes más importantes del desarrollo. La aplicación debe disponer de un configurador que permita seleccionar automáticamente o manualmente el motor de IA que utilizará el chatbot.
+
+### **3.1. Prioridad de selección de los modelos**
+
+La prioridad de búsqueda y utilización debe ser la siguiente:
+
+Prioridad 1
+
+**Modelos empaquetados en la aplicación**
+
+Buscar primero los modelos descargados y preparados en la carpeta `modelos-ia`. Si existe un modelo compatible y operativo, debe ser la opción preferente.
+
+Prioridad 2
+
+**Servicios locales instalados**
+
+Si no hay un modelo empaquetado disponible, detectar servicios locales como Ollama y consultar qué modelos están instalados y disponibles.
+
+Prioridad 3
+
+**Otros proveedores o motores compatibles**
+
+Permitir configurar otros proveedores, servidores de inferencia o APIs compatibles, siempre que el usuario los haya configurado y autorizado.
+
+La aplicación no debe descargar modelos automáticamente sin informar al usuario y solicitar su autorización.
+
+### **3.2. Carpeta local&#x20;**`modelos-ia`
+
+La aplicación debe contemplar una carpeta específica para almacenar modelos y paquetes de IA:
+
+```
+aplicacion/
+│
+├── index.html
+├── assets/
+├── css/
+├── js/
+│
+├── modelos-ia/
+│   ├── manifest.json
+│   │
+│   ├── modelo-conversacional/
+│   │   ├── model.gguf
+│   │   └── config.json
+│   │
+│   ├── modelo-ligero/
+│   │   ├── model.gguf
+│   │   └── config.json
+│   │
+│   └── voces/
+│       └── configuracion.json
+│
+└── configuracion/
+    └── agente.json
+```
+
+La estructura es una propuesta de organización, no una afirmación de que los modelos actuales ya estén incluidos.
+
+El archivo `manifest.json` debe describir los modelos disponibles:
+
+- Nombre del modelo.
+- Identificador.
+- Versión.
+- Formato.
+- Tamaño.
+- Idiomas compatibles.
+- Capacidades.
+- Requisitos mínimos.
+- Motor de ejecución necesario.
+- Ruta del paquete.
+- Estado de disponibilidad.
+
+**Consideración técnica:** guardar un modelo GGUF en una carpeta no significa que el navegador pueda ejecutarlo directamente. Se necesita un motor de inferencia compatible, integrado o instalado en el equipo. La aplicación debe comprobar esa compatibilidad antes de ofrecerlo como disponible.
+
+### **3.3. Compatibilidad con Ollama**
+
+Se debe incorporar un adaptador para Ollama.
+
+Debe permitir:
+
+- Detectar si Ollama está instalado y ejecutándose.
+- Comprobar la conexión con el servicio local.
+- Consultar los modelos instalados.
+- Seleccionar el modelo que utilizará el chat.
+- Comprobar si el modelo admite conversación.
+- Enviar mensajes y recibir respuestas.
+- Gestionar errores de conexión.
+- Mostrar el modelo que está activo.
+
+No se debe asumir que Ollama está instalado ni que todos los modelos ofrecen las mismas capacidades.
+
+### **3.4. Compatibilidad con otros motores y Antigravity**
+
+El sistema debe diseñarse mediante adaptadores para que no dependa exclusivamente de Ollama.
+
+Se debe estudiar la compatibilidad con:
+
+- Servidores locales con API compatible con OpenAI.
+- Otros motores locales de inferencia.
+- Proveedores de IA mediante API.
+- Servicios que permitan utilizar modelos instalados en el equipo.
+
+Respecto a **Antigravity**, el desarrollador debe identificar primero qué integración concreta se pretende utilizar. Si se refiere a Google Antigravity, no debe tratarse automáticamente como un motor de inferencia local equivalente a Ollama: habría que verificar qué interfaz o servicio ofrece para conectar el chatbot. La arquitectura debe permitir incorporarlo mediante un adaptador si existe una integración viable.
+
+## **4. Dos modos de configuración: automático y manual**
+
+Requisito prioritario
+
+El configurador debe ofrecer dos modos claramente diferenciados.
+
+### **4.1. Modo automático**
+
+La aplicación detectará los recursos disponibles y seleccionará el agente siguiendo el orden de prioridad establecido.
+
+Funcionamiento:
+
+1. Examinar la carpeta `modelos-ia`.
+2. Leer el manifiesto de modelos.
+3. Comprobar qué paquetes están completos y son compatibles.
+4. Detectar si existe un motor capaz de ejecutarlos.
+5. Comprobar si Ollama está disponible.
+6. Consultar los modelos locales instalados.
+7. Evaluar los proveedores adicionales configurados.
+8. Seleccionar el primer modelo disponible según la prioridad.
+9. Comprobar que responde correctamente.
+10. Activar el chatbot y mostrar qué agente está utilizando.
+
+Si no encuentra ningún agente operativo, debe informar al usuario y ofrecer la configuración manual.
+
+### **4.2. Modo manual**
+
+El usuario podrá seleccionar directamente el proveedor, motor y modelo.
+
+El configurador debe permitir:
+
+- Elegir entre modelos empaquetados.
+- Seleccionar Ollama.
+- Elegir un modelo instalado en Ollama.
+- Introducir la dirección del servicio local cuando proceda.
+- Seleccionar otro proveedor compatible.
+- Introducir los datos de conexión necesarios.
+- Realizar una prueba de conexión.
+- Guardar la configuración.
+- Volver al modo automático.
+
+No se deben mostrar como disponibles los modelos que no hayan superado la comprobación de conexión y compatibilidad.
+
+### **4.3. Diseño orientativo del configurador**
+
+**Configuración del agente IA**
+
+Propuesta de interfaz funcional para el desarrollador
+
+**Modo de selección**
+
+Automático
+
+Recomendado
+
+Detectar y seleccionar el mejor modelo disponible según las prioridades.
+
+**Selección manual**
+
+Elegir proveedor y modelo personalmente.
+
+**Orden de preferencia**
+
+1. Paquetes locales de `modelos-ia`
+2. Ollama y modelos instalados
+3. Otros proveedores compatibles
+
+**Estado de conexión**
+
+Pendiente de detección
+
+El estado real se mostrará al ejecutar la aplicación.
+
+**Agente activo**
+
+Se mostrará el nombre del proveedor, modelo y tipo de ejecución.
+
+## **5. Conocimiento del libro: el chatbot debe trabajar con toda la obra**
+
+El chatbot no debe ser un asistente genérico que simplemente conteste preguntas. Debe poder utilizar el contenido completo de *El Legado de las Lámparas Mágicas* como base de conocimiento.
+
+Para ello, se recomienda implementar un sistema de recuperación de información (RAG).
+
+### **5.1. Preparación del contenido**
+
+El sistema debe permitir incorporar el libro completo y organizarlo en unidades consultables:
+
+- Capítulos.
+- Escenas.
+- Personajes.
+- Lugares.
+- Objetos.
+- Diálogos.
+- Acontecimientos.
+- Relaciones entre personajes.
+- Elementos simbólicos y narrativos.
+
+El contenido debe dividirse en fragmentos que puedan recuperarse según la pregunta del usuario, manteniendo la referencia al capítulo, escena o sección de origen.
+
+### **5.2. Comportamiento esperado**
+
+El chatbot debe poder responder, por ejemplo:
+
+- ¿Quién es Liam?
+- ¿Qué diferencia existe entre la lámpara de Liam y la de Elara?
+- ¿Qué papel desempeña Aides?
+- ¿Qué ocurre cuando los dos personajes utilizan sus lámparas?
+- ¿Qué relación existe entre Callum y Aides?
+- ¿Qué significado tienen los objetos y símbolos del libro?
+- ¿En qué capítulo aparece determinado personaje?
+- ¿Puedes resumirme la evolución de un personaje?
+
+Cuando la información esté en el libro, debe priorizarla y, siempre que sea posible, indicar su procedencia.
+
+Cuando no encuentre información suficiente, debe decirlo expresamente. No debe inventar capítulos, escenas, diálogos ni acontecimientos y atribuirlos a la obra.
+
+### **5.3. Separación de conocimiento y creatividad**
+
+Es necesario distinguir tres modos:
+
+1. **Consulta documental:** responde exclusivamente con información del libro.
+2. **Interpretación:** analiza el significado, las relaciones y los temas de la obra.
+3. **Creación:** propone nuevas escenas, diálogos, personajes o posibilidades narrativas, identificándolos como contenido nuevo.
+
+Esta separación es especialmente importante para conservar la coherencia del universo narrativo.
+
+## **6. Arquitectura técnica recomendada**
+
+La aplicación actual es un HTML monolítico con recursos embebidos. Para añadir estas funciones sin convertirlo en un bloque todavía más complejo, recomiendo separar el chatbot en módulos.
+
+```
+aplicacion/
+│
+├── index.html
+│
+├── js/
+│   ├── chat/
+│   │   ├── chat-ui.js
+│   │   ├── chat-controller.js
+│   │   ├── chat-history.js
+│   │   └── response-profiles.js
+│   │
+│   ├── ia/
+│   │   ├── agent-manager.js
+│   │   ├── agent-detector.js
+│   │   ├── model-registry.js
+│   │   ├── ollama-adapter.js
+│   │   ├── local-model-adapter.js
+│   │   └── provider-adapter.js
+│   │
+│   ├── knowledge/
+│   │   ├── book-loader.js
+│   │   ├── book-indexer.js
+│   │   ├── retriever.js
+│   │   └── context-builder.js
+│   │
+│   ├── speech/
+│   │   ├── speech-controller.js
+│   │   └── voice-settings.js
+│   │
+│   └── config/
+│       ├── settings-manager.js
+│       └── agent-settings.js
+│
+├── modelos-ia/
+│   └── manifest.json
+│
+└── configuracion/
+    └── agente.json
+```
+
+### **6.1. Responsabilidades de los módulos**
+
+| Módulo                   | Responsabilidad                          |
+| ------------------------ | ---------------------------------------- |
+| `chat-ui.js`             | Interfaz y controles de conversación     |
+| `chat-controller.js`     | Gestionar mensajes y respuestas          |
+| `agent-manager.js`       | Seleccionar y activar agentes            |
+| `agent-detector.js`      | Detectar motores y modelos disponibles   |
+| `model-registry.js`      | Registrar modelos empaquetados           |
+| `ollama-adapter.js`      | Conexión con Ollama                      |
+| `local-model-adapter.js` | Conexión con motores locales compatibles |
+| `provider-adapter.js`    | Conexión con otros proveedores           |
+| `book-loader.js`         | Cargar el contenido de la obra           |
+| `retriever.js`           | Recuperar fragmentos relevantes          |
+| `speech-controller.js`   | Lectura en voz alta                      |
+| `response-profiles.js`   | Aplicar el estilo de respuesta           |
+| `settings-manager.js`    | Guardar y recuperar preferencias         |
+
+### **6.2. Consideraciones importantes de ejecución**
+
+Una página web estática no puede inspeccionar libremente el disco del usuario, leer cualquier carpeta ni ejecutar modelos locales por sí sola.
+
+Para que la detección automática de `modelos-ia` funcione de forma fiable, el desarrollador debe definir cómo se ejecutará la aplicación:
+
+- Si se mantiene como web estática, necesitará un mecanismo explícito para seleccionar o cargar los archivos y comunicarse con un servicio local.
+- Si se incorpora un servidor local, este podrá inspeccionar la carpeta de modelos y ofrecer una API controlada a la interfaz.
+- Si se distribuye como aplicación de escritorio, podrá disponer de un componente local con permisos específicos para gestionar modelos y motores.
+
+La solución más flexible es mantener la interfaz web y añadir una capa local de servicios para la detección, ejecución y gestión de modelos.
+
+También debe controlarse CORS, los permisos de conexión a `localhost`, los puertos, los tiempos de espera y los errores de disponibilidad. Las claves de proveedores externos no deben almacenarse en el HTML ni exponerse al navegador.
+
+## **7. Configuración y persistencia**
+
+El sistema debe guardar las preferencias del usuario para que no tenga que configurarlas cada vez.
+
+Se propone conservar:
+
+- Modo automático o manual.
+- Proveedor seleccionado.
+- Modelo seleccionado.
+- Dirección del servicio local, si procede.
+- Perfil de respuesta.
+- Idioma.
+- Preferencias de voz.
+- Historial de conversación, si el usuario lo activa.
+
+La configuración podría seguir una estructura como esta:
+
+```
+{
+  "agent": {
+    "selection_mode": "automatic",
+    "priority": [
+      "packaged",
+      "local",
+      "external"
+    ],
+    "preferred_provider": null,
+    "preferred_model": null
+  },
+  "response": {
+    "profile": "conversational",
+    "length": "medium",
+    "knowledge_mode": "book",
+    "language": "es"
+  },
+  "speech": {
+    "enabled": true,
+    "autoplay": false,
+    "rate": 1
+  }
+}
+```
+
+Es un ejemplo de configuración inicial; el desarrollador deberá validar los campos y evitar almacenar credenciales sensibles en archivos accesibles desde el cliente.
+
+## **8. Seguridad, privacidad y control del usuario**
+
+El sistema debe contemplar:
+
+- Prioridad al procesamiento local cuando exista un modelo compatible.
+- Información visible cuando los mensajes se envíen a un proveedor externo.
+- Consentimiento antes de utilizar servicios externos.
+- No enviar el libro completo a proveedores externos innecesariamente.
+- No guardar conversaciones sin una opción clara de consentimiento.
+- Posibilidad de borrar el historial.
+- Protección de las claves de acceso.
+- Control de los modelos y paquetes que se cargan.
+- Verificación de integridad de los paquetes descargados.
+
+El modo local debe funcionar sin conexión a Internet una vez que el modelo, su motor y el contenido necesario estén preparados.
+
+## **9. Plan de desarrollo y prioridades**
+
+| Prioridad | Desarrollo                       | Resultado esperado                          |
+| --------- | -------------------------------- | ------------------------------------------- |
+| P0        | Interfaz del chatbot             | Conversación funcional                      |
+| P0        | Configurador automático/manual   | Selección del agente                        |
+| P0        | Registro de modelos empaquetados | Detección de `modelos-ia`                   |
+| P0        | Adaptador Ollama                 | Conexión con modelos locales                |
+| P0        | Conocimiento del libro           | Consultas sobre la obra completa            |
+| P1        | Perfiles de respuesta            | Personalización del estilo                  |
+| P1        | Lectura en voz alta              | Escuchar las respuestas                     |
+| P1        | Historial y preferencias         | Persistencia de configuración               |
+| P1        | Otros proveedores                | Ampliación de compatibilidad                |
+| P2        | Voz local avanzada               | Síntesis de voz independiente del navegador |
+| P2        | Gestión avanzada de agentes      | Varios agentes y perfiles especializados    |
+
+## **10. Pruebas y criterios de aceptación**
+
+El desarrollador deberá demostrar mediante pruebas que:
+
+1. El chatbot puede iniciar una conversación y responder.
+2. El chatbot consulta el contenido completo indexado del libro.
+3. Las respuestas documentales pueden identificar su procedencia.
+4. No inventa información cuando no encuentra una referencia.
+5. El modo automático busca primero los modelos empaquetados.
+6. Si no hay modelos empaquetados utilizables, comprueba Ollama.
+7. Si Ollama no está disponible, informa del problema y continúa con las alternativas configuradas.
+8. El modo manual permite elegir proveedor y modelo.
+9. No se activa un modelo que no haya superado una prueba de conexión.
+10. Los perfiles modifican realmente el comportamiento de las respuestas.
+11. Las respuestas pueden escucharse, pausarse y detenerse.
+12. La configuración se conserva al cerrar y volver a abrir la aplicación.
+13. El modo local puede utilizarse sin conexión cuando todos sus componentes estén disponibles.
+14. La interfaz funciona correctamente en escritorio y dispositivos móviles.
+15. El chatbot no interfiere con los diálogos, controles ni mecánicas del juego.
+
+## **11. Resultado que debe entregar el desarrollador**
+
+El resultado no debe ser únicamente una ventana de chat con una API conectada. Debe ser un sistema completo de conversación con conocimiento del libro, selección de agentes, ejecución local y personalización de respuestas.
+
+**Resultado funcional esperado**
+
+- Chatbot IA integrado en la aplicación.
+- Conocimiento consultable de toda la obra.
+- Lectura en voz alta de las respuestas.
+- Configurador de perfiles y tipos de respuesta.
+- Carpeta de modelos empaquetados `modelos-ia`.
+- Detección automática y selección manual de agentes.
+- Compatibilidad con Ollama y arquitectura ampliable a otros motores.
+- Persistencia de preferencias, privacidad y gestión de errores.
+
+**Recomendación técnica:** implementar primero el gestor de agentes y el registro de modelos. Después, conectar el conocimiento del libro y la interfaz de conversación. Por último, incorporar los perfiles de respuesta, la lectura en voz alta y los proveedores adicionales. Así se evita construir el chat alrededor de un único proveedor y tener que rehacerlo cuando se incorporen nuevos modelos.
+
+## **12. Conclusión de la auditoría**
+
+La funcionalidad solicitada supone ampliar el prototipo actual con un subsistema nuevo de IA. No basta con añadir un cuadro de texto: debe existir una capa de gestión de agentes independiente de la interfaz y del videojuego.
+
+La decisión arquitectónica más importante es que **la aplicación no debe quedar vinculada a Ollama ni a ningún proveedor concreto**. Debe poder cambiar de motor sin modificar el chatbot, sus conversaciones, el conocimiento del libro o sus perfiles de respuesta.
+
+El orden preferente queda establecido así:
+
+1. Modelos empaquetados en `modelos-ia`.
+2. Modelos locales disponibles mediante Ollama u otro motor compatible.
+3. Otros proveedores configurados por el usuario.
+
+Y el usuario debe poder elegir entre detección automática y configuración manual.
+
+Este informe define los requisitos de desarrollo; no certifica que estas funciones estén ya implementadas. La siguiente tarea útil sería convertirlo en una especificación de implementación con historias de usuario, tareas técnicas y pruebas de aceptación para el desarrollador.

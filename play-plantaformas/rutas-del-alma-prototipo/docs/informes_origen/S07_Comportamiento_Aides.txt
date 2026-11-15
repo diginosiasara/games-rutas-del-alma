@@ -1,0 +1,154 @@
+# 📄 INFORME TÉCNICO — SPRINT 7
+## *Rutas del Alma: El Juego* — Sistema de Comportamiento de Aides, Ecología del Jardín y Bucles de Interacción
+**Versión de referencia:** Prototipo Web v7 · **Base narrativa:** Cap. 1 (El Jardín de la Mente) y Cap. 4 (Las Llaves del Pensamiento) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Este sprint se centra en transformar a **Aides** de un simple acompañante a un **sistema vivo de retroalimentación narrativa**. Aides tendrá su propio árbol de acciones, reaccionará a las luces de Liam y Elara, y mantendrá un **ciclo dinámico de "trabajo y descanso"** con Callum. Además, se implementa la **ecología de la negligencia**: si el jardín no se cuida, las plantas mueren y renacen como zarzas, las cuales reaccionan físicamente a las lámparas.
+
+---
+
+## 1. ÁRBOL DE ACCIONES DE AIDES (ACTION TREE)
+
+Cuando el jugador selecciona a Aides o interactúa con ella, el sistema expone las siguientes acciones contextuales:
+
+### 1.1 Acciones de Jardinería (Solo en el jardín)
+*   **Arrancar (Pull):** Extrae zarzas. Requiere que la raíz esté expuesta (Liam) o que la zarza esté "emocionalmente abierta" (Elara).
+*   **Preparar tierra (Till):** Usa una pequeña azada para dejar el suelo listo.
+*   **Sembrar (Sow):** Coloca la semilla en el surco.
+*   **Regar (Water):** Usa su regadera. *Requisito:* debe haber agua en la regadera (se recarga en el lago o en la casa de Callum).
+*   **Cosechar (Harvest):** Recoge la flor madura antes de que se marchite.
+
+### 1.2 Acciones Sociales y de Descanso (Solo en la casa de Callum)
+*   **Servir té (Pour tea):** Aides sirve una taza a Callum y a sí misma. Restaura la "Calma" de Elara y la "Luz" de Liam si están presentes.
+*   **Leer/Escuchar (Listen):** Aides se sienta y escucha. Si el jugador se acerca, Aides comparte una "Reflexión del jardín" (pistas narrativas).
+*   **Descansar (Rest):** Aides cierra los ojos. El tiempo de juego se acelera ligeramente (las plantas crecen un 20% más rápido mientras ella descansa).
+
+### 1.3 Acciones de Interacción con el Jugador
+*   **Pedir ayuda (Request help):** El jugador puede decirle: *"Aides, el jardín necesita atención"*.
+*   **Preguntar por el estado (Ask status):** Aides responde con una metáfora: *"Hay demasiadas dudas en la esquina norte"* (indica zarzas) o *"Las flores de gratitud están sedientas"*.
+
+---
+
+## 2. ECOLOGÍA DE LA NEGLIGENCIA: MUERTE Y REBROTE DE ZARZAS
+
+Si el jugador ignora el jardín, el sistema de "cuidado constante" (cap. 1) entra en acción.
+
+### 2.1 Ciclo de Muerte de la Planta
+1.  **Flor Madura:** Tiene una ventana de 90 segundos para ser cosechada.
+2.  **Marchitamiento:** Si no se cosecha, la flor pierde color y se inclina.
+3.  **Muerte (Death):** La planta se convierte en un tallo seco y gris.
+4.  **Rebrote de Zarza (Thorn Regrowth):** 10 segundos después de morir, el tallo seco se transforma en una **Nueva Zarza**.
+
+### 2.2 Evolución de las Zarzas (Dificultad progresiva)
+Las zarzas que nacen de plantas muertas son más fuertes que las originales:
+*   **Zarza Nivel 1 (Original):** Miedo/Duda. Requiere 1 acción de Aides para arrancarla.
+*   **Zarza Nivel 2 (Renacida):** Resentimiento. Requiere que Liam ilumine la raíz Y que Aides la arranque.
+*   **Zarza Nivel 3 (Negligencia total):** Desesperanza. Requiere que Elara la escuche (diálogo), luego Liam la ilumine, y finalmente Aides la arranque.
+
+---
+
+## 3. INTERACCIÓN DE LAS ZARZAS CON LAS LÁMPARAS
+
+Las zarzas no son estáticas; reaccionan físicamente a las luces de los protagonistas, creando sinergias de juego.
+
+### 3.1 Reacción a la Lámpara de Liam (Luz Dorada / Acción)
+*   **Efecto visual:** Al apuntar la luz, las espinas de la zarza se retraen ligeramente.
+*   **Efecto mecánico:** La luz revela el **nodo central (la raíz)** de la zarza, que brilla en dorado.
+*   **Sinergia con Aides:** Si Aides intenta arrancar una zarza *sin* que Liam haya iluminado la raíz primero, Aides se pincha, pierde tiempo y la zarza se regenera un 50%. Si la raíz está iluminada, Aides la arranca de un solo tirón.
+
+### 3.2 Reacción a la Lámpara de Elara (Luz Violeta / Emoción)
+*   **Efecto visual:** La zarza emite un humo negro o morado (representando la emoción tóxica).
+*   **Efecto mecánico:** La zarza empieza a "temblar" o "llorar" (partículas oscuras).
+*   **Sinergia con Aides:** Si Elara ilumina la zarza, Aides puede **hablarle a la zarza** antes de arrancarla (*"Sé que estás aquí por miedo, pero ya no te necesitamos"*). Esto hace que la zarza se encoja, reduciendo su área de colisión y haciendo que el arranque sea instantáneo.
+
+---
+
+## 4. SISTEMA DE BUCLE: AIDES Y CALLUM (TRABAJO Y DESCANSO)
+
+Aides no es un NPC estático en la casa. Tiene un **ciclo de vida autónomo** que el jugador puede interrumpir o guiar.
+
+### 4.1 La Máquina de Estados de Aides (FSM)
+Aides opera bajo los siguientes estados:
+
+1.  **ESTADO: `EN_CASA_DESCANSANDO`**
+    *   *Visual:* Aides está sentada frente a Callum. Tazas de té con vapor animado.
+    *   *Duración:* 45 segundos de tiempo de juego.
+    *   *Acción del jugador:* Puede sentarse con ellos (recupera recursos) o pedirle ayuda.
+
+2.  **ESTADO: `TRANSICION_AL_JARDIN`**
+    *   *Trigger:* El jugador dice *"Aides, vamos al jardín"* O el sistema detecta que hay más de 3 zarzas Nivel 2 en el jardín.
+    *   *Visual:* Aides se levanta, deja la taza (el vapor se desvanece), saluda a Callum y camina hacia el jardín.
+
+3.  **ESTADO: `CUIDANDO_JARDIN` (Bucle de trabajo)**
+    *   *Comportamiento:* Aides busca automáticamente la zarza más peligrosa o la planta más sedienta.
+    *   *Acciones:* Ejecuta las animaciones de regar, arrancar o sembrar.
+    *   *Duración:* Trabaja hasta que el jardín esté "estable" (menos de 2 zarzas y todas las plantas regadas) o hasta que el jugador le diga *"Descansa, Aides"*.
+
+4.  **ESTADO: `REGRESO_A_CASA`**
+    *   *Visual:* Aides se limpia las manos en el delantal, camina de vuelta a la cabaña.
+    *   *Narrativa:* Callum la espera en la puerta con una taza de té recién servida.
+
+### 4.2 Interrupción por Preocupación de los NPCs
+Si el jugador (Liam/Elara) pasa mucho tiempo fuera del jardín y las zarzas crecen:
+*   **Liam dirá:** *"Elara, mira el jardín de Aides. Las sombras están volviendo."*
+*   **Elara dirá:** *"Aides no puede con todo esto solo. Deberíamos ayudarle."*
+*   **Mecánica:** Esto activa un **objetivo secundario automático** en el HUD: *"Acompaña a Aides al jardín"*. Al acercarse a Aides en la casa, ella dirá: *"Iba a salir, ¿me acompañáis?"*.
+
+---
+
+## 5. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 5.1 Gestión de la IA de Aides (Pathfinding y Tareas)
+*   Usar un **Árbol de Comportamiento (Behavior Tree)** simple para Aides.
+*   **Nodos de prioridad:**
+    1.  ¿Hay una zarza Nivel 3? -> Ir a arrancar (requiere luz).
+    2.  ¿Hay una planta marchita? -> Ir a cosechar/regar.
+    3.  ¿Hay una semilla en el inventario del jugador? -> Esperar a que el jugador siembre.
+    4.  ¿Jardín estable? -> Volver a casa (Estado `EN_CASA_DESCANSANDO`).
+
+### 5.2 Sistema de Partículas y Feedback Visual
+*   **Vapor del té:** Debe ser un sistema de partículas en bucle (`loop`) que se active solo cuando Aides y Callum están en estado `EN_CASA_DESCANSANDO`.
+*   **Reacción de las zarzas:**
+    *   *Luz Liam:* Shader de `rim_light` dorado en la base de la zarza.
+    *   *Luz Elara:* Partículas de `smoke_dark` saliendo de la zarza, con un ligero `shake` (temblor) en el sprite.
+
+### 5.3 Guardado de Estado (Save System)
+El `localStorage` debe guardar no solo la posición de las plantas, sino el **Estado actual de Aides**:
+```json
+{
+  "aides_state": "EN_CASA_DESCANSANDO",
+  "aides_timer": 15, // segundos restantes en este estado
+  "garden_health": 65, // porcentaje de salud del jardín
+  "active_thorns": [
+    {"id": "t1", "level": 2, "position": {"x": 450, "y": 200}}
+  ]
+}
+```
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+1.  ✅ **Aides tiene animaciones distintas** para regar, arrancar, sembrar y sentarse a beber té.
+2.  ✅ **El bucle de trabajo funciona:** Aides va al jardín, trabaja, y vuelve sola a casa de Callum a descansar.
+3.  ✅ **El jugador puede interrumpir el bucle** pidiéndole ayuda o diciéndole que descanse.
+4.  ✅ **Las plantas mueren y generan zarzas** si el jugador las ignora por completo.
+5.  ✅ **Las zarzas reaccionan a las luces:** Se encogen con Elara y muestran la raíz con Liam.
+6.  ✅ **Liam y Elara tienen diálogos de preocupación** si el jardín alcanza un nivel de negligencia alto.
+7.  ✅ **El guardado local** recuerda si Aides está en casa o en el jardín al recargar la página.
+
+---
+
+## 7. ORDEN DE IMPLEMENTACIÓN SUGERIDO
+
+1.  **Día 1:** Implementar la Máquina de Estados (FSM) de Aides (Casa -> Jardín -> Casa).
+2.  **Día 2:** Crear las animaciones de Aides (regar, arrancar, sentarse) y el sistema de vapor del té.
+3.  **Día 3:** Programar la lógica de muerte de plantas y rebrote de zarzas (Niveles 1, 2 y 3).
+4.  **Día 4:** Implementar las reacciones de las zarzas a las lámparas de Liam y Elara (Shaders y partículas).
+5.  **Día 5:** Añadir los diálogos de preocupación de Liam/Elara y las opciones de interacción del jugador con Aides.
+
+---
+
+**¿Aprobado?** Si das el visto bueno, el desarrollador puede empezar por la Máquina de Estados de Aides (Punto 4.1), que es el núcleo de este sprint y desbloquea todas las demás interacciones narrativas.

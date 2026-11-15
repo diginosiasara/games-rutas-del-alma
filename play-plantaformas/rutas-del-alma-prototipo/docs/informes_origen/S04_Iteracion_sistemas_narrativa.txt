@@ -1,0 +1,337 @@
+# 📄 INFORME TÉCNICO — SPRINT 4
+## *Rutas del Alma: El Juego* — Iteración de sistemas, narrativa y usabilidad
+**Versión de referencia:** Prototipo Web v3  
+**Entregable:** Prototipo Web v4  
+**Fecha:** 14 de noviembre de 2026  
+**Dirigido a:** Desarrollador Lead  
+**Base narrativa:** *Rutas del Alma*, caps. 1–4 (archivo `1.Rutas_del_Alma_corregido.docx`)
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+Este sprint cierra seis frentes solicitados por el autor, todos anclados en el libro:
+
+| # | Requisito | Prioridad | Riesgo técnico |
+|---|---|---|---|
+| 1 | Ramificación del uso de lámparas | ALTA | Medio |
+| 2 | Marchitamiento y retorno de zarzas | ALTA | Medio |
+| 3 | Plataformas de transición Jardín → Sauce | ALTA (usabilidad) | Bajo |
+| 4 | Narrativa del Sauce del Reflejo (cap. 2) | ALTA | Bajo |
+| 5 | Narrativa de La Luz Interior (cap. 3) | ALTA | Medio |
+| 6 | Más sombreros + legibilidad de textos | ALTA | Bajo |
+
+**Criterio rector:** todo lo que se añada debe servir al pilar nº1 del GDD —*escuchar en lugar de combatir*— y al lema del cap. 1: *"el jardín necesita cuidado constante. La maleza vuelve si te descuidas"*.
+
+---
+
+## 1. RAMIFICACIÓN DEL USO DE LÁMPARAS
+
+### 1.1 Justificación narrativa
+El Prólogo establece que las lámparas son **complementarias, no intercambiables**:
+> *"La de Liam daba una luz dorada y firme, capaz de abrir camino en la oscuridad más densa. La de Elara era distinta: cuando la acercaba a una sombra, la sombra empezaba a hablar."*  
+> *"Cada relato ofrece una perspectiva distinta —añadió Elara—. Tendremos que elegir con cuidado cuál contar y cuándo."*
+
+Hoy el prototipo usa cada lámpara de forma aislada. El objetivo es que **el orden y la combinación** generen resultados distintos.
+
+### 1.2 Matriz de ramificación (obligatoria)
+
+| Ruta | Secuencia de uso | Resultado | Recompensa |
+|---|---|---|---|
+| **A — Ver primero** | Liam ilumina → aparece sombra oculta → Elara la hace hablar | La sombra revela una pista sobre una plataforma | Flor + Eco |
+| **B — Oír primero** | Elara hace hablar a sombra visible → la sombra nombra un lugar → Liam ilumina ese lugar | Se abre una ruta alternativa | Flor + Sombra (miedo) |
+| **C — Sinergia** | Ambas lámparas activas a la vez sobre una sombra | Escena especial: la sombra cuenta su historia en dos voces | Recuerdo narrativo + carga de luz |
+| **D — Mal uso** | Elara apunta a oscuridad sin sombra / Liam apunta a sombra sin luz | La sombra se cierra y crece | Rumor (Sombra) |
+
+### 1.3 Especificación técnica
+```
+lampState = { liamActive: bool, elaraActive: bool, lastUsed: 'liam'|'elara'|'both', comboWindow: 2.5s }
+```
+- **Combo window:** si Elara apunta a una sombra en los 2,5 s posteriores a que Liam la ilumine, se dispara la **Ruta C**.
+- Cada sombra debe tener un campo `validRoutes: ['A','B','C']` en el JSON.
+- La UI debe indicar sutilmente qué ruta se está siguiendo (brillo dorado = Liam, morado = Elara, ambos = blanco cálido).
+
+### 1.4 Criterios de aceptación
+- [ ] La misma sombra puede resolverse por al menos 2 rutas con resultado distinto.
+- [ ] La Ruta C existe y es opcional (nunca obligatoria).
+- [ ] Ninguna ruta bloquea el progreso: si el jugador elige mal, puede reintentar.
+
+---
+
+## 2. CICLO DE VIDA COMPLETO DE LA PLANTA (MARCHITAMIENTO)
+
+### 2.1 Justificación narrativa
+Callum, cap. 1:
+> *"Recuerda —le había dicho Callum al despedirse—: el jardín necesita cuidado constante. La maleza vuelve si te descuidas."*
+
+Esta cita es la **columna vertebral** de la mecánica. Sin marchitamiento, el jardín es un tutorial; con él, es una metáfora viva.
+
+### 2.2 Estados obligatorios (máquina de estados)
+
+```
+zarza → [arrancar] → tierraPreparada → [sembrar] → semilla
+      → [regar] → brote → crecimiento → floracion → florMadura
+      → [recoger] → huecoLibre
+      → [sin recoger + tiempo] → florMarchita → nuevaZarza
+```
+
+| Estado | Duración | Visual | Acción del jugador |
+|---|---|---|---|
+| semilla | 3 s | montículo con semilla | — |
+| brote | 4 s | tallo verde | — |
+| crecimiento | 5 s | hojas | — |
+| floración | 4 s | capullo | — |
+| **florMadura** | **ventana de 90 s** | flor abierta, brillo | recoger al pasar |
+| florMarchita | 15 s | pétalos caídos, gris | aviso de Aides |
+| nuevaZarza | permanente | zarza (tipo aleatorio) | arrancar de nuevo |
+
+### 2.3 Reglas críticas
+1. **El tiempo cuenta en *tiempo de juego activo*, no en tiempo real.** Si el jugador cierra la pestaña, las plantas se congelan. *(Evita castigar al jugador; coherente con "nunca hay derrota punitiva".)*
+2. **La nueva zarza puede ser de un tipo distinto** (miedo / duda / resentimiento), lo que obliga a una animación de arranque ligeramente diferente.
+3. **Aviso, no sorpresa:** a los 60 s de florMadura, la flor parpadea suavemente; a los 80 s, Aides dice una línea corta (*"Se está pasando de punto"*). En móvil, un icono de reloj sobre la planta.
+4. **Modo Historia:** ventana de 180 s y sin conversión a zarza (la flor se queda marchita, recuperable).
+5. **Guardado:** persistir `state` + `elapsed` de cada planta.
+
+### 2.4 Criterios de aceptación
+- [ ] Una planta sin recoger se marchita y genera una zarza nueva.
+- [ ] El jugador puede repetir el ciclo indefinidamente.
+- [ ] Cerrar y reabrir el navegador no mata las plantas.
+- [ ] El aviso visual y el de Aides aparecen antes del marchitamiento.
+
+---
+
+## 3. PLATAFORMAS DE TRANSICIÓN: JARDÍN → SAUCE
+
+### 3.1 Problema detectado
+La pasarela entre la zona del Jardín (cap. 1) y el Sauce del Reflejo (cap. 2) usa losas ocultas que solo aparecen con la luz de Liam y exigen saltos precisos. En móvil esto es frustrante y rompe el tono de fábula.
+
+### 3.2 Especificación de usabilidad
+
+| Parámetro | Valor actual (v3) | Valor objetivo (v4) |
+|---|---|---|
+| Visibilidad de losas ocultas | Solo con luz activa | 30 % de brillo base + 100 % con luz |
+| Tiempo de visibilidad tras iluminar | inmediato-desaparece | **4 s con fundido** |
+| Coyote time en transiciones | 100 ms | **180 ms** |
+| Jump buffer en transiciones | 100 ms | **150 ms** |
+| Distancia máxima de salto | 96 px | **72 px** |
+| Asistido de aterrizaje (móvil) | no | **sí: magnetismo suave 12 px** |
+| Guía visual | sin | **brillo en el borde + partícula al acercarse** |
+
+### 3.3 Reglas de diseño
+- Las transiciones **nunca** deben requerir precisión de plataformas de acción. Son puentes narrativos.
+- Si el jugador falla 3 saltos seguidos en una transición, el conejo gris aparece en la plataforma destino y las losas se quedan visibles 10 s.
+- Modo Historia: losas siempre visibles, saltos de 60 px, sin magnetismo (para no quitar sensación de control).
+
+### 3.4 Criterios de aceptación
+- [ ] Un tester sin ayuda cruza la transición en < 20 s.
+- [ ] En móvil, la tasa de caída en transición es < 10 %.
+- [ ] Ninguna transición produce frustración reportada en playtest.
+
+---
+
+## 4. NARRATIVA DEL SAUCE DEL REFLEJO (CAP. 2)
+
+### 4.1 Lo que falta hoy
+Ahora es un único diálogo con Tomás. El libro muestra **un círculo de vecinos** y una lección de escucha activa.
+
+### 4.2 Escena ampliada (obligatoria)
+
+**Acto 1 — El primer reflejo (Tomás).** Texto literal del libro:
+> —Lo perdí todo. No sé hacer otra cosa.  
+> —Perdiste la cosecha —repitió Elara, despacio—. Y sientes que no sabes hacer otra cosa. ¿Es así?
+
+- El jugador debe elegir la **frase de reflejo** correcta entre 4 opciones (no 3): reflejar hecho, reflejar emoción, reflejar ambos, o interrumpir.
+- **Mecánica de escucha:** mientras la sombra habla, si el jugador pulsa acción, la frase se corta y la sombra se cierra (*"Escuchar no es esperar nuestro turno para hablar"*).
+
+**Acto 2 — La pregunta poderosa.**
+> —¿Qué se abre ahora que el campo está vacío? —preguntó Elara—. ¿Con qué cuentas, dentro de ti, para empezar de nuevo?
+
+- Al acertar, Tomás se disuelve y **deja una semilla** que conecta con el sistema de plantas (sección 2). El jugador entiende que escuchar *siembra*.
+
+**Acto 3 — El círculo.** 2-3 vecinos más con micro-historias (miedo / esperanza / pérdida). Cada uno se resuelve con una sola línea de reflejo. Objetivo: que el jugador **practique el patrón**, no que lo lea.
+
+**Acto 4 — El silencio que se disipa.** Cierre visual:
+> *"La oscuridad no desapareció, pero se disipó el silencio que la alimentaba."*  
+La niebla del claro baja de opacidad al 40 %. Liam pronuncia: *"Escuchar es una forma de luz."* → la lámpara de Liam se recarga al 100 %.
+
+### 4.3 Criterios de aceptación
+- [ ] La escena dura entre 3 y 5 minutos.
+- [ ] Existe la mecánica de "no interrumpir".
+- [ ] Tomás deja una semilla que entra en el ciclo del jardín.
+- [ ] El cambio de niebla es visible.
+
+---
+
+## 5. NARRATIVA DE LA LUZ INTERIOR (CAP. 3) — ANTES DEL CAP. 4
+
+### 5.1 Situación
+El cap. 3 es la **presentación de los protagonistas y sus sombras**. Hoy el prototipo lo salta. Es el capítulo que da sentido a por qué Liam y Elara pueden guiar al pueblo: porque primero se reconocen a sí mismos.
+
+### 5.2 Estructura propuesta: "La noche en que no leyeron ninguna fábula"
+> *"Esa noche no leyeron ninguna fábula. Se contaron, por turnos, sus propias historias."*
+
+**El jugador elige el orden** (Liam primero o Elara primero) → ramifica la escena (rejugabilidad + coherencia con "cada relato ofrece una perspectiva distinta").
+
+**Rama Liam — La sombra que no huye.**
+> *"Liam también dudaba. A veces la responsabilidad de guiar al pueblo lo abrumaba, y temía no estar a la altura."*
+- Zona oscura donde la única forma de avanzar es **caminar hacia la sombra** (el miedo), no esquivarla.
+- Si el jugador huye 3 veces, la sombra se hace más grande; si la abraza, se reduce y revela el camino.
+- Sin diálogo complejo: es una mecánica de movimiento con significado.
+
+**Rama Elara — El desbordamiento.**
+> *"Su empatía tenía un precio: absorbía la tristeza y el miedo ajenos hasta sentirse desbordada."*
+- El **medidor de calma** (ya previsto en el GDD) se llena al escuchar las sombras del Sauce (escena anterior).
+- El jugador debe **sentarse a meditar** junto a la lámpara: mantener pulsado el botón de acción durante 3 s con una pausa guiada de texto (*"Respira. Lo que sientes no es solo tuyo."*).
+- Al vaciar la calma, Elara reconoce su sombra.
+
+**Cierre conjunto.**
+> *"Para transformar al pueblo —dijo Liam—, primero tenemos que transformarnos nosotros."*
+- Al completar ambas ramas, se abre el paso al Claro del Consejero de Sombreros (cap. 4).
+- Recompensa: **la brújula dorada** (que en el Prólogo estaba entre las páginas del libro) se activa como guía.
+
+### 5.3 Criterios de aceptación
+- [ ] El orden de las ramas es elegible y cambia algún detalle de diálogo.
+- [ ] La sombra de Liam no se combate: se abraza.
+- [ ] El medidor de calma de Elara es funcional y se recarga con meditación.
+- [ ] La escena dura 4-6 minutos y no bloquea el progreso.
+
+---
+
+## 6. SOMBREROS: MÁS OPCIONES
+
+### 6.1 Lo que dice el libro (cap. 4)
+El Consejero entrega **los seis** y Liam y Elara los prueban todos:
+> *"Con el verde, ella propuso… Con el azul, ordenó las ideas… con el amarillo, Liam se preguntó qué oportunidades escondían los desafíos; con el negro, ambos revisaron qué precauciones debían tomar."*
+
+Por tanto, restringir a Blanco y Rojo en el Nivel 1 es una simplificación injustificada.
+
+### 6.2 Propuesta de desbloqueo progresivo en Nivel 1
+
+| Sombrero | Efecto en juego | Dónde se usa | Desbloqueo |
+|---|---|---|---|
+| **Blanco** | Revela hechos, inscripciones, separa grano/paja | Niebla del Sauce | Consejero, acto 1 |
+| **Rojo** | Hace visibles sombras emocionales; habilita reflejar | Círculo del Sauce | Consejero, acto 1 |
+| **Negro** ⭐nuevo | Marca plataformas falsas y saltos riesgosos | Transición Jardín→Sauce | Consejero, acto 2 |
+| **Amarillo** ⭐nuevo | Enciende mecanismos de luz; recarga lámpara de Liam | Cámara del jardín / cabaña | Consejero, acto 2 |
+| Verde | (pendiente, Nivel 1 final) puentes | Claro del Conejo | opcional |
+| Azul | (siempre) mapa e inventario | — | menú |
+
+### 6.3 La mecánica que da valor: *cambiar de voz*
+> *"quien se ponía un sombrero cambiaba también de voz."*
+
+**Implementación:** el sombrero activo **modifica las opciones de respuesta del diálogo**:
+- Con **Blanco**: aparece una opción extra de hechos (*"¿Qué ha pasado exactamente?"*).
+- Con **Rojo**: aparece una opción extra emocional (*"Se nota que eso te pesa."*).
+- Con **Negro**: aparece una opción de cautela (*"¿Y si esto se repite?"*).
+- Con **Amarillo**: aparece una opción de posibilidad (*"¿Qué podrías empezar con lo que queda?"*).
+
+Esto multiplica la profundidad sin romper el sistema reflejar/aconsejar/juzgar: **el sombrero no da la respuesta buena, da una lente distinta.** Coherente con el pilar *"las respuestas no son únicas: dependen de desde dónde se las busca."*
+
+### 6.4 Criterios de aceptación
+- [ ] Cuatro sombreros equipables en Nivel 1.
+- [ ] El sombrero activo cambia las opciones del diálogo visible.
+- [ ] El filtro de color y el matiz musical acompañan al cambio.
+- [ ] Tutorial: el Consejero enseña un sombrero por acto, no los cuatro de golpe.
+
+---
+
+## 7. LEGIBILIDAD DE TEXTOS (CRÍTICO)
+
+### 7.1 Problemas conocidos
+- Codificación UTF-8 rota (*"TomÃ¡s"*, *"sÃ©"*).
+- Texto del HUD pisando otros elementos.
+- Tipografía pequeña sobre fondo de pergamino con textura.
+
+### 7.2 Especificación obligatoria
+
+| Parámetro | Requisito |
+|---|---|
+| Charset | `UTF-8` declarado en `<meta>` y servido con cabecera correcta |
+| Tamaño mínimo (móvil) | 16 px equivalente; cuerpo de diálogo 18 px |
+| Contraste | ratio ≥ 4.5:1 (WCAG AA); texto sobre pergamino **opaco**, no translúcido |
+| Ancho de línea | 60–70 caracteres máximo |
+| Interlineado | 1.4–1.5 |
+| Alineación | izquierda (nunca justificado) |
+| Cursivas | solo en palabras sueltas, no en párrafos |
+| Typewriter | velocidad configurable + tap para completar + opción de desactivar |
+| Longitud por turno | máximo 3 líneas en móvil |
+| Texto de sombras | efecto susurro **opcional** (desactivable en accesibilidad) |
+| HUD | padding mínimo 8 px entre elementos; test de solapamiento en 320, 480 y 1024 px |
+
+### 7.3 Pruebas de legibilidad (obligatorias antes de entregar)
+1. Captura a 320 px de ancho con zoom 200 %.
+2. Modo alto contraste (texto blanco sobre negro) → todo legible.
+3. Simulación de deuteranopia y protanopia (los sombreros se distinguen por icono, no solo por color).
+4. Búsqueda en el JSON de cualquier carácter `Ã`, `Â`, `©` mal formado → **cero resultados**.
+
+### 7.4 Criterios de aceptación
+- [ ] Ningún texto se corta ni se solapa en 3 resoluciones.
+- [ ] Todos los acentos y eñes correctos.
+- [ ] La velocidad del typewriter es ajustable desde el menú.
+- [ ] Contraste verificado con herramienta automática (axe / Lighthouse).
+
+---
+
+## 8. PRESUPUESTO DE IMPACTO
+
+| Elemento nuevo | Coste estimado |
+|---|---|
+| Estados de planta (marchita, zarza nueva) | +2 sprites, ~40 KB |
+| Sombreros Negro y Amarillo | +2 iconos UI, ~20 KB |
+| Escenas Sauce y Luz Interior | +JSON, ~8 KB |
+| Ramificación de lámparas | código, sin assets |
+| Plataformas de transición | ajuste de código |
+| **Total estimado v4** | **~950 KB** (dentro del límite de 4 MB) |
+
+---
+
+## 9. DEFINITION OF DONE — SPRINT 4
+
+1. ✅ Ramificación A/B/C/D de lámparas funcionando.
+2. ✅ Ciclo de planta completo con marchitamiento y zarza nueva.
+3. ✅ Transición Jardín→Sauce cruzable sin frustración en móvil.
+4. ✅ Escena del Sauce ampliada (4 actos, mecánica de no interrumpir).
+5. ✅ Escena de La Luz Interior jugable con ramas Liam/Elara y orden elegible.
+6. ✅ Cuatro sombreros equipables con efecto en el diálogo.
+7. ✅ Legibilidad verificada (UTF-8, contraste, 3 resoluciones).
+8. ✅ Guardado restaura plantas, equipo, sombreros y progreso.
+9. ✅ Sin errores en consola (Chrome, Firefox, Safari).
+10. ✅ Changelog con citas del libro usadas en cada escena nueva.
+
+---
+
+## 10. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Mitigación |
+|---|---|
+| El marchitamiento frustra | Aviso doble (visual + Aides) + Modo Historia |
+| Cuatro sombreros = tutorial denso | Enseñar de uno en uno, en dos actos |
+| "Cambiar de voz" rompe el sistema de 3 respuestas | El sombrero **añade** una opción, no sustituye |
+| Escenas nuevas alargan el nivel | Objetivo: nivel en 12-15 min; si excede, recortar Acto 3 del Sauce |
+| Texto de sombra con efecto susurro ilegible | Efecto opcional, desactivado por defecto en móvil |
+
+---
+
+## 11. ORDEN DE TRABAJO RECOMENDADO
+
+1. **Primero:** legibilidad y UTF-8 (barato, desbloquea todo lo demás).  
+2. **Segundo:** plataformas de transición (mejora inmediata de usabilidad).  
+3. **Tercero:** marchitamiento de plantas (sistema).  
+4. **Cuarto:** ramificación de lámparas.  
+5. **Quinto:** sombreros Negro y Amarillo + cambio de voz.  
+6. **Sexto:** escena del Sauce ampliada.  
+7. **Séptimo:** escena de La Luz Interior (depende de 5 y 6).
+
+---
+
+## 12. COMPROMISO DEL AUTOR
+
+Entrego en 7 días:
+- Textos literales del cap. 2 y cap. 3 para los diálogos (ya en el DOCX, listos para JSON).
+- Sprites de `flor_marchita` y `zarza_nueva` (2 estados).
+- Iconos de sombreros Negro y Amarillo en la paleta del juego.
+- Revisión de legibilidad en móvil real (Android + iPhone) con captura de FPS.
+
+---
+
+**¿Aprobado?** Si confirmas, el desarrollador puede arrancar por el punto 11.1. Si quieres, puedo redactar también el **JSON de ejemplo** de la escena del Sauce y la **máquina de estados de la planta** para que el trabajo empiece con el formato ya cerrado.

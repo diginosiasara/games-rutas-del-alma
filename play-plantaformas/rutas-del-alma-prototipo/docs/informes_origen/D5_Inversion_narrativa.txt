@@ -1,0 +1,338 @@
+# 📄 INFORME TÉCNICO — SISTEMA DE INVERSIÓN NARRATIVA
+## *Rutas del Alma: El Juego* — Lecciones de Callum y Retorno de Inversión
+**Versión de referencia:** Prototipo Web v7 · **Base narrativa:** Cap. 1 (El Jardín de la Mente) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+
+El jugador puede **invertir recursos** (Grano de Luz y Pétalos de Eco) en lecciones que Callum imparte a Aides. Cada lección desbloquea una **mejora permanente** en las habilidades de Aides, y la inversión se recupera con creces a través de **recompensas pasivas** (flores raras, reducción de fatiga, velocidad de trabajo).
+
+Esto refuerza la metáfora del libro: *"el cuidado del jardín es una inversión en uno mismo"*. Callum no vende objetos; **transfiere sabiduría**, y el jugador decide cuánto tiempo y recursos dedica a formar a Aides.
+
+---
+
+## 1. SISTEMA DE "LECCIONES DE CALLUM"
+
+### 1.1 Concepto Narrativo
+Callum es un mentor, no un comerciante. No "vende" mejoras; **enseña lecciones** que requieren:
+- **Tiempo de juego** (Aides debe asistir a la cabaña)
+- **Recursos** (Grano/Pétalos como "ofrenda de atención")
+- **Compromiso** (el jugador debe esperar el ciclo de aprendizaje)
+
+### 1.2 Estructura de Inversión
+
+| Lección | Coste | Duración del Aprendizaje | Mejora Desbloqueada | Retorno de Inversión |
+|---|---|---|---|---|
+| **Lección 1: "Distinguir Hechos de Juicios"** | 10 Grano + 5 Pétalos | 2 minutos de tiempo de juego | Aides identifica zarzas Nivel 1 automáticamente (las marca con un brillo dorado) | +1 Grano por cada zarza arrancada (retorno en 15 zarzas) |
+| **Lección 2: "El Riego Consciente"** | 15 Grano + 10 Pétalos | 3 minutos de tiempo de juego | Aides riega un área 2x más grande (efecto radial) | +1 Flor rara cada 5 ciclos de riego (valor: 5 Grano c/u) |
+| **Lección 3: "La Poda sin Rencor"** | 20 Grano + 15 Pétalos | 4 minutos de tiempo de juego | Aides arranca zarzas Nivel 2 en la mitad de tiempo | -50% fatiga por arranque (retorno en 10 zarzas Nivel 2) |
+| **Lección 4: "El Descanso Fértil"** | 25 Grano + 20 Pétalos | 5 minutos de tiempo de juego | Las plantas crecen 30% más rápido mientras Aides descansa en la cabaña | +1 Pétalo por cada ciclo de descanso completado |
+| **Lección 5: "La Cosecha a Tiempo"** | 30 Grano + 25 Pétalos | 6 minutos de tiempo de juego | Aides cosecha flores automáticamente antes de que se marchiten (ventana extendida a 180s) | +2 Flores raras por cada 10 cosechas (valor: 10 Grano c/u) |
+
+---
+
+## 2. MECÁNICA DE INVERSIÓN Y RETORNO
+
+### 2.1 Flujo de Juego
+
+```
+1. Jugador se acerca a Callum en la cabaña
+   ↓
+2. Callum ofrece lección disponible (según progreso de Aides)
+   ↓
+3. Jugador paga coste (Grano + Pétalos)
+   ↓
+4. Aides se sienta con Callum (animación de té + vapor)
+   ↓
+5. Temporizador de aprendizaje (2-6 minutos según lección)
+   ↓
+6. Al completar: Callum dice frase del libro + mejora se activa
+   ↓
+7. Aides vuelve al jardín con nueva habilidad
+   ↓
+8. Jugador observa retorno de inversión (flores raras, menos fatiga, etc.)
+```
+
+### 2.2 Cálculo de Retorno de Inversión (ROI)
+
+**Ejemplo: Lección 2 "El Riego Consciente"**
+- **Coste:** 15 Grano + 10 Pétalos
+- **Mejora:** Riego en área 2x + Flor rara cada 5 ciclos
+- **Retorno estimado:**
+  - Flor rara = 5 Grano (valor de mercado en la "tienda" de Callum)
+  - Cada 5 ciclos = 5 Grano
+  - **Break-even:** 15 ciclos de riego (75 minutos de juego)
+  - **Ganancia neta:** Después del ciclo 15, cada flor rara es ganancia pura
+
+**Ejemplo: Lección 4 "El Descanso Fértil"**
+- **Coste:** 25 Grano + 20 Pétalos
+- **Mejora:** Plantas crecen 30% más rápido durante descanso + 1 Pétalo por descanso
+- **Retorno estimado:**
+  - Cada descanso = 1 Pétalo
+  - **Break-even:** 20 descansos (900 segundos = 15 minutos de tiempo de descanso)
+  - **Ganancia neta:** Después del descanso 20, cada Pétalo es ganancia pura
+
+### 2.3 Visualización del Retorno
+
+El HUD debe mostrar:
+- **Inversión actual:** "Lección 2: 15 Grano + 10 Pétalos invertidos"
+- **Retorno acumulado:** "Flores raras cosechadas: 3/15 (20% recuperado)"
+- **Proyección:** "Se estima recuperar la inversión en 12 ciclos más"
+
+Esto se muestra al pasar el cursor sobre el icono de la lección en el menú de Callum.
+
+---
+
+## 3. INTEGRACIÓN CON EL CICLO DE AIDES
+
+### 3.1 Estados de Aides durante el Aprendizaje
+
+| Estado | Descripción | Duración | Efecto en el Jardín |
+|---|---|---|---|
+| `EN_LECCION` | Aides está sentada con Callum, tomando té y escuchando | 2-6 minutos | El jardín se congela (no crece, no se marchita) |
+| `PRACTICANDO` | Aides vuelve al jardín y prueba la nueva habilidad | 1 minuto | Las primeras 3 acciones tienen animación especial (brillo dorado) |
+| `DOMINADA` | La habilidad se integra en el bucle automático de Aides | Permanente | Aides usa la mejora en su ciclo de trabajo |
+
+### 3.2 Diálogo de Callum durante la Lección
+
+Cada lección tiene un diálogo único con frases del libro:
+
+**Lección 1: "Distinguir Hechos de Juicios"**
+```
+Callum: "Lo que ya ha brotado son los hechos de tu vida, Aides. 
+         Lo que siembras sobre ellos son tus juicios."
+Aides: "¿Cómo sé cuál es cuál?"
+Callum: "Los hechos se pueden tocar. Los juicios solo se sienten. 
+         Observa la zarza: ¿tiene espinas o solo las imaginas?"
+[2 minutos después]
+Callum: "Recuerda: la maleza vuelve si te descuidas. 
+         Pero ahora sabes distinguirla de la flor."
+Aides: "Gracias, sabio Callum. Voy a practicar."
+```
+
+**Lección 2: "El Riego Consciente"**
+```
+Callum: "El agua no riega solo la tierra, Aides. Riega la intención."
+Aides: "¿Qué intención debo tener?"
+Callum: "La de quien sabe que cada gota es una decisión. 
+         No riegas por regar: riegas para que crezca lo que elegiste."
+[3 minutos después]
+Callum: "Ahora tu regadera no solo lleva agua. Lleva atención."
+Aides: "La siento más ligera. Como si supiera adónde ir."
+```
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS
+
+### 4.1 Variables de Estado
+
+```javascript
+// Estado del jugador
+playerData = {
+  grano_luz: 50,
+  petalos_eco: 30,
+  lecciones_completadas: [],
+  inversion_activa: null
+}
+
+// Estado de Aides
+aidesData = {
+  habilidades: {
+    distinguir_hechos: false,
+    riego_consciente: false,
+    poda_sin_rencor: false,
+    descanso_fertil: false,
+    cosecha_a_tiempo: false
+  },
+  estado: "EN_JARDIN", // EN_JARDIN, EN_LECCION, PRACTICANDO
+  leccion_actual: null,
+  timer_leccion: 0
+}
+
+// Estado de Callum
+callumData = {
+  lecciones_disponibles: [1, 2, 3, 4, 5],
+  lecciones_enseñadas: [],
+  respetando_descanso: true
+}
+```
+
+### 4.2 Función de Inversión
+
+```javascript
+function invertirEnLeccion(leccionId) {
+  const leccion = LECCIONES[leccionId];
+  
+  // Verificar recursos
+  if (playerData.grano_luz < leccion.costoGrano || 
+      playerData.petalos_eco < leccion.costoPetalos) {
+    showDialogue("No tienes suficientes recursos para esta lección.");
+    return;
+  }
+  
+  // Verificar que Aides no esté en otra lección
+  if (aidesData.estado === "EN_LECCION") {
+    showDialogue("Aides ya está aprendiendo. Espera a que termine.");
+    return;
+  }
+  
+  // Cobrar recursos
+  playerData.grano_luz -= leccion.costoGrano;
+  playerData.petalos_eco -= leccion.costoPetalos;
+  
+  // Iniciar lección
+  aidesData.estado = "EN_LECCION";
+  aidesData.leccion_actual = leccionId;
+  aidesData.timer_leccion = leccion.duracion * 60; // en segundos
+  
+  // Congelar jardín
+  gardenData.paused = true;
+  
+  // Mostrar diálogo de Callum
+  startLeccionDialogue(leccionId);
+}
+
+function completarLeccion() {
+  const leccionId = aidesData.leccion_actual;
+  const leccion = LECCIONES[leccionId];
+  
+  // Desbloquear habilidad
+  aidesData.habilidades[leccion.habilidad] = true;
+  aidesData.estado = "PRACTICANDO";
+  
+  // Actualizar progreso
+  playerData.lecciones_completadas.push(leccionId);
+  callumData.lecciones_enseñadas.push(leccionId);
+  
+  // Descongelar jardín
+  gardenData.paused = false;
+  
+  // Mostrar diálogo de cierre
+  endLeccionDialogue(leccionId);
+  
+  // Iniciar fase de práctica (1 minuto)
+  setTimeout(() => {
+    aidesData.estado = "EN_JARDIN";
+    aidesData.leccion_actual = null;
+  }, 60000);
+}
+```
+
+### 4.3 Sistema de Retorno Automático
+
+```javascript
+// Se ejecuta cada vez que Aides completa una acción en el jardín
+function aplicarRetornoInversion(accion) {
+  const habilidades = aidesData.habilidades;
+  
+  // Lección 1: Distinguir hechos
+  if (habilidades.distinguir_hechos && accion === "arrancar_zarza") {
+    playerData.grano_luz += 1;
+    showFloatingText("+1 Grano (Lección 1)", aides.position);
+  }
+  
+  // Lección 2: Riego consciente
+  if (habilidades.riego_consciente && accion === "regar") {
+    gardenData.ciclos_riego++;
+    if (gardenData.ciclos_riego % 5 === 0) {
+      spawnRareFlower(aides.position);
+      showFloatingText("Flor Rara (Lección 2)", aides.position);
+    }
+  }
+  
+  // Lección 4: Descanso fértil
+  if (habilidades.descanso_fertil && aides.estado === "DESCANSANDO") {
+    playerData.petalos_eco += 1;
+    showFloatingText("+1 Pétalo (Lección 4)", callum.position);
+  }
+}
+```
+
+---
+
+## 5. UI/UX DEL SISTEMA
+
+### 5.1 Menú de Lecciones de Callum
+
+Al interactuar con Callum, se abre un menú con:
+
+```
+┌─────────────────────────────────────────┐
+│  CALLUM - SABIO DEL VALLE               │
+│                                         │
+│  Lecciones disponibles:                 │
+│  [1] Distinguir Hechos de Juicios       │
+│      Coste: 10 Grano + 5 Pétalos        │
+│      Duración: 2 min                    │
+│      Retorno: +1 Grano por zarza        │
+│      [INVERTIR]                         │
+│                                         │
+│  [2] El Riego Consciente                │
+│      Coste: 15 Grano + 10 Pétalos       │
+│      Duración: 3 min                    │
+│      Retorno: Flor rara cada 5 riegos   │
+│      [INVERTIR]                         │
+│                                         │
+│  [CERRAR]                               │
+└─────────────────────────────────────────┘
+```
+
+### 5.2 Indicador de Progreso de Inversión
+
+En el HUD, junto al contador de flores:
+
+```
+🌾 Grano: 45 | 🌸 Pétalos: 25
+📚 Inversión activa: Lección 2 (20% recuperada)
+```
+
+Al hacer clic en "Inversión activa", se expande:
+
+```
+Lección 2: El Riego Consciente
+Invertido: 15 Grano + 10 Pétalos
+Recuperado: 3 Flores raras (15 Grano)
+Faltan: 12 ciclos para break-even
+```
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN
+
+1. ✅ El jugador puede invertir Grano y Pétalos en lecciones de Callum.
+2. ✅ Aides se sienta con Callum durante la lección (animación de té).
+3. ✅ El jardín se congela durante la lección (no hay pérdida por marchitamiento).
+4. ✅ Al completar la lección, Aides gana una habilidad permanente.
+5. ✅ El retorno de inversión se visualiza en el HUD.
+6. ✅ Las habilidades se guardan en `localStorage` y persisten entre sesiones.
+7. ✅ Callum tiene diálogo único para cada lección (frases del libro).
+8. ✅ El jugador puede ver el ROI proyectado antes de invertir.
+
+---
+
+## 7. ORDEN DE IMPLEMENTACIÓN
+
+1. **Día 1:** Crear estructura de datos de lecciones y función `invertirEnLeccion()`.
+2. **Día 2:** Implementar estado `EN_LECCION` de Aides y animación de té con Callum.
+3. **Día 3:** Programar las 5 habilidades y su integración con el ciclo de jardín.
+4. **Día 4:** Añadir sistema de retorno automático y visualización en HUD.
+5. **Día 5:** Escribir diálogos de Callum para cada lección y pruebas de balanceo.
+
+---
+
+## 8. BALANCEO ECONÓMICO
+
+Para que el sistema sea justo y no rompa la economía del juego:
+
+- **Ingreso base del jugador:** ~5 Grano y ~3 Pétalos por nivel completado.
+- **Coste total de las 5 lecciones:** 100 Grano + 75 Pétalos.
+- **Tiempo estimado para recuperar todas las inversiones:** 2-3 horas de juego.
+- **Ganancia neta después de 5 horas:** ~50 Grano y ~40 Pétalos extras.
+
+Esto asegura que el jugador **siempre recupere su inversión** si juega con constancia, pero no obtiene ganancias infinitas sin esfuerzo.
+
+---
+
+¿Quieres que prepare el **JSON completo de las 5 lecciones** con los diálogos de Callum y Aides, o el **código de la función de retorno automático** para que el desarrollador lo integre directamente?

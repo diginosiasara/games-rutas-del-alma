@@ -1,0 +1,163 @@
+# 📄 INFORME TÉCNICO — SPRINT 10
+## *Rutas del Alma: El Juego* — Desbloqueo Progresivo, Conexión Remota con Aides y el Consejero como Guía
+**Versión de referencia:** Prototipo Web v9 · **Base narrativa:** Cap. 4 (Las Llaves del Pensamiento) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Este sprint reestructura la progresión de las mecánicas para que **el ritmo del juego imite el ritmo del aprendizaje**. Los sombreros no son herramientas que se "tienen", sino perspectivas que se "adquieren" al estar listo. Además, se introduce un **sistema de vínculo a distancia** con Aides (para que su ausencia no se sienta como una pérdida, sino como una relación que madura) y se redefine al Consejero de Sombreros como un **mentor ambiental** que guía al jugador sin depender de él.
+
+---
+
+## 1. SISTEMA DE DESBLOQUEO PROGRESIVO DE LOS SOMBREROS
+
+### 1.1 Filosofía de Diseño
+Los sombreros no deben estar disponibles desde el menú inicial. El jugador debe **ganarse el derecho a usarlos** a medida que avanza en la comprensión de su propia mente (y en las pantallas del juego).
+
+### 1.2 Matriz de Desbloqueo por Pantalla/Zona
+
+| Sombrero | Pantalla / Zona de Desbloqueo | Condición Narrativa | Efecto en la UI |
+| :--- | :--- | :--- | :--- |
+| **Ninguno / Azul** | Pantalla 1 (Inicio) | Por defecto. El Azul es el menú/inventario. | Activos desde el inicio. |
+| **Blanco (Hechos)** | Pantalla 4 (Claro del Consejero - Acto 1) | Tras escuchar la primera lección sobre distinguir grano de paja. | El icono Blanco deja de estar en gris y emite un brillo suave. |
+| **Rojo (Emociones)** | Pantalla 4 (Claro del Consejero - Acto 2) | Tras el primer ejercicio de empatía con el conejo o una sombra. | El icono Rojo se desbloquea. |
+| **Negro (Cautela)** | Pantalla 6 (Transición al Lago / Puente) | Al enfrentar el primer riesgo real (caídas o zarzas Nivel 2). | El Consejero "susurra" su aparición. |
+| **Amarillo (Optimismo)** | Pantalla 8 (Cabaña de Callum) | Al aprender a ver las oportunidades en el descanso. | Se desbloquea tras la escena del té. |
+| **Verde (Creatividad)** | Pantalla Final (Jefe: Maleza del Resentimiento) | Al necesitar una ruta alternativa para vencer sin combatir. | Último en desbloquearse. |
+
+### 1.3 Implementación Técnica (UI/UX)
+*   **La Rueda de Sombreros:** Los sombreros bloqueados aparecen como **siluetas grises con un pequeño candado dorado**. 
+*   **Animación de Desbloqueo:** Cuando el jugador cumple la condición, la pantalla hace un ligero *zoom in*, el Consejero aparece en un destello y "coloca" el sombrero en la rueda. Se reproduce un sonido de campanilla (el mismo del libro).
+*   **Código (Pseudocódigo):**
+    ```javascript
+    const hats = {
+      blue: { unlocked: true, name: "Organización" },
+      white: { unlocked: false, unlockZone: "clearing_act1" },
+      red: { unlocked: false, unlockZone: "clearing_act2" }
+    };
+    
+    function checkUnlocks(currentZone) {
+      for (let hat in hats) {
+        if (hats[hat].unlockZone === currentZone && !hats[hat].unlocked) {
+          hats[hat].unlocked = true;
+          triggerUnlockAnimation(hat); // Muestra al Consejero entregándolo
+        }
+      }
+    }
+    ```
+
+---
+
+## 2. AIDES: CONTROL VISUAL DE ESTADO Y SISTEMA DE "LLAMADA"
+
+### 2.1 El "Controlador Visual" (HUD de Aides)
+Cuando Aides se queda en la cabaña de Callum o entra en su bucle de trabajo, no desaparece de la experiencia. Se introduce un **Panel de Vínculo** en la esquina inferior derecha (o izquierda, según el HUD de las lámparas).
+
+**Elementos del Panel:**
+1.  **Retrato Circular de Aides:** Cambia según su emoción (Sonrisa suave = Serenidad; Ojos cerrados = Descanso; Ceño fruncido = Ansiedad).
+2.  **Anillo de Estado (Barra circular):** 
+    *   *Verde:* Calma alta / Energía lista.
+    *   *Amarillo:* Cansancio leve / Necesita té.
+    *   *Rojo/Gris:* Ansiedad o Melancolía / Requiere atención.
+3.  **Icono de Acción Actual:** Un pequeño icono sobre el retrato que indica qué está haciendo (una taza de té, una regadera, una cama, un libro).
+4.  **Botón de "Llamada" (Icono de una campana o una hoja):** Siempre interactivo.
+
+### 2.2 Mecánica de "Llamada y Conversación" (Cultivar la Amistad)
+El jugador puede pulsar el botón de llamada (Tecla 'C' o botón táctil) en cualquier momento (fuera de combate o puzzles críticos) para **conectar mentalmente** con Aides.
+
+*   **Diálogos Dinámicos:** El juego no abre un menú genérico. Abre una "burbuja de pensamiento" donde Aides reacciona a su estado actual:
+    *   *Si está descansando:* "Mmm... el té de Callum sabe a lluvia hoy. ¿Necesitas algo, o solo querías saber de mí?"
+    *   *Si está ansiosa:* "Hay muchas zarzas en el sector norte... siento que no doy abasto. ¿Crees que lo estoy haciendo bien?"
+    *   *Si está en bucle de trabajo:* "Estoy regando las flores de gratitud. Crecen rápido hoy."
+*   **Sistema de "Cultivar Amistad" (Vínculo):**
+    *   Cada llamada ofrece 2-3 opciones de respuesta.
+    *   *Respuesta Empática (Sombrero Rojo):* "Tómate tu tiempo, Aides. El jardín espera." -> **+10 Vínculo**.
+    *   *Respuesta Pragmática (Sombrero Blanco):* "¿Cuántas zarzas has arrancado?" -> **+5 Vínculo, +5 Grano**.
+    *   *Respuesta Autoritaria:* "Deja de quejarte y trabaja." -> **-15 Vínculo** (Aides se cierra y no acepta llamadas por 5 minutos de tiempo real).
+*   **Recompensa del Vínculo:** Al llegar a ciertos niveles de amistad (ej. 50, 100), Aides desbloquea **habilidades pasivas** (ej. "Aides encuentra semillas raras mientras descansa", "Aides rega automáticamente sin que se lo pidas").
+
+---
+
+## 3. EL CONSEJERO DE SOMBREROS: EL ACOMPAÑANTE INDEPENDIENTE
+
+### 3.1 Redefinición del Personaje
+A diferencia de Aides (que necesita cuidado y tiene emociones), el Consejero es un **arquetipo estable**. No depende de Liam ni de Elara; es el guardián de las reglas del pensamiento. No se le "llama" para charlar, sino que **él aparece cuando el jugador lo necesita para recordar las dinámicas**.
+
+### 3.2 Mecánica de "Susurros del Consejero" (Contextual Reminders)
+El Consejero actúa como un sistema de *tutorial dinámico* y *guía de puzzles* integrado en el entorno.
+
+*   **Detección de Bloqueo (Stuck Detection):** Si el jugador lleva más de 45 segundos sin avanzar en una pantalla o falla un puzzle 2 veces, el Consejero no aparece físicamente, sino que **su voz (texto en pantalla con su tipografía característica) susurra una pista basada en los sombreros**.
+    *   *Ejemplo en un salto difícil:* *"Amigo mío, ¿has probado a mirar los riesgos? El sombrero Negro siempre revela lo que el ojo ignora."*
+    *   *Ejemplo ante una sombra triste:* *"Recuerda: antes de iluminar con hechos, hay que escuchar con el corazón. El Rojo, amigo, el Rojo."*
+*   **Apariciones Ambientales:** En las pantallas de carga o transiciones entre zonas, el Consejero puede aparecer brevemente en el fondo (sentado en una rama, caminando a lo lejos), haciendo malabares con los sombreros. Esto refuerza su presencia sin interrumpir el juego.
+*   **El "Diario de los Sombreros":** En el menú de pausa, el Consejero deja "notas" al margen del diario del jugador. Si el jugador usa mucho el sombrero Blanco y poco el Rojo, el Consejero escribe: *"Veo que te apoyas mucho en los hechos. ¿Qué estarás evitando sentir?"*. Esto fomenta la autoindagación real del jugador.
+
+### 3.3 Independencia Narrativa
+*   El Consejero **nunca** expresa preocupación por el jugador ni pide ayuda. Su tono es siempre de curiosidad amable y desafío intelectual.
+*   Si el jugador intenta "interactuar" con él cuando aparece en el fondo, el Consejero simplemente se quita el sombrero, hace una reverencia y se desvanece, dejando caer una pequeña pista textual.
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS Y UI/UX
+
+### 4.1 Arquitectura del Estado de Aides
+```javascript
+const aidesConnection = {
+  friendshipLevel: 0, // 0 a 100
+  currentStatus: 'resting', // 'resting', 'working', 'anxious', 'melancholic'
+  lastCallTime: 0,
+  
+  getStatusColor: function() {
+    if (this.currentStatus === 'resting') return '#4CAF50'; // Verde
+    if (this.currentStatus === 'working') return '#FFC107'; // Amarillo
+    if (this.currentStatus === 'anxious') return '#F44336'; // Rojo
+    if (this.currentStatus === 'melancholic') return '#9E9E9E'; // Gris
+  }
+};
+```
+
+### 4.2 Diseño del HUD de Conexión
+*   **Ubicación:** Esquina inferior derecha, tamaño 80x80 px.
+*   **Interacción:** Al hacer hover (PC) o mantener pulsado (Móvil) sobre el retrato de Aides, se expande un pequeño tooltip con su estado actual en texto (*"Aides está descansando. Calma: 80%"*).
+*   **Animación de Llamada:** Al pulsar el botón de llamada, el retrato de Aides emite ondas concéntricas (como una piedra en el agua) y la pantalla se oscurece un 20% durante 1 segundo para simular la "conexión mental", antes de abrir el cuadro de diálogo.
+
+### 4.3 Gestión de Eventos del Consejero
+```javascript
+function checkHatterHints(playerState, puzzleState) {
+  if (puzzleState.failCount >= 2 && !puzzleState.hintGiven) {
+    let hint = "";
+    if (puzzleState.type === 'platforming_risk') {
+      hint = "El sombrero Negro susurra: 'Mira bien dónde pisas...'";
+    } else if (puzzleState.type === 'shadow_dialogue') {
+      hint = "El sombrero Rojo recuerda: '¿Qué siente ella, realmente?'";
+    }
+    showHatterWhisper(hint);
+    puzzleState.hintGiven = true;
+  }
+}
+```
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Los sombreros aparecen bloqueados (gris/candado) al inicio y solo se desbloquean al llegar a las pantallas/zonas designadas.
+*   ✅ Existe un Panel de Vínculo de Aides visible en el HUD que muestra su retrato, estado de ánimo (color) y acción actual.
+*   ✅ El jugador puede "llamar" a Aides en cualquier momento y recibir un diálogo coherente con su estado actual.
+*   ✅ Las respuestas empáticas en las llamadas aumentan el nivel de amistad; las autoritarias lo disminuyen.
+*   ✅ El Consejero de Sombreros no requiere interacción directa para dar pistas; sus "susurros" aparecen automáticamente si el jugador se bloquea en un puzzle.
+*   ✅ El Consejero tiene un tono independiente, de mentor, sin mostrar dependencia emocional de los protagonistas.
+
+---
+
+## 6. ORDEN DE IMPLEMENTACIÓN
+
+1.  **Día 1:** Crear la matriz de desbloqueo de sombreros y la UI de la rueda con estados bloqueados/desbloqueados.
+2.  **Día 2:** Implementar el Panel de Vínculo de Aides en el HUD y conectarlo con su máquina de estados emocionales (Sprint 8).
+3.  **Día 3:** Programar el sistema de "Llamada" y el árbol de diálogos dinámicos basado en el estado de Aides.
+4.  **Día 4:** Implementar el detector de bloqueo (Stuck Detection) y los "susurros" contextuales del Consejero.
+5.  **Día 5:** Pulido de animaciones (desbloqueo de sombreros, ondas de llamada a Aides) y pruebas de balanceo de la amistad.
+
+---
+
+**¿Aprobado?** Este sistema garantiza que el jugador nunca se sienta solo, incluso cuando los personajes no están físicamente en pantalla. Aides se convierte en un amigo que crece contigo, y el Consejero en la voz de la sabiduría que siempre está presente. Si das el visto bueno, el desarrollador puede empezar por la UI de desbloqueo de sombreros.

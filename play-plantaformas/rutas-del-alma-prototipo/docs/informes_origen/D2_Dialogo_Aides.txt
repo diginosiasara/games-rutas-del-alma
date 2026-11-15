@@ -1,0 +1,234 @@
+# 📄 INFORME TÉCNICO — SISTEMA DE DIÁLOGO DE AIDES
+## *Rutas del Alma: El Juego* — Ramificación, Consecuencias y Gestión de Tareas
+**Base narrativa:** Capítulo 1 (El Jardín de la Mente) y Capítulo 4 (Las Llaves del Pensamiento)  
+**Objetivo:** Crear el sistema de diálogo interactivo entre **Aides y el Jugador (Liam/Elara)**. A diferencia de Callum (que actúa como mentor), Aides es un **espejo del estado interno del jugador**. Sus diálogos reflejan la salud del jardín, su propio nivel de fatiga y la calidad de la "escucha" del jugador.
+
+---
+
+## 1. VARIABLES DE ESTADO AFECTADAS POR AIDES
+
+| Variable | Descripción | Efecto en el Gameplay |
+| :--- | :--- | :--- |
+| **`aides_confianza`** | Qué tanto confía Aides en su propio criterio. | Alta: trabaja más rápido y desbloquea acciones avanzadas. Baja: duda, comete errores (riega mal). |
+| **`aides_fatiga`** | Cansancio físico y emocional. | >80%: Aides se niega a trabajar o abandona el jardín. <20%: Entra en estado "Flow" (crecimiento x2). |
+| **`vinculo_jugador`** | Nivel de empatía del jugador hacia Aides. | Determina si Aides acepta "pedidos" complejos (ej. cuidar el jardín en bucle) o si exige descansar. |
+| **`jardin_salud`** | Porcentaje de salud del ecosistema. | Aides comenta este estado en sus diálogos. |
+
+---
+
+## 2. ÁRBOL DE DIÁLOGO 1: "SINERGIA EN EL JARDÍN" (Trabajo conjunto)
+
+**Contexto:** Aides está frente a una zarza de Nivel 2 (Resentimiento). El jugador (Liam o Elara) se acerca para ayudar.
+**Ubicación:** Zona del Jardín.
+
+```json
+{
+  "id": "aides_jardin_01_sinergia",
+  "speaker": "Aides",
+  "text": "Esta zarza... sus raíces son muy profundas. Siento que si tiro con fuerza, romperé la tierra buena. ¿Qué hacemos?",
+  "portrait": "aides_preocupada",
+  "choices": [
+    {
+      "id": "a1_opcion_a_elara_escucha",
+      "text": "[Elara / Sombrero Rojo] ¿Qué te dice tu instinto sobre esta zarza, Aides? ¿Qué emoción la alimenta?",
+      "hat_required": "Rojo (Emoción)",
+      "consequences": {
+        "aides_confianza": "+15",
+        "aides_fatiga": "-10",
+        "player_petalos": "+5",
+        "jardin_salud": "+5"
+      },
+      "next_node": "aides_respuesta_roja",
+      "gameplay_effect": "Aides cierra los ojos, respira, y la zarza se encoge un 30%. Aides aprende a 'Sentir las raíces' (acción pasiva futura)."
+    },
+    {
+      "id": "a1_opcion_b_liam_hechos",
+      "text": "[Liam / Sombrero Blanco] Observemos los hechos. La raíz principal está al norte. Si iluminamos ese punto, podrás tirar con seguridad.",
+      "hat_required": "Blanco (Hechos) + Lámpara Liam",
+      "consequences": {
+        "aides_confianza": "+10",
+        "player_grano": "+5",
+        "energia_liam": "-15"
+      },
+      "next_node": "aides_respuesta_blanca",
+      "gameplay_effect": "Liam ilumina la raíz. Aides arranca la zarza de un solo tirón sin daño colateral. Se obtiene una 'Semilla de Claridad'."
+    },
+    {
+      "id": "a1_opcion_c_orden_directa",
+      "text": "Tira fuerte, Aides. No hay tiempo que perder, el jardín necesita espacio.",
+      "hat_required": "Ninguno",
+      "consequences": {
+        "aides_confianza": "-20",
+        "aides_fatiga": "+25",
+        "jardin_salud": "-10"
+      },
+      "next_node": "aides_respuesta_fallo",
+      "gameplay_effect": "Aides tira con miedo. La zarza se rompe, pero la raíz queda en la tierra y se regenera al 50% en 10 segundos. Aides se frustra."
+    }
+  ]
+}
+```
+
+### Ramificaciones:
+*   **Si elige A (Rojo):** Aides sonríe. *"Tiene miedo. Como yo. Pero al nombrarlo, ya no me asusta."* (Desbloquea diálogo de empatía).
+*   **Si elige B (Blanco):** Aides asiente. *"La luz muestra el camino, pero mis manos hacen el trabajo. Gracias."* (Refuerza el trabajo en equipo).
+*   **Si elige C (Orden):** Aides baja la cabeza. *"Sí... como tú digas."* (Aides entra en modo "Obediencia": trabaja más lento y no genera flores raras).
+
+---
+
+## 3. ÁRBOL DE DIÁLOGO 2: "LA CABANA Y EL BUCLE" (Gestión de tareas y descanso)
+
+**Contexto:** Aides está en la cabaña con Callum, tomando té. El jugador puede pedirle que vuelva al jardín o que descanse. Aquí se implementa la **mecánica de bucle (trabajo/descanso)** solicitada.
+
+```json
+{
+  "id": "aides_cabana_02_bucle",
+  "speaker": "Aides",
+  "text": "El té de Callum tiene un sabor a tierra mojada. Me recuerda que todo necesita su tiempo. ¿Necesitáis algo del jardín?",
+  "portrait": "aides_serena",
+  "conditions": {
+    "aides_fatiga_menor_que": 70
+  },
+  "choices": [
+    {
+      "id": "a2_opcion_a_pedir_cuidado_bucle",
+      "text": "Aides, el jardín es grande. ¿Podrías cuidarlo en bucle? Riega lo que necesite agua y avísame si nace una flor.",
+      "hat_required": "Azul (Organización)",
+      "consequences": {
+        "aides_fatiga": "+15 por ciclo",
+        "aides_confianza": "+10",
+        "jardin_salud": "+20 (automático)"
+      },
+      "next_node": "aides_acepta_bucle",
+      "gameplay_effect": "Aides acepta. Se activa el 'Modo Autonomía': Aides saldrá de la casa, regará, volverá a descansar 45s, y repetirá. El jugador recibe notificaciones: 'Aides ha regado las flores de gratitud'."
+    },
+    {
+      "id": "a2_opcion_b_forzar_trabajo",
+      "text": "No descanses aún. Hay zarzas Nivel 3 en el borde del lago. Ve a arrancarlas ahora.",
+      "hat_required": "Ninguno",
+      "consequences": {
+        "aides_fatiga": "+40",
+        "aides_confianza": "-15",
+        "vinculo_jugador": "-10"
+      },
+      "next_node": "aides_se_resiste",
+      "gameplay_effect": "Aides duda. 'Callum dice que la prisa es otra maleza... pero iré'. Aides trabaja un 50% más lento y tiene 30% de probabilidad de fallar y pincharse."
+    },
+    {
+      "id": "a2_opcion_c_dejarla_descansar",
+      "text": "Nada. Sigue disfrutando tu té. El jardín puede esperar a que estés lista.",
+      "hat_required": "Rojo (Emoción)",
+      "consequences": {
+        "aides_fatiga": "-30",
+        "aides_confianza": "+20",
+        "player_petalos": "+10"
+      },
+      "next_node": "aides_agradecida",
+      "gameplay_effect": "Aides sonríe a Callum. 'Gracias por verlo'. Al terminar el té, Aides irá al jardín por voluntad propia y su velocidad de trabajo aumenta un 25% (Estado 'Flow')."
+    }
+  ]
+}
+```
+
+---
+
+## 4. ÁRBOL DE DIÁLOGO 3: "LA CRISIS DEL REBROTE" (Consecuencia de la negligencia)
+
+**Contexto:** El jugador ha ignorado el jardín por mucho tiempo. Las plantas se han marchitado y convertido en zarzas. Aides está sentada en el suelo del jardín, rodeada de espinas, llorando.
+
+```json
+{
+  "id": "aides_crisis_03_negligencia",
+  "speaker": "Aides",
+  "text": "Volvieron... todas volvieron. Callum dijo que la maleza vuelve si te descuidas, pero no me dijo que dolería tanto verlas crecer sobre mis flores. ¿Por qué no me avisasteis?",
+  "portrait": "aides_llorando",
+  "conditions": {
+    "jardin_salud_menor_que": 30,
+    "zarzas_nivel_superior_a": 2
+  },
+  "choices": [
+    {
+      "id": "a3_opcion_a_elara_abrazo",
+      "text": "[Elara] No estás sola en esto, Aides. Siéntate. Respira. Vamos a mirar juntas qué se puede salvar hoy.",
+      "hat_required": "Rojo (Emoción) + Lámpara Elara",
+      "consequences": {
+        "aides_fatiga": "-20",
+        "vinculo_jugador": "+25",
+        "jardin_salud": "+10"
+      },
+      "next_node": "aides_se_calma",
+      "gameplay_effect": "Elara disuelve las 'Zarzas de Culpa' (invisibles). Aides se levanta. No elimina las zarzas físicas, pero Aides recupera la voluntad para empezar a limpiar."
+    },
+    {
+      "id": "a3_opcion_b_liam_plan",
+      "text": "[Liam] Es un hecho: el jardín está dañado. Pero también es un hecho que tenemos las herramientas. Empecemos por el sector norte.",
+      "hat_required": "Azul (Organización) + Lámpara Liam",
+      "consequences": {
+        "aides_confianza": "+15",
+        "player_grano": "+10"
+      },
+      "next_node": "aides_se_organiza",
+      "gameplay_effect": "Liam marca las zarzas en el HUD. Aides deja de llorar y adopta una expresión determinada. Se desbloquea la acción 'Plan de Rescate' (limpieza rápida de zona)."
+    },
+    {
+      "id": "a3_opcion_c_culpar",
+      "text": "Te dije que vigilaras las plantas. Ahora tendrás que trabajar el doble para arreglarlo.",
+      "hat_required": "Negro (Cautela - Mal uso)",
+      "consequences": {
+        "aides_confianza": "-50",
+        "vinculo_jugador": "-30",
+        "aides_fatiga": "+50"
+      },
+      "next_node": "aides_se_bloquea",
+      "gameplay_effect": "Aides se encierra en silencio. Se niega a trabajar durante 3 minutos de tiempo real. El jugador debe limpiar el jardín solo o esperar a que Aides se recupere."
+    }
+  ]
+}
+```
+
+---
+
+## 5. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 5.1 Sistema de "Memoria Emocional" de Aides
+Aides no es un NPC de una sola línea. Su diálogo inicial cambia según el historial del jugador:
+*   **Si el jugador ha sido empático (muchos Pétalos):** Aides saluda con frases como *"El jardín respira mejor hoy"* o *"Callum y yo estábamos hablando de ti"*.
+*   **Si el jugador ha sido autoritario (muchos Granos, poca empatía):** Aides saluda con frases cortas: *"¿Qué hay que hacer?"* o *"El jardín está... como está"*.
+
+### 5.2 Integración con el Bucle de Trabajo (FSM)
+Cuando el jugador elige la **Opción A del Diálogo 2** (Pedir cuidado en bucle), se activa un temporizador en el código:
+```javascript
+// Pseudocódigo para el bucle de Aides
+function loopAides() {
+  if (aides_state === 'TRABAJANDO') {
+    aides_fatiga += 5;
+    if (aides_fatiga > 80) {
+      changeState('VOLVIENDO_A_CASA');
+    }
+  } else if (aides_state === 'DESCANSANDO') {
+    aides_fatiga -= 10;
+    if (aides_fatiga < 30 && jardin_salud < 80) {
+      changeState('YENDO_AL_JARDIN');
+    }
+  }
+}
+```
+
+### 5.3 Reacción a las Luces (Zarzas)
+Si el jugador usa la lámpara mientras habla con Aides cerca de una zarza:
+*   **Luz de Liam:** Aides dice: *"Ahí está. La raíz brilla. Ya sé por dónde tirar."* (Reduce el tiempo de la animación de arranque a la mitad).
+*   **Luz de Elara:** Aides dice: *"Pobre... solo está asustada. No es mala, solo duele."* (La zarza no se arranca, pero se convierte en "Tierra fértil" instantáneamente, ahorrando trabajo).
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Aides tiene al menos 3 reacciones distintas según el sombrero que lleve el jugador.
+*   ✅ El jugador puede activar el "Modo Autonomía" (bucle) de Aides desde la cabaña.
+*   ✅ Si el jugador culpa a Aides en la crisis, ella se bloquea (huelga emocional) y el jardín no se limpia solo.
+*   ✅ Las luces de Liam y Elara modifican las opciones de diálogo y la eficiencia de Aides en tiempo real.
+*   ✅ El guardado local recuerda el nivel de `vinculo_jugador` y `aides_confianza`.
+
+---
+
+¿Quieres que prepare el **JSON completo y validado** de estos tres árboles para que el desarrollador solo tenga que copiarlo y pegarlo en el archivo `data/dialogue_aides.json` del prototipo?

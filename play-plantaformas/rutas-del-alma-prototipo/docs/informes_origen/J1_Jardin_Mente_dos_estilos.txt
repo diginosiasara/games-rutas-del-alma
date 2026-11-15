@@ -1,0 +1,491 @@
+# INFORME TÉCNICO PARA DESARROLLO
+## Implementación de dos estilos gráficos para el escenario «El Jardín de la Mente»
+
+**Proyecto:** Rutas del Alma  
+**Nivel:** 1 — El Valle y el Jardín de la Mente  
+**Fase:** Fase 1 — Adaptación visual del escenario  
+**Destinatario:** Desarrollo de videojuegos / Programación gráfica / Arte 2D
+
+---
+
+## 1. Objetivo del desarrollo
+
+Implementar una opción que permita visualizar el escenario de **«El Jardín de la Mente»** mediante dos estilos gráficos alternativos:
+
+1. **Pixel Art:** representación mediante gráficos pixelados, con estética de videojuego clásico.
+2. **Ilustración digital 2D de fantasía:** representación mediante escenarios pintados digitalmente, con mayor riqueza de texturas, iluminación, profundidad y ambientación narrativa.
+
+El usuario debe poder cambiar entre ambos estilos sin perder el progreso de la partida ni modificar el funcionamiento del escenario.
+
+**Importante:** esta primera fase afecta exclusivamente al entorno del Jardín de la Mente. No se solicita rehacer los personajes, sus animaciones, la interfaz general ni los demás niveles.
+
+## 2. Alcance funcional
+
+### 2.1. Elementos incluidos
+
+El trabajo gráfico debe centrarse en los siguientes elementos:
+
+- Fondo panorámico del jardín.
+- Cielo nocturno y atmósfera ambiental.
+- Montañas y siluetas del horizonte.
+- Árboles, arbustos y vegetación.
+- Suelo, caminos y desniveles.
+- Rocas, piedras y elementos naturales.
+- Plataformas y elementos del recorrido.
+- Lago y superficie del agua.
+- Vegetación junto al lago.
+- Puentes, accesos y elementos arquitectónicos que formen parte del escenario.
+- Iluminación ambiental, niebla, partículas y efectos atmosféricos.
+- Elementos decorativos del jardín, incluidos los que acompañan visualmente a las flores y las malezas.
+
+### 2.2. Elementos que quedan fuera de esta fase
+
+No se deben rediseñar todavía:
+
+- Liam.
+- Elara.
+- Aides.
+- Callum y los demás personajes.
+- Las lámparas como objetos interactivos.
+- Los sprites de flores que tengan estados de crecimiento o interacción.
+- Los sprites de malezas que tengan estados de eliminación.
+- Los diálogos y sus ventanas.
+- Los menús generales.
+- La interfaz de inventario y los indicadores de juego.
+
+Estos elementos deben continuar funcionando con sus recursos actuales.
+
+Cuando un elemento tenga una función interactiva, su representación funcional debe mantenerse independiente de la decoración del escenario.
+
+## 3. Dirección artística del escenario
+
+El Jardín de la Mente debe transmitir un espacio mágico, simbólico y emocional. No debe parecer un jardín convencional ni un escenario genérico de fantasía.
+
+La ambientación debe reflejar la metáfora narrativa del proyecto:
+
+- Las flores representan pensamientos y creencias que aportan fuerza.
+- Las malezas representan pensamientos y creencias limitantes.
+- Las zarzas representan el miedo.
+- Las enredaderas representan la duda.
+
+La identidad visual debe conservar una atmósfera de fantasía nocturna, con predominio de azules profundos, violetas, sombras, tonos dorados y puntos de luz.
+
+### 3.1. Estilo A: Pixel Art
+
+**Objetivo visual:** conseguir un escenario de videojuego clásico, con identidad propia, profundidad y una composición cuidada.
+
+Características:
+
+- Gráficos pixelados con resolución y escala coherentes.
+- Paleta cromática limitada y consistente.
+- Siluetas reconocibles.
+- Vegetación construida mediante grupos de píxeles.
+- Árboles, arbustos y rocas con formas bien definidas.
+- Agua con animación pixelada.
+- Niebla y partículas adaptadas al estilo.
+- Iluminación mediante píxeles y degradados controlados.
+- Animaciones ambientales sencillas.
+
+La imagen debe mantener una estética homogénea. No se deben mezclar recursos pixelados con imágenes fotográficas o ilustraciones de alta resolución.
+
+### 3.2. Estilo B: Ilustración digital 2D de fantasía
+
+**Objetivo visual:** transformar el escenario en un entorno ilustrado, evocador y narrativo, como un mundo de cuento fantástico.
+
+Características:
+
+- Fondos pintados digitalmente.
+- Texturas orgánicas en árboles, rocas, tierra y vegetación.
+- Iluminación ambiental suave.
+- Sombras con profundidad.
+- Brillos dorados y violetas.
+- Niebla con transparencias y capas.
+- Agua con reflejos y movimiento suave.
+- Vegetación con diferentes niveles de detalle.
+- Sensación de profundidad mediante planos y parallax.
+- Composición visual cinematográfica, sin perder legibilidad jugable.
+
+La ilustración debe conservar la atmósfera nocturna y mágica del escenario, evitando una apariencia excesivamente realista o fotográfica.
+
+## 4. Diseño y composición del escenario
+
+El escenario debe conservar la distribución y las dimensiones del nivel actual.
+
+La implementación de referencia utiliza:
+
+| Parámetro | Valor actual |
+|---|---:|
+| Área lógica de visualización | 480 × 270 px |
+| Anchura del mundo | 3.200 px |
+| Altura del mundo | 360 px |
+| Tecnología gráfica | Canvas 2D |
+| Motor actual | JavaScript integrado en HTML |
+
+El desarrollador debe utilizar estas dimensiones como referencia inicial y no modificar la geometría del nivel para adaptar los gráficos.
+
+### 4.1. Distribución ambiental
+
+El escenario debe dividirse en capas independientes:
+
+**Capa 1. Fondo lejano**
+- Cielo nocturno.
+- Estrellas.
+- Montañas.
+- Horizonte.
+- Nubes o bruma lejana.
+
+**Capa 2. Fondo intermedio**
+- Árboles alejados.
+- Bosques.
+- Siluetas de vegetación.
+- Rocas y elementos naturales de profundidad.
+
+**Capa 3. Escenario principal**
+- Terreno transitable.
+- Caminos.
+- Plataformas.
+- Desniveles.
+- Árboles principales.
+- Arbustos y rocas cercanas.
+
+**Capa 4. Elementos ambientales**
+- Hojas.
+- Polvo luminoso.
+- Pequeñas partículas.
+- Niebla.
+- Reflejos del agua.
+- Destellos de luz.
+
+**Capa 5. Elementos de primer plano**
+- Ramas.
+- Hojas cercanas.
+- Vegetación que enmarca la escena.
+- Elementos decorativos que aportan profundidad.
+
+La composición debe mantener siempre visibles los elementos necesarios para jugar. Ninguna decoración debe ocultar plataformas, zonas de aterrizaje o caminos transitables.
+
+## 5. Arquitectura técnica propuesta
+
+El desarrollador debe separar la representación gráfica del escenario de la lógica del juego.
+
+La idea es disponer de una misma geometría y dos sistemas de representación.
+
+```text
+ESTADO DEL JUEGO
+       |
+       v
+GESTOR GRÁFICO DEL ESCENARIO
+       |
+       +--------------------------+
+       |                          |
+       v                          v
+RENDERER PIXEL ART       RENDERER ILUSTRACIÓN 2D
+       |                          |
+       v                          v
+RECURSOS PIXEL ART       RECURSOS ILUSTRADOS
+       |                          |
+       +-------------+------------+
+                     |
+                     v
+          MISMO ESCENARIO JUGABLE
+```
+
+Los dos renderizadores deben consultar las mismas coordenadas y datos del escenario.
+
+No deben existir dos niveles independientes.
+
+### 5.1. Organización de archivos propuesta
+
+```text
+/assets/
+    /environment/
+        /garden-of-mind/
+            /pixel-art/
+                backgrounds/
+                terrain/
+                trees/
+                vegetation/
+                rocks/
+                lake/
+                atmosphere/
+                decorations/
+
+            /illustration-2d/
+                backgrounds/
+                terrain/
+                trees/
+                vegetation/
+                rocks/
+                lake/
+                atmosphere/
+                decorations/
+
+/js/
+    /graphics/
+        graphics-manager.js
+        garden-renderer.js
+        pixel-renderer.js
+        illustration-renderer.js
+        environment-assets.js
+        parallax-manager.js
+        atmosphere-manager.js
+        graphics-config.js
+```
+
+Esta estructura es una propuesta de organización. Debe adaptarse a la arquitectura real del proyecto antes de modificar el código existente.
+
+### 5.2. Gestor gráfico
+
+Crear un módulo responsable de seleccionar el estilo activo.
+
+Configuración orientativa:
+
+```javascript
+const graphicsConfig = {
+    activeStyle: "pixel-art",
+
+    availableStyles: [
+        "pixel-art",
+        "illustration-2d"
+    ],
+
+    environment: "garden-of-mind",
+
+    transition: {
+        enabled: true,
+        duration: 300
+    },
+
+    persistence: true
+};
+```
+
+El estilo activo debe guardarse en las preferencias del usuario, sin modificar los datos de progreso.
+
+### 5.3. Renderizado
+
+El renderizador debe recibir:
+
+- Coordenadas de cámara.
+- Posición de los elementos del escenario.
+- Dimensiones del mundo.
+- Capas de profundidad.
+- Estado de iluminación.
+- Efectos ambientales.
+- Estilo gráfico seleccionado.
+
+Los elementos decorativos pueden cambiar de aspecto, pero su posición y su relación con el escenario deben conservarse.
+
+## 6. Elementos que deben tener dos versiones gráficas
+
+El equipo artístico debe producir los siguientes recursos en ambos estilos:
+
+| Elemento | Pixel Art | Ilustración 2D |
+|---|---|---|
+| Fondo panorámico | Sí | Sí |
+| Cielo nocturno | Sí | Sí |
+| Montañas | Sí | Sí |
+| Árboles | Sí | Sí |
+| Arbustos | Sí | Sí |
+| Rocas | Sí | Sí |
+| Terreno | Sí | Sí |
+| Plataformas | Sí | Sí |
+| Lago | Sí | Sí |
+| Vegetación cercana al agua | Sí | Sí |
+| Niebla | Sí | Sí |
+| Partículas ambientales | Sí | Sí |
+| Elementos decorativos | Sí | Sí |
+
+Los elementos interactivos existentes no deben duplicar su lógica. Si un elemento del escenario es una plataforma, seguirá siendo la misma plataforma aunque se cambie su apariencia.
+
+## 7. Movimiento ambiental y profundidad
+
+La ilustración digital debe aprovechar las posibilidades de animación ambiental para mejorar la sensación de profundidad.
+
+Se recomienda incorporar:
+
+- Movimiento lento de la niebla.
+- Ondulación del lago.
+- Movimiento suave de las hojas.
+- Partículas luminosas.
+- Variaciones muy sutiles de iluminación.
+- Parallax entre fondo, plano intermedio y primer plano.
+
+En Pixel Art, estos efectos deben adaptarse a la estética pixelada y evitar interpolaciones que difuminen los píxeles.
+
+**Importante:** los efectos ambientales deben ser decorativos. No pueden interferir con las colisiones, las plataformas ni las interacciones.
+
+## 8. Sistema de cambio entre estilos
+
+La opción de selección debe estar disponible inicialmente en la configuración del juego.
+
+El usuario podrá elegir:
+
+- Pixel Art.
+- Ilustración digital 2D.
+
+El cambio debe poder realizarse sin reiniciar el nivel.
+
+### Secuencia técnica
+
+1. Recibir la selección del usuario.
+2. Comprobar que los recursos del estilo elegido están disponibles.
+3. Preparar el renderizador correspondiente.
+4. Mantener el estado actual del juego.
+5. Cambiar la representación del escenario.
+6. Aplicar una transición visual de aproximadamente 300 ms.
+7. Guardar la preferencia gráfica.
+
+Si falla la carga de los recursos, debe conservarse el estilo anterior.
+
+### Datos que no deben modificarse
+
+- Posición del personaje.
+- Posición de Aides.
+- Cámara.
+- Plataformas y colisiones.
+- Flores y malezas.
+- Estado de crecimiento.
+- Estado de las lámparas.
+- Progreso de las tareas.
+- Checkpoints.
+- Diálogos.
+- Objetos recogidos.
+- Estado de Callum y demás acontecimientos narrativos.
+
+El cambio debe afectar exclusivamente a la presentación gráfica del escenario.
+
+## 9. Rendimiento y adaptación de pantalla
+
+### Pixel Art
+- Mantener una escala de píxel uniforme.
+- Evitar el desenfoque de imágenes.
+- Utilizar escalado entero cuando la resolución disponible lo permita.
+- Evitar deformaciones de proporción.
+- Optimizar las texturas repetidas.
+
+### Ilustración digital 2D
+- Utilizar recursos de mayor resolución.
+- Mantener proporciones originales.
+- Optimizar imágenes grandes.
+- Evitar cargar simultáneamente recursos innecesarios.
+- Controlar el número de capas y efectos transparentes.
+
+### Ambos estilos
+- Mantener el sistema de cámara actual.
+- Conservar los controles de teclado y táctiles.
+- Mantener una tasa de actualización estable.
+- Respetar la configuración de movimiento reducido del usuario.
+- Evitar que el cambio de estilo produzca bloqueos o saltos de cámara.
+
+## 10. Plan de implementación
+
+### Fase 1. Auditoría y preparación
+- Revisar el renderizado actual del escenario.
+- Identificar todos los elementos ambientales.
+- Separar los elementos decorativos de las colisiones.
+- Crear un inventario de recursos gráficos.
+- Definir la guía artística común.
+
+### Fase 2. Diseño del escenario maestro
+- Definir la composición completa del Jardín de la Mente.
+- Determinar las capas de profundidad.
+- Establecer la paleta cromática.
+- Definir la iluminación y la atmósfera.
+- Aprobar una imagen de referencia para ambos estilos.
+
+### Fase 3. Desarrollo Pixel Art
+- Crear el fondo.
+- Crear el terreno.
+- Crear árboles y vegetación.
+- Crear rocas y plataformas.
+- Crear lago y efectos ambientales.
+- Integrar los recursos en el renderizador.
+
+### Fase 4. Desarrollo de ilustración digital 2D
+- Crear la versión ilustrada del fondo.
+- Pintar los elementos naturales.
+- Preparar los planos de profundidad.
+- Crear los efectos de iluminación y atmósfera.
+- Integrar los recursos en el segundo renderizador.
+
+### Fase 5. Selector gráfico
+- Incorporar la selección de estilo.
+- Implementar la carga de recursos.
+- Implementar la transición.
+- Guardar la preferencia.
+- Gestionar errores de carga.
+
+### Fase 6. Pruebas
+- Comparar los dos estilos.
+- Comprobar la coincidencia de coordenadas.
+- Verificar las plataformas y colisiones.
+- Probar el cambio durante la partida.
+- Comprobar el rendimiento en escritorio y móvil.
+
+## 11. Criterios de aceptación
+
+La primera fase se considerará terminada cuando se cumplan todos estos puntos:
+
+- [ ] Existe una versión completa del Jardín de la Mente en Pixel Art.
+- [ ] Existe una versión completa del mismo escenario en ilustración digital 2D.
+- [ ] Ambos estilos representan el mismo recorrido.
+- [ ] Los elementos ambientales mantienen su posición.
+- [ ] Las plataformas y las colisiones funcionan exactamente igual.
+- [ ] El lago conserva su geometría y sus elementos jugables.
+- [ ] Los fondos tienen profundidad visual.
+- [ ] El cambio de estilo no reinicia el nivel.
+- [ ] El cambio no altera el progreso guardado.
+- [ ] La preferencia gráfica se conserva al volver a iniciar el juego.
+- [ ] Si falla la carga de un estilo, el juego conserva el anterior.
+- [ ] Los controles funcionan tanto con teclado como con pantalla táctil.
+- [ ] No se producen errores importantes de rendimiento.
+
+## 12. Entregables del equipo
+
+**Programación**
+- Gestor de estilos gráficos.
+- Renderizador Pixel Art.
+- Renderizador de ilustración 2D.
+- Configuración persistente.
+- Sistema de transición.
+- Integración con el escenario existente.
+
+**Arte 2D**
+- Fondo panorámico Pixel Art.
+- Fondo panorámico ilustrado.
+- Recursos de terreno y vegetación en ambos estilos.
+- Rocas, plataformas, lago y elementos decorativos.
+- Efectos ambientales de ambos estilos.
+- Guía de estilo y paleta cromática.
+
+**QA**
+- Pruebas de equivalencia visual y geométrica.
+- Pruebas de cambio de estilo.
+- Pruebas de rendimiento.
+- Pruebas de persistencia.
+- Informe de incidencias.
+
+## 13. Restricciones importantes para el desarrollador
+
+1. No rehacer el juego desde cero.
+2. No crear dos niveles independientes.
+3. No modificar la lógica de movimiento.
+4. No modificar las colisiones ni la geometría jugable.
+5. No alterar las interacciones de Liam, Elara o Aides.
+6. No sustituir los recursos funcionales de flores y malezas por elementos meramente decorativos.
+7. No modificar la historia ni los diálogos.
+8. No extender todavía esta implementación a los demás escenarios.
+
+La prioridad es conseguir una arquitectura que permita ampliar posteriormente el sistema gráfico a otros niveles sin tener que duplicar la lógica del juego.
+
+## 14. Resultado esperado
+
+Al finalizar esta primera fase, el jugador debe poder entrar en **El Jardín de la Mente** y elegir cómo quiere contemplar ese mismo mundo:
+
+- Una versión Pixel Art, con estética de videojuego clásico.
+- Una versión de ilustración digital 2D, con una ambientación de fantasía más pictórica y cinematográfica.
+
+Ambas versiones deben ofrecer la misma experiencia jugable, el mismo recorrido, los mismos elementos y la misma historia.
+
+**Recomendación de desarrollo:** antes de producir todos los recursos definitivos, crear un tramo piloto completo del jardín que incluya fondo, árboles, terreno, vegetación, una plataforma y el lago. Aprobar las dos versiones visuales y comprobar que el cambio funciona correctamente. Solo después debe producirse el resto del escenario.

@@ -1,0 +1,72 @@
+📄 INFORME TÉCNICO DE DESARROLLO
+Proyecto: Rutas del Alma: El Juego
+Género: RPG de Plataformas 2D / Aventura Narrativa
+Plataforma Objetivo: Web Multiplataforma (HTML5 / WebGL) - PC, Móvil (Android/iOS), Tablet.
+Motor Recomendado: Godot 4.x (por su excelente exportación a Web y ligereza) o Unity 2022 LTS.
+1. VISIÓN GENERAL Y PROPUESTA DE VALOR
+El juego traslada la saga literaria a una experiencia interactiva. El jugador no solo "lee" sobre el crecimiento personal, sino que lo ejecuta mediante mecánicas de juego. En lugar de un combate tradicional, el "conflicto" se resuelve mediante la empatía, la resolución de acertijos (los 6 sombreros) y la gestión de la luz y las sombras.
+2. ARQUITECTURA TÉCNICA (STACK)
+Para garantizar que el juego corra fluido en navegadores web sin descargas pesadas:
+Motor de Juego: Godot 4 (Recomendado). Su exportación a HTML5/WebGL genera archivos muy ligeros (ideal para móviles con 4G/5G) y maneja el 2D/Pixel Art de forma nativa.
+Lenguaje: GDScript (Godot) o C# (Unity).
+Backend (Opcional): Firebase o Supabase. Para guardar el progreso del jugador en la nube, permitiendo que un usuario empiece en el PC y continúe en su móvil.
+Optimización Web: Uso de Texture Atlases y Spritesheets para reducir las peticiones HTTP. Carga progresiva de niveles (Lazy Loading).
+3. MECÁNICAS DE JUEGO (GAMEPLAY)
+A. Movimiento y Plataformas (Core Loop)
+Controles fluidos de correr, saltar, escalar y deslizarse.
+Física: Ajustada para ser precisa (tipo Hollow Knight o Celeste), con un ligero "coyote time" (permiso de salto justo al caer de una plataforma) para mejorar la jugabilidad en móviles.
+B. Mecánica Principal: La Lámpara y las Sombras
+Lámpara de Liam (Acción): Ilumina caminos ocultos, activa mecanismos y disipa la "niebla de rumores" (zonas de peligro).
+Lámpara de Elara (Narrativa/Exploración): Al apuntar a las sombras de los NPCs o enemigos, estas "hablan". En lugar de matar a los enemigos (que representan miedos o rumores), el jugador debe escucharlos y elegir la respuesta empática correcta para desactivarlos.
+C. Sistema de Puzzles: "Los Seis Sombreros"
+El jugador puede cambiar de "Sombrero" (modo de juego) en tiempo real para resolver acertijos:
+🤍 Blanco (Datos): Revela pistas ocultas en el entorno.
+❤️ Rojo (Emoción): Permite interactuar con NPCs enfadados o tristes.
+🖤 Negro (Cautela): Detecta trampas y plataformas falsas.
+💛 Amarillo (Optimismo): Activa mecanismos que requieren luz/energía.
+💚 Verde (Creatividad): Permite crear puentes o rutas alternativas.
+💙 Azul (Organización): Abre el mapa y gestiona el inventario.
+D. Sistema de Reputación: "El Peso de los Rumores"
+Basado en Ecos y Sombras. Las decisiones del jugador (qué rumores creer, a quién defender) alteran el diálogo de los NPCs del pueblo y desbloquean (o cierran) ciertas rutas en los niveles finales.
+4. DISEÑO DE NIVELES (BASADO EN LA SAGA)
+Nivel 1: El Valle y el Jardín de la Mente (Tutorial)
+Objetivo: Aprender a moverse y a "arrancar malezas" (enemigos básicos) y "sembrar flores" (coleccionables).
+Jefe: La Maleza del Resentimiento.
+Nivel 2: El Templo y el Pueblo Sumergido
+Mecánica: Uso de la Brújula Dorada. Niveles verticales y secciones subacuáticas (bucle de tiempo o gravedad alterada).
+Lore: Descubrir los pergaminos de las Custodias.
+Nivel 3: El Circo de las Sombras y los Sueños
+Estilo: Nivel tipo "Feria" con minijuegos. Plataformas móviles sobre cuerdas flojas.
+Recolección: Encontrar las reliquias (el peine, la campana rota).
+Nivel 4: El Corredor del Alba y el Faro de las Mareas
+Mecánica: Gestión de la luz y la oscuridad. El jugador debe "compartir el peso" (mecánica de cooperativo local o IA compañera) para avanzar.
+5. DIRECCIÓN DE ARTE Y AUDIO
+Estilo Visual: Pixel Art de alta resolución (manteniendo la estética de los stickers proporcionados: contornos blancos, paleta cálida, dorados y azules profundos).
+Interfaz (UI): Diseñada como un libro antiguo. Los menús de inventario son el "Gran Libro de Fábulas". El mapa es el pergamino con la brújula.
+Audio:
+Música: Bandas sonoras dinéricas. La música cambia de tono según el "Sombrero" que el jugador tenga equipado.
+SFX: Sonidos de papel, tinta, agua y viento. La lámpara tiene un sonido de "cristal resonando" al iluminar sombras.
+6. ADAPTACIÓN WEB MULTIPLATAFORMA (UX/UI)
+Dado que el juego será web, la experiencia de usuario (UX) es crítica:
+Controles Adaptativos:
+PC: Teclado (WASD/Flechas) + Ratón para apuntar la lámpara.
+Móvil/Tablet: Joystick virtual en pantalla (izquierda) y botones de acción/salto/lámpara (derecha). Los botones deben ser semi-transparentes y reposicionables.
+Orientación: El juego debe soportar Landscape (Horizontal) para PC/Tablet y ofrecer un modo Portrait (Vertical) optimizado para móviles (con plataformas más cortas y scroll vertical).
+Accesibilidad: Modo daltónico, subtítulos ajustables y opción de "Modo Historia" (reducir la dificultad de las plataformas para enfocarse en la narrativa).
+7. CONSIDERACIONES NARRATIVAS Y DE CONTENIDO
+Adaptación de la Casa de los Placeres: Para mantener la clasificación web accesible (PEGI 12/16 en lugar de 18), esta zona se adaptará como un nivel de intriga, misterio y gestión de diálogos (estilo Disco Elysium o Pentiment), donde el jugador debe descubrir secretos, evitar a Don Alastor y proteger a las aprendices mediante el ingenio y el sigilo, eliminando la connotación sexual explícita pero manteniendo la crítica social y el empoderamiento.
+El Cuaderno de Práctica: Al final de cada nivel, en lugar de una pantalla de "Game Over" o "Victoria", se desbloquea una entrada interactiva en el "Diario del Jugador" con las preguntas de coaching ontológico de los libros.
+8. HOJA DE RUTA DE DESARROLLO (ROADMAP)
+Fase 1: Prototipo (Semanas 1-4)
+Validar el "Core Loop": Movimiento, salto y uso de la Lámpara de Elara para hablar con sombras.
+Fase 2: Vertical Slice (Semanas 5-10)
+Desarrollo completo del Nivel 1 (El Jardín de la Mente). Arte final, música, UI y exportación a Web para pruebas en móviles.
+Fase 3: Producción (Meses 3-6)
+Desarrollo de los niveles 2, 3 y 4. Implementación del sistema de los 6 Sombreros y el árbol de decisiones de rumores.
+Fase 4: Pulido y Optimización Web (Mes 7)
+Reducción de peso de assets, implementación de guardado en la nube (Firebase), testeo de controles táctiles en 10 dispositivos móviles diferentes.
+Fase 5: Lanzamiento Web (Mes 8)
+Publicación en portales como Itch.io (ideal para juegos web narrativos), Newgrounds o alojamiento propio en la web del autor.
+📝 Notas para el Desarrollador
+Assets Visuales: El autor ya cuenta con una guía de estilo visual clara (Pixel Art tipo sticker con contorno blanco). Se recomienda usar herramientas como Aseprite para la animación de sprites.
+Narrativa: El juego debe permitir que el jugador sienta que sus decisiones importan. El sistema de diálogos debe ser robusto (recomendado usar Ink o Yarn Spinner integrados en el motor para manejar las ramas narrativas).

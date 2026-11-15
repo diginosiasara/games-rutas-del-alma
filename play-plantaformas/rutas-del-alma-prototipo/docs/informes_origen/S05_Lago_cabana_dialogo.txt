@@ -1,0 +1,150 @@
+📄 INFORME TÉCNICO — SPRINT 5
+Rutas del Alma: El Juego — Accesibilidad del lago, cabaña de Callum y diálogo ampliado
+Versión de referencia: Prototipo v6 (index (6).html) · Base narrativa: Rutas del Alma, cap. 1 (Callum y Aides) · Fecha: 14 nov 2026
+0. DIAGNÓSTICO DE LA CAPTURA
+Lo que veo en la pantalla:
+Síntoma
+Evidencia en la imagen
+Gravedad
+Plataformas casi invisibles
+Losas del lago al ~30 % de opacidad sobre agua oscura de noche
+🔴 Bloqueante
+Huecos demasiado largos
+Distancia entre losas ≈ 90–100 px con salto de ~96 px
+🔴 Bloqueante
+Sin referencia de aterrizaje
+La flor está sobre una losa alta sin borde luminoso
+🟠
+Cabaña de Callum desintegrada
+Viñeta con halo, sin sombra de contacto, chimenea sin humo, sin jardín
+🟠
+Aides ausente en la escena de Callum
+Solo Liam y Elara en pantalla
+🟠
+Principio rector: en esta zona el jugador no debe demostrar puntería, debe descubrir una alternativa. Es coherente con el pilar 1 del GDD y con el cap. 4: "las respuestas no son únicas: dependen de desde dónde se las busca."
+1. ACCESIBILIDAD DEL LAGO (prioridad ALTA)
+1.1 Parámetros a cambiar (valores concretos)
+Parámetro
+v6 actual
+v7 objetivo
+Opacidad base de losas ocultas
+30 %
+55 %
+Borde de losa
+ninguno
+filo dorado permanente, 2 px, brillo suave
+Distancia máxima de hueco
+96 px
+64 px
+Altura máxima entre losas
+72 px
+48 px
+Coyote time en zona lago
+100 ms
+180 ms
+Jump buffer
+100 ms
+150 ms
+Magnetismo de aterrizaje (móvil)
+12 px
+20 px
+Checkpoint de vela antes del lago
+no visible
+sí, obligatoria
+Vela intermedia sobre losa central
+no
+sí (una en el centro del lago)
+1.2 La solución narrativa: el puente de enredadera ⭐
+En lugar de obligar a saltar, ofrecer una alternativa que use lo que el juego ya sabe hacer (el ciclo de plantas de Aides):
+En la orilla del lago hay un terreno preparado (un montículo de tierra con brillo verde). Si Aides está en el equipo, el jugador pulsa Acción → Aides siembra y riega una semilla de enredadera. En ~10 s crece un tallo que se enrosca por las losas y forma un puente natural hasta la otra orilla. El puente dura lo que reste de nivel.
+Esto convierte el obstáculo en una lección del cap. 1: no se lucha contra la maleza, se la reorienta. Y da a Aides un uso que hoy no tiene fuera del jardín.
+Reglas:
+Si Aides no está en el equipo → el juego muestra la pista del conejo y las losas se iluminan solas (fallback).
+El puente no elimina la ruta de saltos: ambos caminos funcionan (pilar de "nunca un solo camino").
+Modo Historia: el puente aparece ya crecido al llegar; el jugador lo descubre, no lo ejecuta.
+1.3 Asistido anti-frustración (obligatorio)
+Tras 2 caídas en el mismo hueco: la losa destino pulsa en dorado 3 veces.
+Tras 3 caídas: el conejo gris se sienta en la losa destino y todas las losas quedan al 100 % durante 12 s.
+Tras 5 caídas: aparece el montículo de la enredadera con un destello y un susurro de Aides ("Puedo sembrar un puente, si me dejas.").
+1.4 Legibilidad en la zona nocturna
+Subir el brillo base de la escena del lago del 0,7 al 0,85 (la imagen está demasiado oscura).
+Añadir reflejos de las losas en el agua (ya hay reflejos del sauce; extenderlos).
+Las luciérnagas actuales compiten visualmente con los destellos de las losas: reducir su densidad un 40 % en esta zona.
+2. MEJORA VISUAL DE LA CABAÑA DE CALLUM
+2.1 Problemas actuales
+Es una viñeta pegada: conserva halo gris-blanco, flota sobre el suelo, no tiene sombra, la chimenea no humea y el entorno es idéntico al resto del valle.
+2.2 Especificación de integración
+Elemento
+Requisito
+Recorte
+Alfa tolerante (umbral de luminancia > 240 → transparente), no recorte por color blanco puro
+Sombra de contacto
+Elipse oscura bajo la base, 30 % opacidad, difuminada
+Anclaje al suelo
+Base de la cabaña alineada con la línea de hierba; añadir 3–4 matas de hierba que la "abracen"
+Chimenea
+Humo procedural: partículas grises claras, ascenso lento, 6–8 px, se desvanece arriba
+Ventana
+Luz cálida interior parpadeante (respiración de 0,9–1,1)
+Jardín de Callum
+Diferenciarlo del jardín descuidado de Aides: aquí las flores están podadas y ordenadas en hileras, con un camino de piedras. Contraste visual = lección del cap. 1
+Banco exterior
+Añadir un banco de madera frente a la puerta: es donde ocurre la escena del té
+Cartel
+Un letrero pequeño con una taza dibujada (pista de interacción)
+Escala
+Reducir la viñeta al 85 % si hoy tapa más de 1/3 de la pantalla
+2.3 Interacción de llegada
+Al acercarse: la puerta se abre sola, el humo se intensifica y suena un burbujeo de tetera. El HUD muestra "La cabaña de Callum — té de hierbas".
+3. DIÁLOGO AMPLIADO: CALLUM ↔ AIDES
+3.1 Contexto narrativo (cap. 1 del libro)
+El libro da tres lecciones literales de Callum. El diálogo debe enseñarlas en ese orden y con las frases del texto, no inventadas:
+Hechos (lo ya brotado) vs. juicios (lo que se siembra sobre ellos).
+Arrancar la maleza sin rencor: "la maleza también te enseña dónde falta luz".
+El cuidado constante: "la maleza vuelve si te descuidas" → conecta con el marchitamiento del Sprint 4.
+3.2 Estructura de la escena
+Duración: 90–120 s. Ubicación: banco frente a la cabaña. Asistentes: Callum + Aides sentados con tazas y vapor; Liam y Elara de pie escuchando (el jugador puede elegir escuchar o irse antes; si se va, Aides resume la lección en una línea).
+Turnos con opciones (sistema reflejar/preguntar, como en el Sauce):
+Turno
+Callum dice
+Opciones del jugador (por Aides)
+1
+"Sabio Callum, ¿cómo convierto mi jardín en un lugar sereno?"
+a) "Arrancándolo todo de una vez." (incorrecta: Callum responde que la prisa es otra maleza) · b) "No sé por dónde empezar." (neutral) · c) "¿Qué debo mirar primero?" (correcta: abre la lección 1)
+2
+"Lo que ya ha brotado son los hechos de tu vida. Lo que siembras sobre ellos son tus juicios."
+a) "Entonces mis juicios son los que crecen." (correcta) · b) "¿Y los hechos no importan?" (incorrecta) · c) "¿Qué hago con los juicios malos?" (correcta alternativa)
+3
+"Arranca el resto sin rencor, porque la maleza también te enseña dónde falta luz."
+a) "¿Sin rencor?" (correcta: Callum explica que el rencor es una semilla) · b) "La arranco con ganas." (incorrecta) · c) silencio con Sombrero Rojo (correcta oculta: si el jugador lleva el Rojo, aparece la opción de escuchar sin hablar, y Callum sonríe)
+4
+"Recuerda: el jardín necesita cuidado constante. La maleza vuelve si te descuidas."
+→ Esta línea desbloquea el marchitamiento del Sprint 4. El juego muestra un aviso: "Aides ha aprendido a cuidar lo que crece."
+Cierre: Callum entrega la taza a Aides. Efectos mecánicos:
+La luz de Liam se recarga al 100 % (ya existía: conservarlo).
+Aides aprende a regar: el riego pasa de manual a automático tras sembrar (calidad de vida).
+Aides se queda con Callum (escena de té, ya definida): el equipo se separa aquí, no antes.
+3.3 Reglas de legibilidad (crítico, por tu aviso)
+Retratos grandes (80 px) con fondo opaco, no translúcido.
+Texto 18 px mínimo; máximo 2 líneas por turno en móvil.
+Callum con voz grave: tipografía serif; Aides: sans-serif. Nunca cursiva en párrafos.
+Vapor de las tazas detrás del texto, nunca delante.
+Opción de "mostrar todo el diálogo" (sin typewriter) en accesibilidad.
+4. CRITERIOS DE ACEPTACIÓN — SPRINT 5
+✅ Un tester cruza el lago sin caer más de 2 veces, por salto o por puente.
+✅ El puente de enredadera funciona y es opcional.
+✅ Las losas son visibles sin luz activa en toda la zona.
+✅ La cabaña no muestra halo, tiene sombra, humo y jardín propio.
+✅ El diálogo Callum–Aides dura 90–120 s y usa las frases del cap. 1.
+✅ La escena desbloquea el marchitamiento y el riego automático.
+✅ Liam y Elara pueden escuchar o marcharse; Aides se queda con Callum.
+✅ Textos legibles en 320, 480 y 1024 px; UTF-8 sin caracteres rotos.
+✅ Sin errores de consola en Chrome, Firefox y Safari.
+5. ORDEN DE TRABAJO
+Parámetros del lago (1.1) — 1 día.
+Puente de enredadera (1.2) — 2 días.
+Asistido anti-frustración (1.3) — 1 día.
+Cabaña: recorte, sombra, humo, jardín (2.1–2.3) — 2 días.
+Diálogo Callum–Aides (3.1–3.3) — 2 días.
+Pruebas de legibilidad y accesibilidad — 1 día.
+Total estimado: ~9 días laborables. Peso adicional previsto: < 60 KB (partículas de humo y enredadera por código, sin sprites nuevos).

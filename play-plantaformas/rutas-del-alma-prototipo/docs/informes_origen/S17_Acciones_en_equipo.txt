@@ -1,0 +1,166 @@
+# 📄 INFORME TÉCNICO — SPRINT 17
+## *Rutas del Alma: El Juego* — Motor de Acciones en Equipo, Modificadores Emocionales y Consecuencias Ramificadas
+**Versión de referencia:** Prototipo Web v14 · **Base narrativa:** Cap. 3 (La Luz Interior) y Cap. 36 (El precio compartido) · **Fecha:** 14 nov 2026
+**Dirigido a:** Desarrollador Lead / Programador de Gameplay
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Este sprint cierra el círculo de la mecánica relacional. Ya no basta con que Liam y Elara (o Aides y Callum) estén en la misma pantalla; **deben ejecutar acciones combinadas**. 
+
+La innovación central es que **el éxito de estas acciones no depende solo de la habilidad del jugador (timing/precisión), sino del Estado de Ánimo y el Vínculo entre los personajes**. Un equipo en "Armonía" ejecutará tareas en la mitad de tiempo y con efectos multiplicadores; un equipo en "Fricción" verá sus acciones entorpecidas, generando consecuencias narrativas y ambientales negativas.
+
+---
+
+## 1. ARQUITECTURA DEL MOTOR DE ACCIONES EN EQUIPO
+
+### 1.1 Definición de Acción en Equipo
+Una acción en equipo requiere la presencia de al menos dos personajes específicos en un radio de interacción (`interaction_radius = 64px`) y la activación simultánea de sus herramientas (Lámparas, Herramientas de jardín, Voz).
+
+### 1.2 Catálogo de Acciones en Equipo (Nivel 1)
+
+| Código | Acción | Personajes | Requisito Narrativo | Efecto Base |
+| :--- | :--- | :--- | :--- | :--- |
+| **EQ-01** | **La Poda Resonante** | Liam + Elara | Zarza Nivel 3 (Desesperanza) | Disuelve la zarza y purifica el suelo. |
+| **EQ-02** | **El Cultivo Guiado** | Aides + Callum | Tierra Preparada (T-03) + Semilla Rara | Garantiza el nacimiento de una Flor de Luz. |
+| **EQ-03** | **La Escucha Profunda** | Elara + NPC (Tomás) | Tomás en estado "Melancolía" | Restaura a Tomás al estado "Esperanzado" instantáneamente. |
+| **EQ-04** | **El Puente de Raíces** | Aides + Liam | Borde del lago (sin puente) | Aides siembra, Liam ilumina. Crea el puente de enredadera en 5s (en lugar de 10s). |
+
+---
+
+## 2. SISTEMA DE MODIFICADORES POR ESTADO DE ÁNIMO (La Fórmula de Eficiencia)
+
+La eficiencia de una acción en equipo se calcula en tiempo real cruzando las variables del `RelationshipFSM` (Sprint 16) y el `MoodState` de los participantes.
+
+### 2.1 La Fórmula de Ejecución
+```javascript
+tiempo_ejecucion = tiempo_base / (multiplicador_vinculo * multiplicador_emocion)
+calidad_resultado = base + (bonus_vinculo + bonus_emocion)
+```
+
+### 2.2 Tabla de Multiplicadores
+
+| Estado del Vínculo / Ánimo | Multiplicador de Velocidad | Multiplicador de Calidad | Efecto Visual / Sonoro |
+| :--- | :--- | :--- | :--- |
+| **Armonía (Vínculo > 70)** | x 1.5 (Más rápido) | x 1.5 (Mejor resultado) | Auras de las lámparas se entrelazan (blanco cálido). Sonido de acorde mayor. |
+| **Neutral (30 < Vínculo < 70)** | x 1.0 (Normal) | x 1.0 (Normal) | Auras separadas pero estables. Sonido neutro. |
+| **Fricción (Vínculo < 30)** | x 0.6 (Más lento) | x 0.5 (Peor resultado) | Auras parpadean y se repelen (chispas grises). Sonido de disonancia leve. |
+| **Agotamiento (Fatiga > 80)** | x 0.4 (Muy lento) | x 0.2 (Riesgo de fallo) | Personajes jadean, cámara tiembla ligeramente. |
+
+---
+
+## 3. RESOLUCIÓN DE ACCIONES Y CONSECUENCIAS RAMIFICADAS
+
+Cuando el jugador completa una acción en equipo (ej. mantener pulsado el botón de sinergia durante 3 segundos), el motor evalúa el **Resultado (Result Tier)** basándose en la fórmula anterior y en la precisión del input del jugador.
+
+### 3.1 Ejemplo Práctico: EQ-01 (La Poda Resonante - Zarza Nivel 3)
+
+#### Escenario A: Equipo en ARMONÍA (Éxito Crítico)
+*   **Condición:** Vínculo > 70, Elara en "Serenidad", Liam en "Sereno".
+*   **Ejecución:** La barra de progreso se llena en 2 segundos.
+*   **Consecuencias:**
+    1.  **Ambiental:** La zarza no solo desaparece; explota en una nube de **polen dorado** (VFX L-01 modificado) que cura todas las plantas en un radio de 128px.
+    2.  **Recursos:** Otorga 1 "Semilla de Luz" (recurso raro) + 15 Grano + 15 Pétalos.
+    3.  **Narrativa/Relación:** Liam dice: *"Tu luz guía la mía."* Elara responde: *"Y la tuya da forma a la mía."* `vinculo` +10.
+    4.  **Desbloqueo:** Se marca la zona en el mapa como "Santuario" (las zarzas no rebrotan aquí durante 5 minutos de tiempo de juego).
+
+#### Escenario B: Equipo NEUTRAL (Éxito Normal)
+*   **Condición:** Vínculo entre 30 y 70.
+*   **Ejecución:** La barra se llena en 4 segundos.
+*   **Consecuencias:**
+    1.  **Ambiental:** La zarza se desintegra en polvo normal (VFX G-01).
+    2.  **Recursos:** Otorga 5 Grano + 5 Pétalos.
+    3.  **Narrativa/Relación:** Sin diálogo especial. `vinculo` +2.
+    4.  **Estado:** El suelo queda como "Tierra Preparada" (T-03).
+
+#### Escenario C: Equipo en FRICCIÓN (Fallo Parcial)
+*   **Condición:** Vínculo < 30, o uno de los dos en estado "Ansiedad/Melancolía".
+*   **Ejecución:** La barra se llena en 7 segundos y **tiembla** (requiere que el jugador mantenga el botón con precisión).
+*   **Consecuencias:**
+    1.  **Ambiental:** La zarza se rompe, pero **sus raíces se dividen en dos Zarzas Nivel 2** (Resentimiento).
+    2.  **Recursos:** No otorga recursos. Consume 20 de energía de ambas lámparas.
+    3.  **Narrativa/Relación:** Liam suspira: *"No me estás escuchando."* Elara cruza los brazos: *"Tú solo quieres imponer tu luz."* `vinculo` -10, `tension` +15.
+    4.  **Debuff:** Ambos personajes reciben el estado "Dudando" (velocidad de movimiento -10% durante 30 segundos).
+
+---
+
+## 4. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 4.1 Máquina de Estados de la Acción (Action FSM)
+```javascript
+class TeamAction {
+  constructor(type, participants) {
+    this.type = type; // 'EQ-01', 'EQ-02', etc.
+    this.participants = participants; // [liam, elara]
+    this.state = 'IDLE'; // IDLE, CHARGING, RESOLVING, COMPLETED, FAILED
+    this.progress = 0;
+    this.requiredTime = this.getBaseTime(); 
+  }
+
+  update(deltaTime) {
+    if (this.state === 'CHARGING') {
+      // Calcular modificadores en tiempo real
+      let moodMultiplier = RelationshipFSM.getMoodMultiplier();
+      let playerInput = Input.getChargeRate(); // 0.0 a 1.0
+      
+      this.progress += (deltaTime * moodMultiplier * playerInput);
+      
+      // Actualizar UI de la barra de acción
+      UI.updateActionBar(this.progress / this.requiredTime);
+      
+      if (this.progress >= this.requiredTime) {
+        this.resolve();
+      }
+    }
+  }
+
+  resolve() {
+    let resultTier = this.calculateResultTier();
+    ConsequenceEngine.apply(resultTier, this.type);
+  }
+}
+```
+
+### 4.2 Feedback Visual y UI (Crítico para la jugabilidad)
+El jugador debe entender *por qué* una acción va lenta o rápida sin leer números.
+1.  **Barra de Acción Dinámica:** 
+    *   Si hay Armonía, la barra se llena de un degradado dorado-violeta y brilla.
+    *   Si hay Fricción, la barra se llena de gris, tiene "grietas" visuales y el botón de acción vibra (screen shake de 1px).
+2.  **Indicadores de Estado sobre la Cabeza (Burbujas):**
+    *   Durante la carga de la acción, sobre Liam y Elara aparecen iconos pequeños que reflejan su estado actual (un corazón entrelazado para Armonía, un nudo para Fricción).
+
+### 4.3 Integración con el Sistema de Guardado
+Las consecuencias deben persistir.
+```json
+"team_actions_log": {
+  "EQ-01_critical_successes": 3,
+  "EQ-01_failures": 1,
+  "last_action_result": "critical_success",
+  "zone_sanctuary_status": { "x": 450, "y": 200, "expires_at": 14500 }
+}
+```
+
+---
+
+## 5. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+1.  ✅ El motor detecta cuando dos personajes están en rango y permite iniciar una acción en equipo (botón de "Sinergia").
+2.  ✅ La velocidad de la barra de acción cambia visiblemente y matemáticamente según el `vinculo` y el `mood_state`.
+3.  ✅ Existen al menos 3 niveles de consecuencias (Éxito Crítico, Normal, Fallo) para la acción EQ-01.
+4.  ✅ Las consecuencias afectan: el entorno (VFX/colisiones), los recursos (Grano/Pétalos) y las variables de relación (`vinculo`/`tension`).
+5.  ✅ Los diálogos de post-acción reflejan el estado emocional (no dicen lo mismo si están en Armonía que si están en Fricción).
+6.  ✅ El sistema maneja la interrupción: si el jugador suelta el botón o se mueve, la acción se cancela y aplica una penalización menor de fatiga.
+
+---
+
+## 6. ORDEN DE IMPLEMENTACIÓN (3 días)
+
+| Día | Tarea | Dependencias |
+| :--- | :--- | :--- |
+| **1** | Implementar `TeamActionManager` y la fórmula de modificadores por estado de ánimo. | Sprint 16 (RelationshipFSM) |
+| **2** | Crear la acción EQ-01 (Poda Resonante) con sus 3 ramas de consecuencias y VFX asociados. | Sprint 14 (VFX) |
+| **3** | Integrar la UI de la barra de acción dinámica y los diálogos de post-acción. Pruebas de balanceo. | Sprint 12 (UI) |
+
+---
+
+**¿Aprobado?** Este sistema es el corazón del *gameplay* narrativo. Convierte la "relación" en una mecánica tangible y medible. Si das el visto bueno, el desarrollador puede empezar por el Día 1.

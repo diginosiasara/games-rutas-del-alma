@@ -1,0 +1,688 @@
+# 📋 INFORME TÉCNICO - FASE 1: PROTOTIPO
+## *Rutas del Alma: El Juego*
+**Documento para Desarrollo · Versión 1.0**  
+**Fecha:** Noviembre 2026  
+**Alcance:** Prototipo web jugable (Nivel 1 - "El Valle y el Jardín de la Mente")
+
+---
+
+## 1. OBJETIVO DE LA FASE
+
+Desarrollar un **prototipo funcional en HTML5** que valide las mecánicas núcleo del juego en un entorno controlado, utilizando los assets visuales existentes (ilustraciones estáticas en pixel-art) y demostrando la viabilidad técnica de la propuesta.
+
+### Criterios de Éxito
+- ✅ Juego ejecutable en navegador (Chrome, Firefox, Safari) sin instalación
+- ✅ Tiempo de carga inicial < 5 segundos en conexión 4G
+- ✅ 60 FPS estables en dispositivo de gama media (2020+)
+- ✅ Un tester externo completa el nivel sin asistencia en < 15 minutos
+- ✅ Las tres mecánicas principales funcionan: movimiento, lámparas y sombreros
+
+---
+
+## 2. ESPECIFICACIONES TÉCNICAS
+
+### 2.1 Stack Tecnológico Recomendado
+
+| Capa | Tecnología | Justificación |
+|------|-----------|---------------|
+| **Motor** | Godot 4.2 LTS | Exportación WebGL ligera, excelente soporte 2D, GDScript rápido de prototipar |
+| **Alternativa** | Phaser 3 + TypeScript | Si el peso de Godot WebAssembly excede 10MB, cambiar a JS puro |
+| **Lenguaje** | GDScript 2.0 | Curva de aprendizaje suave, tipado opcional para prototipado rápido |
+| **Diálogos** | JSON propio + Ink (fase 2) | Prototipo: JSON simple. Producción: migrar a Ink para ramificación |
+| **Audio** | Howler.js + archivos OGG | Ligero, compatible web, compresión eficiente |
+| **Guardado** | localStorage (prototipo) | Sin backend. Producción: Firebase/Supabase |
+| **Hosting** | GitHub Pages / Itch.io | Gratuito, HTTPS, CDN global |
+
+### 2.2 Requisitos de Rendimiento
+
+**Objetivos medibles:**
+- **Peso total del build:** < 15 MB (comprimido Brotli)
+- **Memoria RAM:** < 256 MB en ejecución
+- **CPU:** < 30% en móvil gama media
+- **Primera interacción:** < 2 segundos tras carga
+
+**Optimizaciones obligatorias:**
+- Compresión de texturas: PNG-8 indexado para sprites, WebP para fondos
+- Atlas de texturas único (máx. 2048x2048)
+- Lazy loading de niveles (solo cargar Nivel 1)
+- Object pooling para partículas y proyectiles
+- Desactivar VSync en móvil si FPS < 60
+
+---
+
+## 3. ARQUITECTURA DEL PROTOTIPO
+
+### 3.1 Estructura de Carpetas
+
+```
+rutas-del-alma-prototipo/
+├── assets/
+│   ├── sprites/           # Liam, Elara, Tomás, sombras, malezas, flores
+│   ├── backgrounds/       # Valle, jardín, sauce, cabaña
+│   ├── ui/                # Botones, joystick, marcos, sombreros
+│   ├── audio/             # SFX básicos, música ambiental (loop)
+│   └── data/
+│       ├── dialogue.json  # Diálogo con Tomás
+│       ├── level1.json    # Configuración del nivel
+│       └── spritesheet.json
+├── scenes/
+│   ├── MainMenu.tscn
+│   ├── Level1.tscn
+│   └── Dialogue.tscn
+├── scripts/
+│   ├── player/
+│   │   ├── Player.gd
+│   │   ├── Lamp.gd
+│   │   └── HatSystem.gd
+│   ├── world/
+│   │   ├── Platform.gd
+│   │   ├── Shadow.gd
+│   │   └── Weed.gd
+│   ├── ui/
+│   │   ├── VirtualJoystick.gd
+│   │   ├── DialogueBox.gd
+│   │   └── HatWheel.gd
+│   └── utils/
+│       ├── GameState.gd
+│       └── AudioManager.gd
+├── exports/
+│   └── web/
+└── project.godot
+```
+
+### 3.2 Diagrama de Flujo del Prototipo
+
+```
+[Main Menu]
+     ↓
+[Load Level 1]
+     ↓
+[Tutorial Zone] ←→ [Movement Test]
+     ↓
+[Weed Garden] ←→ [Plant/Remove Mechanic]
+     ↓
+[Shadow Encounter] ←→ [Lamp + Dialogue]
+     ↓
+[Hat Introduction] ←→ [White + Red Hats]
+     ↓
+[Level Complete]
+     ↓
+[Journal Entry] → [Save to localStorage]
+```
+
+---
+
+## 4. MECÁNICAS A IMPLEMENTAR
+
+### 4.1 Sistema de Movimiento (Prioridad: ALTA)
+
+**Especificaciones técnicas:**
+
+```gdscript
+# player/Player.gd
+extends CharacterBody2D
+
+@export var speed: float = 200.0
+@export var jump_velocity: float = -400.0
+@export var gravity: float = 980.0
+@export var coyote_time: float = 0.1  # 100ms
+@export var jump_buffer: float = 0.1  # 100ms
+
+var can_jump: bool = false
+var jump_pressed: bool = false
+var coyote_timer: float = 0.0
+
+func _physics_process(delta):
+    # Gravedad
+    if not is_on_floor():
+        velocity.y += gravity * delta
+        coyote_timer -= delta
+    else:
+        can_jump = true
+        coyote_timer = coyote_time
+    
+    # Buffer de salto
+    if Input.is_action_just_pressed("jump"):
+        jump_pressed = true
+        jump_buffer_timer = jump_buffer
+    
+    # Salto con coyote time
+    if jump_pressed and (can_jump or coyote_timer > 0) and velocity.y < 0:
+        velocity.y = jump_velocity
+        jump_pressed = false
+        can_jump = false
+        emit_signal("jumped")
+    
+    # Movimiento horizontal
+    var direction = Input.get_axis("left", "right")
+    if direction:
+        velocity.x = direction * speed
+    else:
+        velocity.x = move_toward(velocity.x, 0, speed * 0.2)
+    
+    move_and_slide()
+```
+
+**Controles:**
+- **PC:** WASD / Flechas + Ratón (apuntar lámpara)
+- **Móvil:** Joystick virtual (izquierda) + Botones táctiles (derecha)
+
+**Métricas de validación:**
+- Salto preciso en plataformas de 32px de ancho
+- Caída sin daño: teletransporte a último checkpoint
+- Velocidad máxima: 200px/segundo
+
+### 4.2 Sistema de Lámparas (Prioridad: ALTA)
+
+**Lámpara de Liam (Acción):**
+- Cono de luz de 90° apuntable con ratón/dedo
+- Medidor de energía: 100 puntos, consume 10/segundo
+- Recarga: 20/segundo cuando no está activa
+- Revela plataformas ocultas (cambia collision layer)
+- Activa mecanismos (señal `mechanism_activated`)
+
+```gdscript
+# player/Lamp.gd
+extends Node2D
+
+@export var max_energy: float = 100.0
+@export var drain_rate: float = 10.0
+@export var recharge_rate: float = 20.0
+@export var light_cone_angle: float = 90.0
+
+var current_energy: float = max_energy
+var is_active: bool = false
+var light_polygon: Polygon2D
+
+func _process(delta):
+    if is_active and current_energy > 0:
+        current_energy -= drain_rate * delta
+        update_light_cone()
+    elif not is_active and current_energy < max_energy:
+        current_energy += recharge_rate * delta
+    
+    if current_energy <= 0:
+        is_active = false
+        emit_signal("lamp_depleted")
+
+func activate():
+    if current_energy > 0:
+        is_active = true
+        emit_signal("lamp_activated")
+
+func deactivate():
+    is_active = false
+    emit_signal("lamp_deactivated")
+```
+
+**Lámpara de Elara (Narrativa):**
+- Raycast 2D para detectar sombras en línea de visión
+- Al hacer clic: abre sistema de diálogo
+- Diálogo de 3 turnos con 3 opciones por turno
+- Sistema de "escucha correcta": reflejar > preguntar > aconsejar
+
+```gdscript
+# world/Shadow.gd
+extends CharacterBody2D
+
+@export var shadow_id: String
+@export var dialogue_tree: Dictionary
+var is_revealed: bool = false
+var is_dissolved: bool = false
+
+func interact_with_lamp():
+    is_revealed = true
+    DialogueSystem.start_dialogue(dialogue_tree)
+    connect("dialogue_completed", _on_dialogue_completed)
+
+func _on_dialogue_completed(success: bool):
+    if success:
+        dissolve_animation.play()
+        is_dissolved = true
+        emit_signal("shadow_dissolved", shadow_id)
+        # Drop collectible
+        var flower = Flower.new()
+        flower.position = position
+        get_parent().add_child(flower)
+```
+
+### 4.3 Sistema de Sombreros (Prioridad: MEDIA)
+
+**Implementación:**
+- Rueda radial (8 posiciones) activable con tecla Q / botón UI
+- Solo 2 sombreros en prototipo: Blanco y Rojo
+- Cooldown: 0.5 segundos entre cambios
+- Efecto visual: Filtro de color en CanvasLayer + partícula
+
+```gdscript
+# player/HatSystem.gd
+extends Node
+
+enum HatType { NONE, WHITE, RED }
+var current_hat: HatType = HatType.NONE
+var hat_cooldown: float = 0.0
+const COOLDOWN_TIME: float = 0.5
+
+signal hat_changed(hat_type: HatType)
+
+func _process(delta):
+    if hat_cooldown > 0:
+        hat_cooldown -= delta
+
+func change_hat(new_hat: HatType):
+    if hat_cooldown > 0 and new_hat == current_hat:
+        return  # Toggle off if same hat
+    
+    current_hat = new_hat
+    hat_cooldown = COOLDOWN_TIME
+    emit_signal("hat_changed", current_hat)
+    
+    # Apply visual effect
+    var color_filter = CanvasModulate.new()
+    match new_hat:
+        HatType.WHITE:
+            color_filter.color = Color(1, 1, 1, 0.3)  # Bright
+        HatType.RED:
+            color_filter.color = Color(1, 0, 0, 0.2)  # Warm
+    get_tree().current_scene.add_child(color_filter)
+
+# White Hat: Reveal hidden clues
+func reveal_facts():
+    if current_hat == HatType.WHITE:
+        var clues = get_tree().get_nodes_in_group("hidden_clues")
+        for clue in clues:
+            clue.visible = true
+            clue.modulate.a = 1.0
+
+# Red Hat: Enable emotional dialogues
+func enable_emotional_dialogue():
+    if current_hat == HatType.RED:
+        DialogueSystem.enable_mode("emotional")
+```
+
+### 4.4 Sistema de Malezas y Flores (Prioridad: MEDIA)
+
+**Mecánica:**
+- Malezas: Áreas estáticas con colisión, interacción con tecla E
+- Flores: Coleccionables, +10 puntos de "Jardín Interior"
+- Animación: 0.5s para arrancar, 0.5s para sembrar
+
+```gdscript
+# world/Weed.gd
+extends Area2D
+
+@export var weed_type: String  # "fear", "doubt", "resentment"
+var is_removed: bool = false
+
+func _on_body_entered(body):
+    if body.is_in_group("player") and Input.is_action_just_pressed("interact"):
+        start_removal_animation()
+
+func start_removal_animation():
+    var tween = create_tween()
+    tween.tween_property(self, "modulate:a", 0.0, 0.5)
+    tween.tween_callback(_on_removed)
+
+func _on_removed():
+    is_removed = true
+    queue_free()
+    emit_signal("weed_removed", weed_type)
+    GameState.add_flower()
+```
+
+### 4.5 Sistema de Diálogo (Prioridad: ALTA)
+
+**Estructura JSON:**
+
+```json
+{
+  "shadow_tomas": {
+    "id": "tomas_shadow_01",
+    "character": "Tomás",
+    "emotion": "despair",
+    "lines": [
+      {
+        "speaker": "shadow",
+        "text": "Lo perdí todo. No sé hacer otra cosa.",
+        "emotion": "sadness"
+      },
+      {
+        "speaker": "player",
+        "choices": [
+          {
+            "text": "Entiendo que te sientas así.",
+            "type": "reflect",
+            "correct": true,
+            "response": {
+              "speaker": "shadow",
+              "text": "Sí... es difícil ver más allá de la pérdida."
+            }
+          },
+          {
+            "text": "Deberías buscar otro trabajo.",
+            "type": "advise",
+            "correct": false,
+            "response": {
+              "speaker": "shadow",
+              "text": "No es tan simple. No conozco otro oficio."
+            }
+          },
+          {
+            "text": "Eso te pasa por no planificar.",
+            "type": "judge",
+            "correct": false,
+            "response": {
+              "speaker": "shadow",
+              "text": "..."
+            }
+          }
+        ]
+      },
+      {
+        "speaker": "player",
+        "choices": [
+          {
+            "text": "¿Qué se abre ahora que el campo está vacío?",
+            "type": "question",
+            "correct": true,
+            "response": {
+              "speaker": "shadow",
+              "text": "Quizá... la posibilidad de empezar de nuevo."
+            },
+            "completion": true
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**UI de Diálogo:**
+- Caja de texto inferior con fondo semi-transparente
+- Nombre del hablante arriba a la izquierda
+- Botones de elección con animación hover
+- Typewriter effect: 30ms por carácter
+- Soporte para saltar diálogo con clic
+
+---
+
+## 5. DISEÑO DEL NIVEL 1
+
+### 5.1 Layout del Nivel
+
+**Dimensiones:**
+- Tamaño total: 3200px x 1200px (20 x 75 tiles de 160px)
+- Resolución lógica: 480x270px (escalado 2x en HD)
+- Cámara: 2D ortográfica, sin rotación
+
+**Zonas:**
+
+| Zona | Coordenadas | Elementos | Mecánicas |
+|------|-------------|-----------|-----------|
+| **Tutorial** | 0-600px | Plataformas básicas, flechas | Movimiento, salto |
+| **Jardín de Aides** | 600-1400px | 5 malezas, 3 flores | Arrancar/sembrar |
+| **Cabaña de Callum** | 1400-1800px | NPC, punto de guardado | Diálogo tutorial |
+| **Sauce del Reflejo** | 1800-2600px | Sombra de Tomás, lago | Lámpara Elara, diálogo |
+| **Claro del Conejo** | 2600-3200px | Mesa de sombreros | Sistema de sombreros |
+
+### 5.2 Tileset y Assets
+
+**Assets necesarios (prioridad):**
+
+1. **Personajes:**
+   - Liam: idle (4 frames), run (8 frames), jump (3 frames), lamp_use (6 frames)
+   - Elara: idle (4 frames), run (8 frames), lamp_use (6 frames)
+   - Tomás (sombra): idle (2 frames), dissolve (10 frames)
+   - Conejo: idle (2 frames), hop (4 frames)
+
+2. **Escenario:**
+   - Suelo: 4 variantes (hierba, tierra, piedras, madera)
+   - Plataformas: 3 tamaños (pequeña, mediana, grande)
+   - Fondo: Valle (parallax layer 1), montañas (layer 2), cielo (layer 3)
+   - Decoración: árboles (3 tipos), flores (5 tipos), rocas (4 tipos)
+
+3. **Objetos:**
+   - Malezas: 3 tipos (miedo, duda, resentimiento)
+   - Flores: 1 tipo genérico (coleccionable)
+   - Lámparas: dorada y púrpura (sprites + efecto de luz)
+   - Sombreros: blanco y rojo (iconos UI)
+
+4. **UI:**
+   - Joystick virtual (base + knob)
+   - Botones: salto, lámpara, interacción, sombreros
+   - Barra de energía de lámpara
+   - Contador de flores (0/12)
+   - Caja de diálogo
+
+**Nota:** Usar las ilustraciones existentes como base, crear spritesheets en Aseprite o similar.
+
+---
+
+## 6. PLAN DE DESARROLLO
+
+### Semana 1-2: Core Movement & World
+
+**Día 1-3:**
+- [ ] Configurar proyecto Godot 4.2
+- [ ] Importar assets básicos (placeholders)
+- [ ] Implementar Player.gd con movimiento básico
+- [ ] Configurar cámara 2D
+- [ ] Crear tileset básico (16x16px)
+
+**Día 4-7:**
+- [ ] Implementar coyote time y jump buffer
+- [ ] Añadir plataformas y colisiones
+- [ ] Sistema de checkpoints (velas)
+- [ ] Caída sin daño (teletransporte)
+- [ ] **Milestone 1:** Personaje se mueve por el nivel
+
+**Día 8-10:**
+- [ ] Animaciones de idle, run, jump
+- [ ] Efectos de partículas (polvo al correr)
+- [ ] Sonidos de pasos (placeholders)
+- [ ] **Milestone 2:** Movimiento fluido y pulido
+
+### Semana 3-4: Mechanics & Dialogue
+
+**Día 11-14:**
+- [ ] Implementar sistema de lámparas
+- [ ] Efecto de luz dinámica (PointLight2D)
+- [ ] Plataformas ocultas que se revelan
+- [ ] Medidor de energía UI
+
+**Día 15-17:**
+- [ ] Sistema de malezas y flores
+- [ ] Animaciones de interacción
+- [ ] Contador de coleccionables
+
+**Día 18-20:**
+- [ ] Sistema de diálogo JSON
+- [ ] UI de diálogo (typewriter, botones)
+- [ ] Diálogo con sombra de Tomás
+- [ ] **Milestone 3:** Diálogo funcional
+
+**Día 21-24:**
+- [ ] Sistema de sombreros (rueda radial)
+- [ ] Efectos visuales de sombreros
+- [ ] Sombrero Blanco: revelar pistas
+- [ ] Sombrero Rojo: diálogo emocional
+- [ ] **Milestone 4:** Sombreros funcionales
+
+### Semana 5: Polish & Export
+
+**Día 25-27:**
+- [ ] Música ambiental (loop 2min)
+- [ ] SFX: salto, lámpara, diálogo, colección
+- [ ] Transiciones entre escenas
+- [ ] Pantalla de inicio y final
+
+**Día 28-30:**
+- [ ] Optimización de assets (compresión)
+- [ ] Pruebas en 3 dispositivos móviles
+- [ ] Ajuste de dificultad (tiempos, saltos)
+- [ ] **Milestone 5:** Build web listo
+
+**Día 31-35:**
+- [ ] Testing con 5 usuarios externos
+- [ ] Recolección de feedback
+- [ ] Bug fixing
+- [ ] **ENTREGA FINAL:** Prototipo publicado en Itch.io
+
+---
+
+## 7. CRITERIOS DE ACEPTACIÓN
+
+### Funcionales (OBLIGATORIOS)
+
+- ✅ **F1:** El personaje corre y salta sin bugs de colisión
+- ✅ **F2:** Coyote time de 100ms funciona consistentemente
+- ✅ **F3:** La lámpara de Liam revela al menos 2 plataformas ocultas
+- ✅ **F4:** La lámpara de Elara inicia diálogo con la sombra de Tomás
+- ✅ **F5:** El diálogo tiene al menos 3 turnos con 3 opciones
+- ✅ **F6:** Se pueden arrancar 5 malezas y sembrar 5 flores
+- ✅ **F7:** Los sombreros Blanco y Rojo cambian el estado del juego
+- ✅ **F8:** El nivel se completa al llegar al final
+- ✅ **F9:** El progreso se guarda en localStorage
+- ✅ **F10:** Funciona en Chrome, Firefox y Safari
+
+### No Funcionales (OBLIGATORIOS)
+
+- ✅ **NF1:** Carga inicial < 5 segundos en 4G (medido con Lighthouse)
+- ✅ **NF2:** 60 FPS estables en Samsung Galaxy S10 o equivalente
+- ✅ **NF3:** Peso total del build < 15 MB comprimido
+- ✅ **NF4:** Sin errores en consola del navegador
+- ✅ **NF5:** Controles táctiles responden en < 100ms
+- ✅ **NF6:** Texto legible en pantallas de 320px de ancho
+- ✅ **NF7:** Audio se puede mutear desde UI
+
+### Experiencia de Usuario (DESEABLES)
+
+- ⭐ **UX1:** Un tester completa el nivel sin ayuda en < 15 minutos
+- ⭐ **UX2:** Feedback visual claro al interactuar con objetos
+- ⭐ **UX3:** Transiciones suaves entre estados (sin saltos bruscos)
+- ⭐ **UX4:** La música no interfiere con la concentración
+- ⭐ **UX5:** El tono visual es cálido y coherente con el libro
+
+---
+
+## 8. RIESGOS Y MITIGACIÓN
+
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|--------|-------------|---------|------------|
+| **Godot WebAssembly muy pesado** | Media | Alto | Tener Phaser 3 como plan B; medir peso en día 7 |
+| **Assets visuales insuficientes** | Alta | Medio | Usar placeholders geométricos; priorizar funcionalidad sobre estética |
+| **Diálogo JSON muy complejo** | Media | Medio | Empezar con sistema simple; migrar a Ink en fase 2 |
+| **Rendimiento en móvil bajo** | Media | Alto | Profiling temprano (día 14); reducir partículas si es necesario |
+| **Controles táctiles incómodos** | Alta | Medio | Testing en día 21; ajustar tamaño/posición de botones |
+| **Tiempo insuficiente (4 semanas)** | Media | Alto | Alcance mínimo viable: si no da tiempo, quitar sombreros y priorizar lámparas |
+
+---
+
+## 9. ENTREGABLES
+
+### Al Final de la Fase 1
+
+1. **Build Web jugable**
+   - Archivo HTML + JS + assets
+   - Hosted en Itch.io o GitHub Pages
+   - URL pública compartida
+
+2. **Código fuente**
+   - Repositorio GitHub/GitLab
+   - README con instrucciones de build
+   - Comentarios en código crítico
+
+3. **Documentación**
+   - Este informe técnico actualizado
+   - Changelog de cambios implementados
+   - Lista de bugs conocidos
+
+4. **Reporte de Testing**
+   - Resultados de pruebas en 3 dispositivos
+   - Métricas de rendimiento (FPS, carga, memoria)
+   - Feedback de 5 testers externos
+
+5. **Assets organizados**
+   - Spritesheets en formato PNG
+   - Audio en OGG (música) y MP3 (SFX)
+   - JSON de diálogos y configuración
+
+---
+
+## 10. PRÓXIMOS PASOS (Post-Prototipo)
+
+Una vez validado el prototipo, la **Fase 2 (Vertical Slice)** incluirá:
+
+- ✅ Nivel 1 completo con arte final (no placeholders)
+- ✅ Los 6 sombreros implementados
+- ✅ Sistema de reputación "Ecos y Sombras"
+- ✅ 3 diálogos completos (Tomás, Aides, Callum)
+- ✅ Música y SFX definitivos
+- ✅ UI pulida y accesible
+- ✅ 12 coleccionables (flores)
+- ✅ Diario del Jugador funcional
+
+**Duración estimada:** 6 semanas adicionales  
+**Equipo necesario:** 1 desarrollador full-time + 1 ilustrador part-time
+
+---
+
+## 11. CHECKLIST DE INICIO
+
+Para comenzar el desarrollo, se necesita:
+
+- [ ] **Autor:** Confirmar stack tecnológico (Godot vs Phaser)
+- [ ] **Autor:** Proporcionar acceso a repositorio (GitHub/GitLab)
+- [ ] **Autor:** Confirmar si hay ilustrador disponible o usar placeholders
+- [ ] **Desarrollador:** Configurar entorno de desarrollo (Godot 4.2 instalado)
+- [ ] **Desarrollador:** Crear estructura de carpetas del proyecto
+- [ ] **Desarrollador:** Implementar "Hello World" con movimiento básico
+- [ ] **Ambos:** Reunión de kickoff (30 min) para aclarar dudas
+
+---
+
+## 12. CONTACTO Y SEGUIMIENTO
+
+**Metodología:** Desarrollo ágil con sprints semanales  
+**Comunicación:** 
+- Reunión de seguimiento: Viernes 10:00 AM (30 min)
+- Canal: Email / WhatsApp / Discord (definir)
+- Reporte semanal: Cada viernes por la tarde
+
+**Herramientas:**
+- Trello/Notion para tracking de tareas
+- GitHub Projects para issues técnicos
+- Google Drive para assets compartidos
+
+---
+
+**Documento elaborado por:** Asistente de Desarrollo  
+**Revisado por:** [Pendiente - Autor]  
+**Fecha de aprobación:** [Pendiente]  
+**Inicio de desarrollo:** [Fecha a confirmar]
+
+---
+
+### 📎 ANEXOS
+
+**Anexo A:** Referencias visuales de juegos similares  
+- *Celeste* (movimiento preciso, coyote time)  
+- *Gris* (atmósfera, narrativa visual)  
+- *Night in the Woods* (diálogos, tono introspectivo)  
+
+**Anexo B:** Paleta de colores sugerida  
+- Dorado: #D4AF37 (lámpara de Liam)  
+- Púrpura: #8B4789 (lámpara de Elara)  
+- Verde esmeralda: #50C878 (jardín)  
+- Azul profundo: #1E3A8A (cielo nocturno)  
+
+**Anexo C:** Enlaces de referencia  
+- Godot 4.2 Docs: https://docs.godotengine.org  
+- Phaser 3 Docs: https://photonstorm.github.io/phaser3-docs  
+- Ink Narrative Engine: https://www.inklestudios.com/ink  
+
+---
+
+**¿Listo para comenzar?**  
+Confirma la aprobación de este informe y la fecha de inicio para proceder con la configuración del entorno de desarrollo. 

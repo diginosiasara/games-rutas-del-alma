@@ -1,0 +1,137 @@
+# 📄 INFORME TÉCNICO — SPRINT 8
+## *Rutas del Alma: El Juego* — Sistema de Emociones de Aides y su Efecto en el Jardín
+**Versión de referencia:** Prototipo Web v7/v8 · **Base narrativa:** Cap. 1 (El Jardín de la Mente) · **Fecha:** 14 nov 2026
+
+---
+
+## 0. RESUMEN EJECUTIVO
+Aides no es solo un NPC que ejecuta tareas; **Aides es la personificación del Jardín de la Mente**. Por tanto, su estado emocional no es un simple "medidor de amistad", sino **el clima interno del jardín**. 
+
+Si Aides está ansiosa, el jardín se llena de espinas y las plantas crecen lentas. Si está en calma, las flores florecen y atraen mariposas. El jugador (Liam/Elara) debe aprender a **cuidar la mente de Aides** tanto como a cuidar las plantas.
+
+---
+
+## 1. LOS 4 ESTADOS EMOCIONALES DE AIDES
+
+El sistema se basa en dos ejes ocultos: **Nivel de Calma** (0-100) y **Nivel de Carga Mental** (0-100). La combinación de estos ejes define 4 estados emocionales visibles.
+
+| Estado Emocional | Condición (Calma / Carga) | Efecto en el Jardín (Gameplay) | Efecto en Aides (Visual/Animación) |
+| :--- | :--- | :--- | :--- |
+| **🌿 Serenidad (Armonía)** | Calma > 70, Carga < 30 | **Crecimiento x1.5.** Las flores brillan. Aparecen mariposas (coleccionables extra). Las zarzas no rebrotan. | Aides sonríe levemente, movimientos fluidos y pausados. Aura verde suave a su alrededor. |
+| **🌪️ Ansiedad (Prisa)** | Calma < 40, Carga > 70 | **Crecimiento x0.5.** Las plantas se marchitan más rápido. **Las zarzas rebrotan al doble de velocidad.** | Aides mira a los lados, se mueve rápido pero "tropezando". A veces derrama agua al regar. Aura grisácea. |
+| **🌧️ Melancolía (Tristeza)** | Calma < 30, Carga < 50 | **Crecimiento x0 (Pausa).** Las plantas no crecen ni mueren, se quedan "congeladas" en gris. | Aides se sienta en el suelo del jardín, abraza sus rodillas. No trabaja hasta que el jugador la consuele. |
+| **✨ Alegría (Euforia)** | Calma > 80, Carga < 10 (Raro) | **Flores Raras.** Solo en este estado pueden nacer las "Flores de Luz" (recompensa máxima). | Aides canta mientras trabaja, salta ligeramente. El cielo del jardín se vuelve más brillante. |
+
+---
+
+## 2. CÓMO CAMBIA EL ESTADO DE AIDES (TRIGGERS)
+
+El jugador y el entorno modifican las emociones de Aides constantemente.
+
+### 2.1 Lo que AUMENTA su Ansiedad/Carga (Negativo)
+*   **Jugador autoritario:** Elegir opciones de diálogo tipo "¡Date prisa, Aides!" o "¿Por qué no has terminado?".
+*   **Sobrecarga de trabajo:** Dejar que Aides trabaje en bucle sin mandarla a descansar con Callum.
+*   **Entorno hostil:** Si hay más de 5 zarzas Nivel 2 o 3 en la pantalla, Aides entra en pánico leve.
+*   **Oscuridad:** Si el jugador no usa la Lámpara de Liam en el jardín al anochecer, Aides siente miedo (Carga +20).
+
+### 2.2 Lo que AUMENTA su Calma (Positivo)
+*   **Escucha activa:** Usar la Lámpara de Elara sobre Aides y elegir la opción "Reflejar/Escuchar".
+*   **Ritual del té:** Mandar a Aides a la cabaña de Callum (se reinicia su Carga a 0).
+*   **Sombrero Amarillo (Optimismo):** Si el jugador equipa el Sombrero Amarillo cerca de Aides, ella recibe un buff de +15 Calma.
+*   **Éxito en el jardín:** Cosechar una flor madura a tiempo (+5 Calma).
+
+---
+
+## 3. INTEGRACIÓN CON LAS LÁMPARAS (SINERGIA EMOCIONAL)
+
+Las lámparas de Liam y Elara ahora pueden usarse **directamente sobre Aides** para regular su estado emocional, no solo sobre las plantas.
+
+*   **Lámpara de Liam (Luz Dorada) sobre Aides:**
+    *   *Efecto:* Disipa la **Ansiedad**. La luz dorada "ordena" sus pensamientos.
+    *   *Visual:* Aides se detiene, respira hondo (animación de 2s), y su aura grisácea se vuelve dorada. Reduce la Carga Mental en 30 puntos.
+*   **Lámpara de Elara (Luz Violeta) sobre Aides:**
+    *   *Efecto:* Disipa la **Melancolía**. La luz violeta "abraza" su emoción.
+    *   *Visual:* Aides levanta la vista, sonríe con lágrimas en los ojos (animación de 2s). Convierte el estado "Melancolía" en "Serenidad".
+
+---
+
+## 4. EJEMPLO DE RAMIFICACIÓN DE DIÁLOGO POR EMOCIÓN
+
+El diálogo con Aides **cambia drásticamente** dependiendo de su estado emocional actual. El jugador debe leer su emoción antes de hablar.
+
+**Contexto:** El jugador se acerca a Aides en el jardín.
+
+### Si Aides está en estado "ANSIEDAD" (Se mueve rápido, mira a los lados)
+*   **Opción A (Incorrecta - Autoritaria):** *"Aides, hay que arrancar esas zarzas ya."*
+    *   *Consecuencia:* Aides entra en pánico. `Carga +30`. Se niega a trabajar por 1 minuto.
+*   **Opción B (Correcta - Sombrero Azul/Organización):** *"Respira, Aides. Vamos a hacer una lista de prioridades. Solo una cosa a la vez."*
+    *   *Consecuencia:* `Calma +20`. Aides asiente y trabaja con eficiencia.
+*   **Opción C (Correcta - Lámpara de Liam):** *(Iluminarla con la lámpara dorada sin hablar)*.
+    *   *Consecuencia:* `Carga -30`. Aides se calma sola.
+
+### Si Aides está en estado "MELANCOLÍA" (Sentada en el suelo)
+*   **Opción A (Incorrecta - Lógica fría):** *"Si no trabajas, el jardín morirá. Levántate."*
+    *   *Consecuencia:* Aides llora. El jardín se oscurece.
+*   **Opción B (Correcta - Lámpara de Elara / Sombrero Rojo):** *"No tienes que hacer nada ahora. Estoy aquí contigo en la oscuridad."*
+    *   *Consecuencia:* Aides se levanta lentamente. `Estado cambia a Serenidad`.
+
+---
+
+## 5. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR
+
+### 5.1 Actualización del `GameState`
+Añadir las siguientes variables al objeto de Aides:
+```javascript
+aidesData = {
+  // ... variables anteriores ...
+  emotion_state: "SERENIDAD", // SERENIDAD, ANSIEDAD, MELANCOLIA, ALEGRIA
+  calma_level: 80, // 0 a 100
+  carga_mental: 20, // 0 a 100
+  
+  updateEmotion: function() {
+    if (this.calma_level > 70 && this.carga_mental < 30) this.emotion_state = "SERENIDAD";
+    else if (this.calma_level < 40 && this.carga_mental > 70) this.emotion_state = "ANSIEDAD";
+    else if (this.calma_level < 30) this.emotion_state = "MELANCOLIA";
+    else if (this.calma_level > 80 && this.carga_mental < 10) this.emotion_state = "ALEGRIA";
+    
+    // Aplicar modificadores al jardín según el estado
+    applyGardenModifiers(this.emotion_state);
+  }
+}
+```
+
+### 5.2 Feedback Visual (UI y Escenario)
+*   **Icono de estado:** Añadir un pequeño icono sobre la cabeza de Aides (un sol para Serenidad, un remolino para Ansiedad, una nube de lluvia para Melancolía, una estrella para Alegría).
+*   **Filtro de pantalla (Color Grading):** Cuando Aides está en Ansiedad, aplicar un filtro sutil de ruido/viñeta grisácea a la cámara. Cuando está en Serenidad, aumentar la saturación y el brillo del escenario.
+*   **Partículas:** 
+    *   Ansiedad: Partículas de "polvo" o "hojas secas" agitadas por el viento.
+    *   Serenidad/Alegría: Partículas de "polen dorado" o "luciérnagas" flotando suavemente.
+
+### 5.3 Modificadores de Física/Tiempo
+*   En estado **Ansiedad**, el temporizador de marchitamiento de las plantas (`timeToWither`) se reduce un 40%.
+*   En estado **Melancolía**, el `growthRate` de todas las plantas se setea a `0`.
+
+---
+
+## 6. CRITERIOS DE ACEPTACIÓN (DEFINITION OF DONE)
+
+*   ✅ Aides tiene 4 estados emocionales claramente diferenciables visualmente.
+*   ✅ El estado emocional de Aides modifica la velocidad de crecimiento de las plantas y la tasa de aparición de zarzas.
+*   ✅ El jugador puede usar las Lámparas de Liam y Elara sobre Aides para cambiar su estado emocional.
+*   ✅ Los diálogos con Aides ofrecen opciones diferentes (y consecuencias diferentes) según su emoción actual.
+*   ✅ Si Aides entra en "Melancolía", se sienta y deja de trabajar hasta que el jugador la consuele.
+*   ✅ El guardado local persiste el `emotion_state` y los niveles de `calma`/`carga`.
+
+---
+
+## 7. ORDEN DE IMPLEMENTACIÓN
+
+1.  **Día 1:** Crear la máquina de estados emocionales y las variables `calma`/`carga`.
+2.  **Día 2:** Implementar los modificadores en el ciclo de vida de las plantas (velocidad de crecimiento/marchitamiento según emoción).
+3.  **Día 3:** Crear las animaciones/estados visuales de Aides (sentarse para melancolía, moverse rápido para ansiedad).
+4.  **Día 4:** Integrar la interacción de las Lámparas de Liam/Elara sobre Aides para modificar sus variables.
+5.  **Día 5:** Ramificar los diálogos existentes para que reaccionen al estado emocional actual.
+
+---
+
+**¿Aprobado?** Este sistema cierra el círculo narrativo: el jugador entiende que **no se puede cultivar un jardín (una mente) si no se cuida primero al jardinero (uno mismo)**. Si das el visto bueno, el desarrollador puede empezar por el Día 1.
