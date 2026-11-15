@@ -70,6 +70,8 @@ button{font-family:inherit;color:inherit}
 #b-lamp{right:max(112px,env(safe-area-inset-right,0px));bottom:max(30px,env(safe-area-inset-bottom,0px));width:70px;height:70px}
 #b-act{right:max(24px,env(safe-area-inset-right,0px));bottom:max(116px,env(safe-area-inset-bottom,0px));width:64px;height:64px}
 #b-hat{right:max(98px,env(safe-area-inset-right,0px));bottom:max(110px,env(safe-area-inset-bottom,0px));width:58px;height:58px}
+#b-call{right:max(176px,env(safe-area-inset-right,0px));bottom:max(168px,env(safe-area-inset-bottom,0px));width:54px;height:54px;font-size:.7rem}
+#b-syn{right:max(98px,env(safe-area-inset-right,0px));bottom:max(176px,env(safe-area-inset-bottom,0px));width:54px;height:54px;font-size:.7rem}
 #b-swap{right:max(176px,env(safe-area-inset-right,0px));bottom:max(100px,env(safe-area-inset-bottom,0px));width:58px;height:58px}
 /* end / journal */
 #end{background:rgba(18,20,42,.88);overflow:auto;align-items:flex-start;z-index:30}
@@ -94,6 +96,8 @@ body.portrait #b-jump{width:96px;height:96px;bottom:max(34px,env(safe-area-inset
 body.portrait #b-lamp{width:80px;height:80px;bottom:max(50px,env(safe-area-inset-bottom,0px));right:max(126px,env(safe-area-inset-right,0px))}
 body.portrait #b-act{width:72px;height:72px;bottom:max(140px,env(safe-area-inset-bottom,0px));right:max(26px,env(safe-area-inset-right,0px))}
 body.portrait #b-hat{width:64px;height:64px;bottom:max(150px,env(safe-area-inset-bottom,0px));right:max(112px,env(safe-area-inset-right,0px))}
+body.portrait #b-call{width:58px;height:58px;bottom:max(214px,env(safe-area-inset-bottom,0px));right:max(190px,env(safe-area-inset-right,0px))}
+body.portrait #b-syn{width:58px;height:58px;bottom:max(226px,env(safe-area-inset-bottom,0px));right:max(112px,env(safe-area-inset-right,0px))}
 body.portrait #b-swap{width:64px;height:64px;bottom:max(140px,env(safe-area-inset-bottom,0px));right:max(190px,env(safe-area-inset-right,0px))}
 body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
 #end{touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
@@ -114,6 +118,8 @@ body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
   <div class="tb" id="b-act" data-act="act">Acción</div>
   <div class="tb" id="b-hat" data-act="hat">Sombreros</div>
   <div class="tb" id="b-swap" data-act="swap">Liam ⇄ Elara</div>
+  <div class="tb" id="b-call" data-act="call" style="display:none">Llamar</div>
+  <div class="tb" id="b-syn" data-act="syn" style="display:none">Sinergia</div>
 </div>
 
 <div id="wheel" class="ov" hidden><div class="ring" id="ring"><div class="mid" id="wmid">Elige un sombrero</div></div><button class="btn ghost" id="wclose" style="margin-top:1rem">Cerrar (Q)</button></div>
@@ -121,7 +127,7 @@ body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
 
 <div id="menu" class="ov" hidden>
   <img id="mLamp" alt="">
-  <h1>Rutas del Alma</h1>
+  <h1>Rutas del Alma</h1><div style="font-size:.7rem;opacity:.6;margin-top:-.4rem">build v16 · 2026-11-15</div>
   <p class="sub">Nivel 1 · El Valle y el Jardín de la Mente · Prototipo</p>
   <div class="row">
     <button class="btn" id="mStart">Comenzar</button>
@@ -282,6 +288,8 @@ function noise(dur,vol,fc){
 const SFX={
   jump:()=>tone(330,.18,'triangle',.08,1.9),
   land:()=>noise(.08,.1,500),
+  skid:()=>noise(.12,.07,2200),
+  splash:()=>{noise(.35,.16,420);tone(180,.25,'sine',.05,.6)},
   lampL:()=>{tone(784,.5,'sine',.06,1,0,true);tone(1175,.6,'sine',.04,1,.04,true)},
   lampE:()=>{tone(1318,.7,'sine',.05,1,0,true);tone(1760,.8,'sine',.035,1,.05,true);tone(2093,.8,'sine',.02,1,.1,true)},
   collect:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.25,'triangle',.07,1,i*.07,true)),
@@ -311,7 +319,7 @@ function setMuted(v){muted=v;savePrefs();if(AU.m)AU.m.gain.value=muted?0:.8;$('#
 const key={left:0,right:0,jump:0,lamp:0,down:0,up:0};
 const mouse={x:W/2,y:H/2,active:false,down:false};
 const touch={ax:0,ay:0,jump:0,lamp:0};
-let pressedAct=false,pressedSwap=false,pressedHat=false;
+let pressedAct=false,pressedSwap=false,pressedHat=false,pressedCall=false;
 let dialogActive=false;
 addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','Tab'].includes(e.code))e.preventDefault();
@@ -328,8 +336,14 @@ addEventListener('keydown',e=>{
     case 'KeyE':pressedAct=true;break;
     case 'Tab':case 'KeyC':pressedSwap=true;break;
     case 'KeyQ':pressedHat=true;break;
+    case 'KeyV':pressedCall=true;break;
+    case 'KeyG':key.syn=1;break;
     case 'Digit1':chooseHat('white');break;
     case 'Digit2':chooseHat('red');break;
+    case 'Digit3':chooseHat('black');break;
+    case 'Digit4':chooseHat('yellow');break;
+    case 'Digit5':chooseHat('green');break;
+    case 'Digit6':chooseHat('blue');break;
     case 'KeyM':setMuted(!muted);break;
     case 'Escape':if(wheelOpen)toggleWheel(false);break;
   }
@@ -342,9 +356,10 @@ addEventListener('keyup',e=>{
     case 'ArrowDown':case 'KeyS':key.down=0;break;
     case 'KeyZ':key.up=0;break;
     case 'KeyF':key.lamp=0;break;
+    case 'KeyG':key.syn=0;break;
   }
 });
-addEventListener('blur',()=>{key.left=key.right=key.jump=key.lamp=key.down=key.up=0;mouse.down=false});
+addEventListener('blur',()=>{key.left=key.right=key.jump=key.lamp=key.down=key.up=key.syn=0;mouse.down=false});
 function toLogical(e){const r=cv.getBoundingClientRect();const s=Math.min(r.width/W,r.height/H);return{x:(e.clientX-r.left-(r.width-W*s)/2)/s,y:(e.clientY-r.top-(r.height-H*s)/2)/s}}
 cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const p=toLogical(e);mouse.x=p.x;mouse.y=p.y;mouse.active=true});
 cv.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;auInit();mouse.down=true;mouse.active=true;const p=toLogical(e);mouse.x=p.x;mouse.y=p.y});
@@ -364,8 +379,8 @@ addEventListener('touchstart',()=>{showTouch()},{passive:true,once:true});
   document.querySelectorAll('#touch .tb').forEach(b=>{
     const a=b.dataset.act;
     b.addEventListener('pointerdown',e=>{e.preventDefault();auInit();b.setPointerCapture(e.pointerId);b.classList.add('on');
-      if(a==='jump'){touch.jump=1;P.jbuf=.15}else if(a==='lamp')touch.lamp=1;else if(a==='act')pressedAct=true;else if(a==='swap')pressedSwap=true;else if(a==='hat')pressedHat=true});
-    const up=()=>{b.classList.remove('on');if(a==='jump')touch.jump=0;if(a==='lamp')touch.lamp=0};
+      if(a==='jump'){touch.jump=1;P.jbuf=.15}else if(a==='lamp')touch.lamp=1;else if(a==='act')pressedAct=true;else if(a==='swap')pressedSwap=true;else if(a==='hat')pressedHat=true;else if(a==='call')pressedCall=true;else if(a==='syn')touch.syn=1});
+    const up=()=>{b.classList.remove('on');if(a==='jump')touch.jump=0;if(a==='lamp')touch.lamp=0;if(a==='syn')touch.syn=0};
     b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);
   });
 })();
@@ -470,7 +485,7 @@ const HATS=[
     const b=document.createElement('button');b.className='hat '+h.id+(h.on?'':' locked');b.dataset.id=h.id;
     b.innerHTML=`<span class="g">${h.g}</span><span>${h.name}</span>`;b.setAttribute('aria-label',`Sombrero ${h.name}, ${h.sub}${h.on?'':', bloqueado'}`);
     b.style.left=(50+Math.cos(a)*39)+'%';b.style.top=(50+Math.sin(a)*39)+'%';
-    b.onclick=()=>{if(!h.on){toast('Este sombrero se desbloquea en los próximos niveles.',2500);return}chooseHat(h.id)};
+    b.onclick=()=>{if(!h.on){toast('Este sombrero se desbloquea al avanzar por el valle.',2500);return}chooseHat(h.id)};
     ring.appendChild(b);
   });
   function min(x){return x}
@@ -485,7 +500,7 @@ function chooseHat(id){
   if(hatCD>0)return;
   hat=hat===id?null:id;hatCD=.5;SFX.hat(hat==='white');
   flashT=.25;
-  toast(hat?`Sombrero ${hat==='white'?'Blanco: los hechos':'Rojo: las emociones'}`:'Sin sombrero',1800);
+  toast(hat?'Sombrero '+HATN[hat]:'Sin sombrero',1800);
   if(wheelOpen)toggleWheel(false);
 }
 
@@ -512,12 +527,13 @@ function solids(){
   const s=[...ground,...floats];
   hidden.forEach((h,i)=>s.push({x:h.x,y:h.y,w:h.w,h:8,ow:i===2}));
   if(!S.fog)s.push({x:fogRect.x,y:-200,w:fogRect.w,h:500});
+  bridgeSolids().forEach(b=>s.push(b));
   return s;
 }
 function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
 function box(){return{x:P.x-P.w/2,y:P.y-P.h,w:P.w,h:P.h}}
 function step(dt){
-  const MAXV=105*(S.pace?1.12:1),JUMP=300,G=900;
+  const MAXV=105*(S.pace?1.12:1)*(S.dud>0?.9:1)*(S.fat>80?.92:1),JUMP=300,G=900;
   P.t+=dt;
   if(P.lock>0){P.lock-=dt;P.vx=0}
   let ax=0;
@@ -527,7 +543,7 @@ function step(dt){
   if(ax!==0){P.vx+=clamp(tv-P.vx,-acc*dt,acc*dt);P.face=ax>0?1:-1}
   else{const f=(P.on?1300:260)*dt;P.vx=Math.abs(P.vx)<=f?0:P.vx-Math.sign(P.vx)*f}
   const jh=key.jump||touch.jump;
-  const coy=(story||S.assist)?.24:.18;
+  const coy=((story||S.assist)?.24:.18)+(hat==='black'?.06:0);
   P.coyote=P.on?coy:Math.max(0,P.coyote-dt);
   P.jbuf=Math.max(0,P.jbuf-dt);
   if(P.jbuf>0&&P.coyote>0&&P.lock<=0){P.vy=-JUMP;P.jbuf=0;P.coyote=0;P.on=false;P.cut=false;SFX.jump();puff(P.x,P.y,4)}
@@ -550,9 +566,9 @@ function step(dt){
   if(P.y>WORLD_H+30)respawn();
 }
 function respawn(){
-  let lakeMsg=false;
+  let lakeMsg=false;const lakeFall=P.x>1960&&P.x<2260;
   if(P.x>1960&&P.x<2260){S.falls=(S.falls||0)+1;if(S.falls>=2&&!S.assist){S.assist=true;lakeMsg=true}}
-  const c=checkpoints[S.cp];P.x=c.x;P.y=c.y||GROUND;P.vx=P.vy=0;SFX.fall();flashT=.4;
+  const c=checkpoints[S.cp];P.x=c.x;P.y=c.y||GROUND;P.vx=P.vy=0;hurtT=.9;if(lakeFall)SFX.splash();else SFX.fall();flashT=.4;
   toast(lakeMsg?'Elara: «Respira, lo intentamos juntos.» Las losas brillan más.':'La vela te recoge. Aquí caer no cuesta nada.',lakeMsg?3600:2800,'fall');
 }
 function puff(x,y,n){if(reduced)return;for(let i=0;i<n;i++)particles.push({x:x+(Math.random()-.5)*8,y:y-2,vx:(Math.random()-.5)*30,vy:-Math.random()*18,life:.4,max:.4,c:'rgba(240,225,190,.7)',s:2})}
@@ -571,7 +587,8 @@ function update(dt){
   // cambiar de personaje
   if(pressedSwap){pressedSwap=false;S.who=S.who==='liam'?'elara':'liam';spark(P.x,P.y-20,10,S.who==='liam'?'rgba(255,215,90,.9)':'rgba(190,120,230,.9)');onSwap();toast(S.who==='liam'?'Liam: su luz dorada abre caminos y aclara la niebla.':'Elara: su luz violeta hace hablar a las sombras.',2600)}
   // lámpara
-  const wantLamp=!wheelOpen&&(key.lamp||touch.lamp||mouse.down);
+  const wantSyn=!wheelOpen&&!dialogActive&&(key.syn||touch.syn)&&synOK()&&energy>6;
+  const wantLamp=!wheelOpen&&(key.lamp||touch.lamp||mouse.down||wantSyn);
   const was=lamp.on;
   lamp.who=S.who;lamp.x=P.x+P.face*5;lamp.y=P.y-P.h*.62;
   if(S.who==='liam'){
@@ -581,13 +598,14 @@ function update(dt){
     else if(!lamp.on)energy=Math.min(100,energy+20*dt);
     if(energy<=0&&!story){depleted=true;if(wantLamp)toast('Tu lámpara se queda sin luz. Descansa un momento junto a una vela.',2500,'dep')}
   }else{lamp.on=wantLamp;lamp.half=.52;lamp.len=115;energy=Math.min(100,energy+20*dt)}
+  lamp.dbl=!!(lamp.on&&wantSyn);if(lamp.dbl){lamp.half=.6;energy=Math.max(0,energy-(S.who==='liam'?14:34)*dt)}
   if(lamp.on){lamp.ang=aimAngle();const c=Math.cos(lamp.ang);if(Math.abs(c)>.2)P.face=c>0?1:-1}
   if(lamp.on&&!was){(S.who==='liam'?SFX.lampL:SFX.lampE)();S.act[S.who]++;S.lastLamp={who:S.who,t:S.time}}
   // estela de salto sobre el lago (~0.3 s)
   if(!P.on&&!reduced&&P.x>1940&&P.x<2260){P.tr=(P.tr||0)-dt;if(P.tr<=0){P.tr=.035;particles.push({x:P.x,y:P.y-12,vx:0,vy:-4,life:.3,max:.3,c:'rgba(255,226,140,.8)',s:2})}}
   // plataformas ocultas
   hidden.forEach(h=>{
-    const lit=lamp.on&&lamp.who==='liam'&&rectLit(h,lamp);
+    const lit=lamp.on&&(lamp.who==='liam'||lamp.dbl)&&rectLit(h,lamp);
     if(lit)h.t=4;else h.t=Math.max(0,h.t-dt);
     const vis=h.t>0?1:.9;h.v=lerp(h.v,vis,Math.min(1,dt*4));
   });
@@ -604,7 +622,7 @@ function update(dt){
     const d=shadowsDef[k];if(S.shadows[k])continue;
     const c={x:d.x,y:GROUND-24};
     const near=Math.abs(P.x-d.x)<130;
-    if(lamp.on&&lamp.who==='elara'&&inCone(c.x,c.y,lamp)){
+    if(lamp.on&&(lamp.who==='elara'||lamp.dbl)&&inCone(c.x,c.y,lamp)){
       if(d.needHat&&hat!==d.needHat){toast('La sombra está tensa y no te oye. Necesitas el Sombrero Rojo (Q).',3500,'rednd');focus[k]=0}
       else if(!S.hats&&d.needHat){focus[k]=0}
       else{focus[k]+=dt}
@@ -617,7 +635,7 @@ function update(dt){
   for(const d of dropped){if(d.got)continue;d.vy=Math.min(d.vy+300*dt,200);d.y+=d.vy*dt;if(d.y>GROUND-6){d.y=GROUND-6;d.vy=0}
     if(Math.hypot(P.x-d.x,(P.y-14)-(d.y-8))<18){d.got=true;collect(d.id,d.x,d.y-10)}}
   // velas
-  checkpoints.forEach((c,i)=>{if(!c.lit&&Math.abs(P.x-c.x)<(c.small?30:22)&&P.on&&Math.abs(P.y-(c.y||GROUND))<6){c.lit=true;S.cp=Math.max(S.cp,i);SFX.cp();spark(c.x,(c.y||GROUND)-24,12);toast('Vela encendida: tu punto de recuperación.',2200);save()}});
+  checkpoints.forEach((c,i)=>{if(!c.lit&&Math.abs(P.x-c.x)<(c.small?30:22)&&P.on&&Math.abs(P.y-(c.y||GROUND))<6){c.lit=true;S.cp=Math.max(S.cp,i);gain(2,0);SFX.cp();spark(c.x,(c.y||GROUND)-24,12);toast('Vela encendida: tu punto de recuperación.',2200);save()}});
   // interacción
   const tgt=findTarget();curTarget=tgt;
   if(pressedAct){pressedAct=false;if(tgt)doInteract(tgt)}
@@ -644,7 +662,7 @@ const GROW_SPROUT=3,GROW_BLOOM=7,GROW_RIPE=12,WILT_T=15,ZTYPES=['fear','doubt','
 const winLen=()=>story?180:90;
 function variantOf(w){return w.lg>=2&&w.le>=2?'both':w.lg>=2?'gold':w.le>=2?'violet':'plain'}
 function plantTick(w,dt){
-  const was=w.g;w.g+=dt;S.grow[w.id]=w.g;
+  const was=w.g;w.g+=dt*growMul(w);S.grow[w.id]=w.g;
   if(lamp.on&&w.g<GROW_RIPE&&rectLit({x:w.x-9,y:GROUND-30,w:18,h:30},lamp)){
     if(lamp.who==='liam')w.lg=Math.min(4,w.lg+dt);else w.le=Math.min(4,w.le+dt);S.lt[w.id]=[w.lg,w.le];
     if(Math.random()<dt*10)particles.push({x:w.x+(Math.random()-.5)*10,y:GROUND-10,vx:0,vy:-20,life:.7,max:.7,c:lamp.who==='liam'?'rgba(255,215,90,.95)':'rgba(190,120,230,.95)',s:2})}
@@ -663,6 +681,7 @@ function harvest(w){
     if(v==='violet'||v==='both'){const c=clues[(S.found.n||0)%clues.length];S.found.n=(S.found.n||0)+1;toast('Un susurro de la flor: «'+c.t+'»',4200,'whisper');spark(P.x,P.y-20,14,'rgba(190,120,230,.95)')}
     if(!S.found[v]){S.found[v]=1;toast('Variante descubierta ('+Object.keys(S.found).filter(k=>k!=='n').length+'/3): '+(v==='gold'?'dorada recarga tu lámpara':v==='violet'?'violeta susurra pistas':'ambas luces: recarga y susurra'),4200,'var')}
   }else toast(wilted?'Flor marchita recogida. Aides la replantará.':'Flor recogida del jardín de Aides.',2200,'harv');
+  if(!wilted)gain(v==='plain'?3:v==='gold'?6:v==='violet'?0:5,v==='violet'?6:v==='both'?5:0);
   w.st=2;w.g=0;w.vr=null;w.lg=w.le=0;S.weeds[w.id]=2;delete S.grow[w.id];delete S.lt[w.id];
   if(S.team&&!S.aidesStay)qadd(w,'sow');save();
 }
@@ -685,12 +704,14 @@ async function houseTalk(){
   S.tableN=(S.tableN||0)+1;const n=S.tableN;
   if(n===1)await groupLesson();
   else if(n===2)await groupTea();
+  else if(n>=3&&n<=5){await houseExtra(n)}
   else{const au=callumAura();
     await showLine('Callum',au==='serena'?'El jardín huele a flores nuevas. Se nota que alguien lo cuida con paciencia.':au==='vigilante'?'Hay zarzas que aún piden atención. No te apures: se atienden de una en una.':'El jardín está callado. Cuando duele, también enseña: empieza por una sola zarza.',{cls:''});
     const L=[[['Callum','Aquí el té no se bebe con prisa: se escucha. Mira cómo sube el vapor.'],['Aides','Me quedo un rato. El jardín crece solo y a mí me toca aprender a no hacer nada.']],
     [['Aides','Cada flor que recogéis me cuenta algo. Con la luz dorada se abren firmes; con la violeta, susurran.'],['Callum','Y con las dos, dicen cosas que ninguna diría sola.']],
     [['Callum','Seguid vosotros. Las puertas de esta casa se abren desde dentro y desde fuera.'],['Aides','Volved cuando queráis. Siempre habrá una taza de más.']]][(n-3)%3];
     for(const [nm,t] of L)await showLine(nm,t,{cls:''})}
+  if(n>=2)await lessonMenu();
   if(S.cr>=80&&!S.claridad){S.claridad=true;energy=100;depleted=false;toast('Callum te sirve el Té de la Claridad: lámparas recargadas.',3400)}
   dlgHide();save();
 }
@@ -723,28 +744,31 @@ function updateWalkIn(dt){
   if(done){S.inside=true;spark(DOOR_X,GROUND-24,12,'rgba(255,225,150,.95)');toast('Aides y Callum entran a tomar el té. Podéis visitarles: la puerta está abierta.',4200,'inside');save()}
 }
 function qadd(w,k){if(!A.q.some(q=>q.w===w&&q.k===k)&&!(A.task===w&&A.kind===k))A.q.push({w,k})}
+const HR=()=>lessonDone('cosecha')?900:420;
 const qOK=q=>q.k==='pull'?q.w.st===0:q.k==='sow'?q.w.st===2:q.w.st===5&&q.w.g>=GROW_RIPE;
 function updateAides(dt){
   if(S.aidesStay&&!S.inside)updateWalkIn(dt);
   if(!S.team||S.aidesStay)return;
   const go=(tx,sp)=>{const d=tx-A.x;if(Math.abs(d)<2)return false;A.x+=Math.sign(d)*Math.min(Math.abs(d),sp*dt);A.f=Math.sign(d);return true};
   A.ph+=dt*12;A.cheer=Math.max(0,(A.cheer||0)-dt);
-  weeds.forEach(w=>{if(w.st===5&&w.g>=GROW_RIPE&&Math.abs(w.x-P.x)<420)qadd(w,'harvest')});
+  weeds.forEach(w=>{if(w.st===5&&w.g>=GROW_RIPE&&Math.abs(w.x-P.x)<HR())qadd(w,'harvest');if(lessonDone('hechos')&&w.st===0&&Math.abs(w.x-A.x)<170&&!A.q.some(q=>q.w===w)&&A.task!==w)qadd(w,'pull')});
+  if(A.st!=='work'&&aidesEmo()==='melancolia'){A.moving=false;if(Math.abs(A.x-P.x)>260)A.x=P.x-P.face*34;if(Math.random()<dt*.15)bubble('aides','…',1800);return}
   if(A.st==='work'){
     A.moving=false;A.wt+=dt;const w=A.task;
     if(A.kind==='pull'){
-      w.st=1;w.p=Math.min(1,A.wt/1.1);
-      if(A.wt>=1.1){w.st=2;w.p=0;S.weeds[w.id]=2;SFX.pull();puff(w.x,GROUND,8);A.kind='sow';A.wt=0;A.planted=false}
+      const PT=1.1*(lessonDone('poda')?.5:1)*(S.obey>0?1.5:1)*(w.hard?1.6:1);w.st=1;w.p=Math.min(1,A.wt/PT);
+      if(A.wt>=PT){w.st=2;w.p=0;S.weeds[w.id]=2;SFX.pull();puff(w.x,GROUND,8);A.kind='sow';A.wt=0;A.planted=false}
     }else if(A.kind==='sow'){
       if(A.wt>.8&&!A.planted){A.planted=true;SFX.sow();spark(w.x,GROUND-6,8,'rgba(190,140,90,.95)')}
       if(A.wt>1.1&&A.wt<2.1&&Math.random()<dt*28)particles.push({x:A.x+A.f*13,y:GROUND-16,vx:A.f*14,vy:10,life:.5,max:.5,c:'rgba(130,200,255,.95)',s:2});
-      if(A.wt>=2.1){w.st=5;w.g=0;S.weeds[w.id]=5;S.grow[w.id]=0;spark(w.x,GROUND-8,10,'rgba(130,200,255,.9)');toast('Aides sembró y regó. Brotará poco a poco.',2400,'seedok');save();A.st='follow';A.task=null}
+      if(A.wt>=2.1){w.st=5;w.g=0;S.weeds[w.id]=5;S.grow[w.id]=0;if(S.guided>0){S.guided--;w.lg=w.le=2.4;S.lt[w.id]=[2.4,2.4]}
+        if(lessonDone('riego'))weeds.forEach(n=>{if(n!==w&&n.st===2&&Math.abs(n.x-w.x)<130){n.st=5;n.g=0;S.weeds[n.id]=5;S.grow[n.id]=0}});spark(w.x,GROUND-8,10,'rgba(130,200,255,.9)');toast('Aides sembró y regó. Brotará poco a poco.',2400,'seedok');save();A.st='follow';A.task=null}
     }else{
       if(A.wt>=.9){if(w.st===5&&w.g>=GROW_RIPE)harvest(w);A.st='follow';A.task=null;A.cheer=1;S.ac=Math.min(100,S.ac+3)}
     }
     return}
   while(A.q.length&&!qOK(A.q[0]))A.q.shift();
-  if(A.q.length&&Math.abs(A.q[0].w.x-P.x)<420){
+  if(A.q.length&&Math.abs(A.q[0].w.x-P.x)<HR()){
     const it=A.q[0];A.moving=go(it.w.x-16,95);
     if(!A.moving){A.q.shift();A.task=it.w;A.kind=it.k;A.st='work';A.wt=0;A.planted=false;A.f=1}
     return}
@@ -762,10 +786,12 @@ function drawAides(t){
     else{o.anim='plant';o.fps=4}
     if(!SHEETS.aides)o.rot=A.wt<.7?.38:.22}
   else if(A.cheer>0)o.anim='cheer';
+  else if(A.getT>0){o.anim='getup';o.at=1.2-A.getT;o.fps=3.3;o.move=0}
+  else if(aidesEmo()==='melancolia'){o.anim='sit';o.at=t;o.fps=.6;o.move=0}
   drawChar('aides',A.x,GROUND,52,o);
 }
 function collect(id,x,y,sown){
-  if(S.flowers.includes(id))return;S.flowers.push(id);SFX.collect();spark(x,y,10);save();
+  if(S.flowers.includes(id))return;S.flowers.push(id);SFX.collect();spark(x,y,10);if(!String(id).startsWith('s_'))gain(2,0);save();
   if(S.flowers.length===12)toast('¡Las 12 flores del valle! Tu jardín florece.',3500);
 }
 function findTarget(){
@@ -774,6 +800,8 @@ function findTarget(){
   weeds.forEach(w=>{if(w.st===0&&!A.q.some(q=>q.w===w)&&A.task!==w)check(w,'pull')});
   npcs.forEach(n=>{if(n.id==='aides'&&(S.team||S.aidesStay))return;if(n.id==='callum'&&S.aidesStay)return;check(n,'npc',40)});
   if(S.tea)check({x:DOOR_X},'door',26);
+  if(S.team&&!S.aidesStay&&A.st!=='work')check(A,'aidesTalk',44);
+  if(!best||bd>26)checkpoints.forEach(c=>{if(c.lit&&Math.abs(P.x-c.x)<22&&Math.abs(P.x-c.x)<bd&&P.on&&Math.abs(P.y-(c.y||GROUND))<8&&S.fat>=20){bd=Math.abs(P.x-c.x);best={type:'rest',o:c}}});
   return best;
 }
 async function doInteract(t){
@@ -781,6 +809,8 @@ async function doInteract(t){
   if(t.type==='pull'){if(!S.team){toast('Aides sabe qué sembrar aquí: habla con ella y pídele que os acompañe.',3200,'needaides');return}qadd(t.o,'pull');react('pull');P.face=Math.sign(t.o.x-P.x)||P.face;SFX.good();toast('Aides irá a arrancar la zarza.',2000,'pullq')}
   else if(t.type==='door'){inHouse=true;I.x=84;I.tgt=null;hist.length=0;flashT=.35;if(!S.inside)toast('La casa está en calma. Callum sigue fuera.',2400,'empty')}
   else if(t.type==='npc')talkNpc(t.o);
+  else if(t.type==='aidesTalk')aidesTalk();
+  else if(t.type==='rest')doRest(t.o);
 }
 async function talkNpc(n){
   P.face=Math.sign(n.x-P.x)||P.face;
@@ -814,7 +844,7 @@ async function talkNpc(n){
 async function startShadow(k){
   const d=shadowsDef[k];SFX.lampE();
   await runTree(k==='tomas'?treeTomas:treeJavier,{name:'Elara',cls:''});
-  S.shadows[k]=true;react('shadow');
+  S.shadows[k]=true;react('shadow');gain(0,10);if(k==='tomas'){dlgHide();await sauceCierre()}
   dropped.push({id:'d_'+k,x:d.x,y:GROUND-50,vy:-60,got:false});
   spark(d.x,GROUND-26,26,'rgba(190,150,255,.95)');save();
 }
@@ -830,9 +860,9 @@ function finish(){
 /* ---------- Sprints 8/9/16/17: vínculo, conversaciones y evolución ---------- */
 let pillT=0,cgap=18,cHop=0,talkT=0,idleT=0,ambCD=14,nodeBusy=false,aidesLampCD=0,aidesCD=40,evoT=0,lastReact=-99;
 const cpos={x:0,y:300},bub=[];
-function EV(){S.vin=S.vin??50;S.ten=S.ten??20;S.eq=S.eq??0;S.act=S.act||{liam:0,elara:0,syn:0};S.nodes=S.nodes||{};S.ac=S.ac??60;S.cr=S.cr??50;S.ac2=S.ac2??50;S.syncT=S.syncT||0;S.evo=S.evo||{};S.lastSwap=S.lastSwap||-99}
-function mood(){return S.ten>60?'friction':(S.vin>70&&S.ten<30?'harmony':'neutral')}
-const MOODN={harmony:'Armonía',neutral:'Camino compartido',friction:'Fricción'};
+function EV(){S.vin=S.vin??50;S.ten=S.ten??20;S.eq=S.eq??0;S.act=S.act||{liam:0,elara:0,syn:0};S.nodes=S.nodes||{};S.ac=S.ac??60;S.cr=S.cr??50;S.ac2=S.ac2??50;S.syncT=S.syncT||0;S.evo=S.evo||{};S.lastSwap=S.lastSwap||-99;EVB()}
+function mood(){if(S.fat>80)return'distance';return S.ten>60?'friction':(S.vin>70&&S.ten<30?'harmony':'neutral')}
+const MOODN={harmony:'Armonía',neutral:'Camino compartido',friction:'Fricción',distance:'Distancia'};
 function bond(v,t,e){const m0=mood();S.vin=clamp(S.vin+(v||0),0,100);S.ten=clamp(S.ten+(t||0),0,100);S.eq=clamp(S.eq+(e||0),-50,50);pillT=3.5;const m1=mood();
   if(m1!==m0){if(m1==='harmony')toast('Liam y Elara caminan en armonía: sus luces se entrelazan.',3200,'mh');else if(m1==='friction')toast('Hay tensión entre Liam y Elara. Escucharse la rebaja.',3200,'mf');else toast('El ambiente entre Liam y Elara se calma.',2600,'mn')}save()}
 function bubble(who,text,ms){bub.length=0;bub.push({who,text,t:0,max:(ms||3000)/1000})}
@@ -869,6 +899,7 @@ function evoCheck(){['liam','elara'].forEach(c=>{const s=evoStage(c);if(S.evo[c]
   if(s>S.evo[c]){S.evo[c]=s;const n=EVOL[c][s];setTimeout(()=>{toast((c==='liam'?'Liam':'Elara')+' evoluciona: '+n[0]+'. '+n[1],4200);sparkMix()},200);save()}else if(s<S.evo[c])S.evo[c]=s});
   const as=aidesState();if(S.evo.a!==undefined&&S.evo.a!==as&&S.team&&!S.aidesStay){if(as==='serena')toast('Aides está serena: el jardín responde.',2800,'aser');if(as==='agobiada')bubble('aides','Voy deprisa y me tropiezo… ¿me iluminas un momento?',3600)}S.evo.a=as}
 const AMBC={
+ distance:[[['elara','Estoy agotada…'],['liam','Lo sé. Busquemos una vela donde parar.']]],
  harmony:[[['elara','Me gusta cómo suena el jardín cuando no discutimos.'],['liam','A mí también. Hoy no tengo prisa.']],[['liam','¿Sabes? Tu manera de escuchar me ha enseñado a mirar.'],['elara','Y tu manera de mirar me da donde apoyarme.']]],
  neutral:[[['liam','Si seguimos al paso, llegaremos antes de la noche.'],['elara','Llegaremos. Pero sin olvidar mirar a los lados.']],[['elara','¿Notas cómo cambia el aire junto al lago?'],['liam','Sí. Vamos con cuidado.']]],
  friction:[[['liam','Tú nunca actúas.'],['elara','Y tú nunca escuchas.']],[['elara','Siempre vas dos pasos por delante, Liam.'],['liam','Alguien tiene que ir.']]]};
@@ -893,11 +924,11 @@ async function nodeHats(){nodeBusy=true;S.nodes.hats=1;
   if(i===0)bond(2,0,-8);else if(i===1)bond(2,0,8);else{bond(25,-10,0);sparkMix();toast('Habéis integrado los sombreros: el vínculo crece.',3000)}
   await showLine(i===1?'Liam':'Elara',i===0?'Una base sólida… sí. Pero no olvides mirar por encima del ala.':i===1?'Hecho: una mirada más para cada herida.':'Entonces miremos juntos.',{cls:i===1?'liam':''});
   dlgHide();save();nodeBusy=false}
-async function finalScene(){const b=branch();S.branch=b;
+async function finalScene(){const b=branch();S.branch=b;poseT=6;
   if(b==='A'){await showLine('Liam','Hemos limpiado el camino.',{cls:'liam'});await showLine('Elara','Sí. Pero ya no sé si caminamos juntos o si solo te sigo.',{cls:''})}
   else if(b==='B'){await showLine('Elara','Siento que el jardín respira.',{cls:''});await showLine('Liam','Respira, sí. Pero se está asfixiando entre la maleza que no te atreviste a cortar.',{cls:'liam'})}
   else{await showLine('Liam','No lo habría logrado solo.',{cls:'liam'});await showLine('Elara','Ni yo. Hemos sido dos luces en una.',{cls:''});await showLine('Callum','(Sonríe y sirve dos tazas de té.) Han descubierto el secreto. La luz no es de uno. Es del espacio entre los dos.',{cls:''})}
-  dlgHide()}
+  await peso();dlgHide()}
 async function groupLesson(){
   await showLine('Callum','Aides, observa esta enredadera. Sus espinas miran hacia abajo, pero sus flores buscan el sol. ¿Qué nos dice sobre su naturaleza?');
   await showLine('Aides','Yo… no estoy segura. (Te mira buscando ayuda.)');
@@ -929,10 +960,11 @@ function evTick(dt){
     if(!S.nodes.expl&&P.x>780&&P.x<1200)nodeExpl();
     else if(!S.nodes.fog&&S.cp>=2&&Math.abs(P.x-1950)<40)nodeFog()}
   evoT-=dt;if(evoT<=0){evoT=2;evoCheck()}
+  evTickB(dt)
 }
 function drawAuras(t){
   const m=mood();
-  if(m==='harmony'||m==='friction'){const x=(P.x+cpos.x)/2,f=1+Math.sin(t*2)*.08;ctx.save();ctx.globalCompositeOperation='lighter';
+  if(m==='harmony'||m==='friction'||m==='distance'){const x=(P.x+cpos.x)/2,f=1+Math.sin(t*2)*.08;ctx.save();ctx.globalCompositeOperation='lighter';
     const g=ctx.createRadialGradient(x,GROUND,2,x,GROUND,34*f);g.addColorStop(0,m==='harmony'?'rgba(255,240,200,.35)':'rgba(150,160,190,.18)');g.addColorStop(1,'rgba(255,255,255,0)');
     ctx.translate(0,GROUND);ctx.scale(1,.32);ctx.translate(0,-GROUND);ctx.fillStyle=g;ctx.fillRect(x-40,GROUND-40,80,80);ctx.restore();
     if(m==='harmony'&&!reduced&&Math.random()<.06)particles.push({x:x+(Math.random()-.5)*20,y:GROUND-20,vx:0,vy:-14,life:.9,max:.9,c:Math.random()<.5?'rgba(255,215,90,.9)':'rgba(200,140,240,.9)',s:1.6})}
@@ -951,10 +983,260 @@ function drawBubbles(t){
   ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x-w/2,y-h,w,h,4);else ctx.rect(x-w/2,y-h,w,h);ctx.fill();ctx.stroke();
   ctx.beginPath();ctx.moveTo(x-3,y);ctx.lineTo(x+3,y);ctx.lineTo(x,y+4);ctx.closePath();ctx.fill();
   ctx.fillStyle='#3b2a1a';ctx.textAlign='center';ctx.textBaseline='alphabetic';L.forEach((l,i)=>ctx.fillText(l,x,y-h+9+i*8.4));ctx.restore()}
-function moodTint(){const m=mood();if(m==='harmony'){ctx.fillStyle='rgba(255,196,120,.05)';ctx.fillRect(0,0,W,H)}else if(m==='friction'){ctx.fillStyle='rgba(80,100,150,.10)';ctx.fillRect(0,0,W,H)}
+function moodTint(){const m=mood();if(m==='harmony'){ctx.fillStyle='rgba(255,196,120,.05)';ctx.fillRect(0,0,W,H)}else if(m==='friction'){ctx.fillStyle='rgba(80,100,150,.10)';ctx.fillRect(0,0,W,H)}else if(m==='distance'){ctx.fillStyle='rgba(30,30,60,.16)';ctx.fillRect(0,0,W,H)}
   if(pillT>0){const a=Math.min(1,pillT);ctx.save();ctx.globalAlpha=a;ctx.font='600 7px '+FF;const txt='♥ Vínculo · '+MOODN[m];const w=ctx.measureText(txt).width+14;
     ctx.fillStyle='rgba(30,24,50,.78)';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(W/2-w/2,8,w,15,7);else ctx.rect(W/2-w/2,8,w,15);ctx.fill();
     ctx.fillStyle=m==='harmony'?'#ffe9a0':m==='friction'?'#aab6d8':'#f3e6c8';ctx.textAlign='center';ctx.fillText(txt,W/2,18.5);ctx.restore()}}
+
+/* ================= FASE B: economía, emociones de Aides, sombreros, sinergia, acciones en equipo, escenas, fatiga ================= */
+let resLog=null,callCD=0,stuckT=0,maxX=0,progSig='',focusT={},eqBar=null,eqState={w:null,t:0},bridgeP=0,restT=0,hatChk=0,fatWarn=0,callumFoc=0,aidesFoc=0;
+function EVB(){S.gr=S.gr??0;S.pe=S.pe??0;S.lec=S.lec||{};S.ca=S.ca??20;S.fat=S.fat??10;S.hatsOn=S.hatsOn||['white','red'];S.skills=S.skills||{};S.cAuraT=S.cAuraT||0;S.guided=S.guided||0;S.restT=S.restT||0;S.obey=S.obey||0;S.dud=S.dud||0;
+  HATS.forEach(h=>{h.on=S.hatsOn.includes(h.id);const b=document.querySelector('#ring .hat.'+h.id);if(b)b.classList.toggle('locked',!h.on)})}
+function gain(g,p){S.gr+=g||0;S.pe+=p||0;resLog={g:g||0,p:p||0,t:2.6};save()}
+const lessonDone=id=>!!(S.lec[id]&&S.lec[id].done);
+/* ---- lecciones de Callum ---- */
+const LESS=[
+ {id:'hechos',n:'Distinguir hechos de juicios',g:10,p:5,min:2,fx:'Aides arranca por su cuenta las zarzas cercanas.'},
+ {id:'riego',n:'El riego consciente',g:15,p:10,min:3,fx:'Al sembrar riega también las plantas vecinas.'},
+ {id:'poda',n:'La poda sin rencor',g:20,p:15,min:4,fx:'Arranca zarzas en la mitad de tiempo.'},
+ {id:'descanso',n:'El descanso fértil',g:25,p:20,min:5,fx:'Las plantas crecen un 30 % más mientras Aides descansa con Callum.'},
+ {id:'cosecha',n:'La cosecha a tiempo',g:30,p:25,min:6,fx:'Cosecha las flores maduras sin que se lo pidas, aunque estén lejos.'}];
+const LESS_SC=.5;
+function lessCost(l){const f=callumAura()==='serena'?.8:1;return[Math.ceil(l.g*f),Math.ceil(l.p*f)]}
+async function lessonMenu(){
+  const prog=LESS.find(l=>S.lec[l.id]&&!S.lec[l.id].done),next=LESS.find(l=>!S.lec[l.id]);
+  const opts=[];let nx=null;
+  if(prog){const r=Math.max(0,Math.ceil(S.lec[prog.id].t0+prog.min*60*LESS_SC-S.time));await showLine('Callum','Aides sigue con «'+prog.n+'». Le quedan unos '+r+' s. Mientras tanto, ¿un té?',{cls:''})}
+  else if(next){const[g,p]=lessCost(next);const closed=callumAura()==='triste'&&LESS.indexOf(next)>=3;
+    if(closed)await showLine('Callum','Aún no estoy listo para esta lección. Cuando el jardín se recupere, la enseñaremos.',{cls:''});
+    else{nx=next;await showLine('Callum','Si queréis, puedo enseñarle a Aides «'+next.n+'». Cuesta '+g+' Grano y '+p+' Pétalos. Efecto: '+next.fx,{cls:''});opts.push({tag:'Lección · '+g+'G '+p+'P',text:'Enseñar «'+next.n+'»'})}}
+  else await showLine('Callum','Ya no me queda nada que enseñarle que no sepa. El jardín es suyo.',{cls:''});
+  opts.push({tag:'Té de hierbas raras · 10 Grano',text:'Tomar un té que recarga las lámparas y calma a Aides'});opts.push({tag:'Ahora no',text:'Seguir con el té tranquilamente'});
+  const i=await choose(opts);
+  if(nx&&i===0){const[g,p]=lessCost(nx);if(S.gr<g||S.pe<p){await showLine('Callum','Te faltan recursos ('+S.gr+'/'+g+' Grano, '+S.pe+'/'+p+' Pétalos). Escucha, ilumina y cultiva: vuelve cuando los tengas.',{cls:''})}
+    else{S.gr-=g;S.pe-=p;S.lec[nx.id]={t0:S.time,done:false};resLog={g:-g,p:-p,t:2.6};await showLine('Aides','Gracias, Callum. Voy a practicarlo con calma.',{cls:''});toast('Lección iniciada: '+nx.n,3000)}}
+  else if((nx&&i===1)||(!nx&&i===0)){if(S.gr>=10){S.gr-=10;energy=100;depleted=false;S.ca=Math.max(0,S.ca-25);S.ac=Math.min(100,S.ac+10);resLog={g:-10,p:0,t:2.6};await showLine('Callum','Té de hierbas raras: sabe a tierra mojada y a calma.',{cls:''})}else await showLine('Callum','Te faltan 10 Grano de Luz para ese té.',{cls:''})}
+  dlgHide();save()}
+/* ---- emociones de Aides ---- */
+function aidesEmo(){const c=S.ca,k=S.ac;if(k<25)return'melancolia';if(c>70||(k<38&&c>=45))return'ansiedad';if(k>82&&c<15)return'alegria';if(k>62&&c<35)return'serenidad';return'neutral'}
+const EMON={melancolia:'Melancolía',ansiedad:'Ansiedad',alegria:'Alegría',serenidad:'Serenidad',neutral:'Aprendiendo'};
+function growMul(w){let m=1;if(S.team){const e=aidesEmo();m*=e==='serenidad'||e==='alegria'?1.5:e==='ansiedad'?.6:e==='melancolia'?.25:1}
+  if(S.aidesStay&&lessonDone('descanso'))m*=1.3;if(S.restT>0)m*=1.2;if(hat==='green'&&Math.abs(P.x-w.x)<170)m*=1.25;if(S.skills.riegoAuto&&w.g>=GROW_RIPE)m*=.5;return m}
+async function aidesTalk(){
+  if(dialogActive||callCD>0)return;callCD=3;
+  if(Math.abs(A.x-P.x)>200){A.x=P.x-P.face*40;A.moving=false;spark(A.x,GROUND-24,8,'rgba(150,230,150,.9)')}
+  const e=aidesEmo(),W_=(n,t)=>showLine(n,t,{cls:''});
+  if(!S.nodes.a1&&S.team&&weeds.some(w=>w.st===0)){S.nodes.a1=1;
+    await W_('Aides','Esta zarza… sus raíces son muy profundas. Siento que si tiro con fuerza, romperé la tierra buena. ¿Qué hacemos?');
+    const i=await choose([{tag:'Elara · Sombrero Rojo',text:'«¿Qué te dice tu instinto, Aides? ¿Qué emoción la alimenta?»'},{tag:'Liam · Sombrero Blanco',text:'«Observemos los hechos: la raíz principal está al norte. Si la iluminamos, podrás tirar con seguridad.»'},{tag:'Orden directa',text:'«Tira fuerte, Aides. No hay tiempo que perder.»'}]);
+    if(i===0){S.ac2+=15;S.ca=Math.max(0,S.ca-10);gain(0,5);bond(3,-3);await W_('Aides','Tiene miedo. Como yo. Pero al nombrarlo, ya no me asusta.')}
+    else if(i===1){S.ac2+=10;gain(5,0);energy=Math.max(0,energy-15);S.skills.semillaClaridad=1;await W_('Aides','La luz muestra el camino, pero mis manos hacen el trabajo. Gracias.')}
+    else{S.ac2-=20;S.ca=Math.min(100,S.ca+25);S.ac=Math.max(0,S.ac-8);S.obey=90;bond(-3,5);await W_('Aides','Sí… como tú digas. (Trabajará más despacio un rato.)')}
+    S.ac2=clamp(S.ac2,0,100);dlgHide();save();return}
+  if(e==='ansiedad'){
+    await W_('Aides','Perdona… voy deprisa y no termino nunca. Cada zarza que arranco me parece que nace otra detrás.');
+    const i=await choose([{tag:'Liam · hechos',text:'«Hagamos una lista: lo urgente primero. Una zarza cada vez.»'},{tag:'Elara · empatía',text:'«Se nota cuánto cargas. ¿Respiramos un momento juntas?»'},{tag:'Orden',text:'«No hay tiempo, Aides. Sigue.»'}]);
+    if(i===0){S.ca=Math.max(0,S.ca-30);S.ac=Math.min(100,S.ac+10);gain(5,0);await W_('Aides','Una cada vez… sí, eso puedo hacerlo.')}
+    else if(i===1){S.ca=Math.max(0,S.ca-25);S.ac=Math.min(100,S.ac+20);S.ac2=Math.min(100,S.ac2+8);gain(0,5);await W_('Aides','(Respira hondo.) Ya no tiemblo tanto. Gracias.')}
+    else{S.ca=Math.min(100,S.ca+15);S.ac=Math.max(0,S.ac-15);S.obey=60;bond(-2,4);await W_('Aides','Sí… como tú digas.')}}
+  else if(e==='melancolia'){
+    await W_('Aides','No sé si sirve de algo… cuido el jardín y siempre vuelven las zarzas.');
+    const i=await choose([{tag:'Reflejar',text:'«Estás cansada y algo triste, ¿verdad? Sentirlo no es fracasar.»'},{tag:'Acompañar',text:'(Sentarte a su lado, en silencio.)'},{tag:'Animar',text:'«Anímate, hay mucho por hacer.»'}]);
+    if(i===0){S.ac=Math.min(100,S.ac+40);S.ca=Math.max(0,S.ca-15);gain(0,8);S.ac2=Math.min(100,S.ac2+10);await W_('Aides','…Gracias por nombrarlo. Pesa menos dicho en voz alta.')}
+    else if(i===1){S.ac=Math.min(100,S.ac+28);S.ca=Math.max(0,S.ca-5);gain(0,3);await W_('Aides','(Apoya la cabeza en tu hombro un rato.)')}
+    else{S.ac=Math.min(100,S.ac+5);S.ca=Math.min(100,S.ca+5);await W_('Aides','Ya… claro.')}}
+  else if(e==='serenidad'||e==='alegria'){
+    await W_('Aides',e==='alegria'?'¡El jardín canta hoy! ¿Lo oís? Cada brote es una pequeña victoria.':'El jardín respira conmigo hoy. Me siento ligera.');
+    const i=await choose([{tag:'Preguntar',text:'«¿Qué has aprendido hoy?»'},{tag:'Agradecer',text:'«Gracias por cuidarlo con tanta paciencia.»'}]);
+    if(i===0){gain(0,3);S.ac=Math.min(100,S.ac+3);await W_('Aides','Que la prisa también es una maleza. Y que se arranca respirando.')}
+    else{gain(2,0);S.ac2=Math.min(100,S.ac2+4);await W_('Aides','Eso me da fuerzas para el resto del día.')}}
+  else{
+    await W_('Aides','Aquí estoy. ¿Necesitáis algo del jardín?');
+    const i=await choose([{tag:'Preguntar',text:'«Cuéntame cómo te sientes.»'},{tag:'Descanso',text:'«Cuando quieras, descansa con Callum.»'},{tag:'Seguir',text:'«Nada, sigamos.»'}]);
+    if(i===0){S.ac=Math.min(100,S.ac+4);await W_('Aides','Entre calma y trabajo: aprendiendo. Si me siento ligera, las plantas crecen más rápido.')}
+    else if(i===1){S.ca=Math.max(0,S.ca-8);await W_('Aides','Se lo diré a mis manos. Aunque ellas no escuchan mucho.')}}
+  dlgHide();save()}
+/* ---- sombreros por zona y consejero ---- */
+const HATN={white:'Blanco: los hechos',red:'Rojo: las emociones',black:'Negro: la cautela',yellow:'Amarillo: el optimismo',green:'Verde: la creatividad',blue:'Azul: la organización'};
+const HATC={white:'#fffdf4',red:'#c23b3b',black:'#2d2d33',yellow:'#e8c33a',green:'#4fa84a',blue:'#3b6fc2'};
+function hatCheck(){if(!S.hats)return;const u=[];
+  if(P.x>2850)u.push(['black','Negro (cautela): caer no cuenta, y las losas se perfilan.']);
+  if(S.tea)u.push(['yellow','Amarillo (optimismo): tus lámparas gastan menos y Aides se calma cerca de ti.']);
+  if(S.shadows.tomas)u.push(['green','Verde (creatividad): las plantas cercanas crecen más rápido.']);
+  if(S.flowers.length>=6||Object.keys(S.lec).length)u.push(['blue','Azul (organización): muestra el objetivo en pantalla.']);
+  u.forEach(([id,t])=>{if(!S.hatsOn.includes(id)){S.hatsOn.push(id);EVB();toast('Sombrero desbloqueado · '+t,4200);SFX.hat(true);save()}})}
+function objective(){
+  if(!S.team)return'Habla con Aides: ella cuidará el jardín.';if(!S.tea)return'Lleva a Aides con Callum, al este.';
+  if(!S.shadows.tomas)return'Escucha a Tomás en el Sauce (luz de Elara).';if(!S.hats)return'Busca al Consejero de Sombreros.';
+  if(!S.shadows.javier)return'Javier necesita ser escuchado (Sombrero Rojo).';return'Alcanza el Claro del Conejo, al final del valle.'}
+function whisper(){
+  let m;const lake=P.x>1900&&P.x<2260,near=(x,r)=>Math.abs(P.x-x)<r;
+  if(lake&&S.falls>=2)m='Las losas son firmes. Salta cuando el borde esté bajo tus pies.';
+  else if(near(2440,220)&&!S.shadows.tomas)m=S.who==='elara'?'Apunta la luz violeta hacia Tomás y espera: escuchar es la llave.':'Cambia a la lámpara de Elara (Tab): las sombras hablan con quien escucha.';
+  else if(near(3015,220)&&!S.shadows.javier)m=hat==='red'?'Ahora sí: ilumina a Javier con la luz de Elara.':'El Sombrero Rojo (Q) abre a quien tiene miedo.';
+  else if(!S.team)m='Aides os ayudará con el jardín: habla con ella (E).';
+  else m=objective();
+  toast('El Consejero susurra: «'+m+'»',4200,'cons'+Math.floor(S.time/60))}
+/* ---- fatiga, descanso ---- */
+function isNight(){return skyAt(P.x).night>.5}
+async function doRest(c){
+  if(S.fat<20){toast('No tenéis sueño todavía. Seguid un poco más.',2400,'norest');return}
+  restT=2.4;SFX.good();await sleep(900);
+  S.fat=Math.max(0,S.fat-45);energy=100;depleted=false;S.ca=Math.max(0,S.ca-10);S.restT=60;weeds.forEach(w=>{if(w.st===5)w.g+=6});
+  const m=mood();const L=m==='friction'?[['liam','…Gracias por quedarte a mi lado.'],['elara','Mañana lo hablamos con calma.']]:m==='harmony'?[['elara','Dormir junto a ti es oír el jardín entero.'],['liam','Y despertar con menos peso.']]:[['elara','La vela cuida el sueño de quien descansa.'],['liam','Mañana seguiremos.']];
+  bond(3,-6);toast('Habéis descansado junto a la vela: fatiga reducida y lámparas recargadas.',3200);banter(L);save()}
+/* ---- escenas ---- */
+async function nodeSombra(){nodeBusy=true;S.nodes.sombra=1;
+  await showLine('Liam','Esa sombra pesa más de lo normal. ¿La enfrentamos con hechos, o la escuchamos?',{cls:'liam'});
+  await showLine('Elara','Está cerrada como un puño. Si empujamos, se aferrará más.',{cls:''});
+  const i=await choose([{tag:'Liam · Ataque',text:'«Iluminémosla de frente y ya está.»'},{tag:'Elara · Escucha',text:'«Dejemos que hable. Yo me encargo, tú vigila.»'},{tag:'Sinergia',text:'«Luz de los dos: tú alumbras, yo escucho.»'}]);
+  if(i===0){gain(5,0);S.fat+=10;bond(-3,6,-8);await showLine('Elara','Está bien… aunque se ha cerrado un poco más.',{cls:''})}
+  else if(i===1){gain(0,5);S.fat+=5;bond(6,-3,8);await showLine('Liam','Hecho. Te cubro las espaldas.',{cls:'liam'})}
+  else if(synOK()){bond(10,-8);gain(5,5);S.fat=Math.max(0,S.fat-5);sparkMix();await showLine('Liam','Sentía que no hacía falta pelear. Solo estar.',{cls:'liam'});toast('Sinergia: ilumináis la sombra juntos.',2800)}
+  else{bond(0,5);await showLine('Elara','No estamos del todo sincronizados todavía… probemos de otra forma.',{cls:''})}
+  dlgHide();save();nodeBusy=false}
+async function sauceCierre(){
+  await showLine('Elara','(Dos vecinos se acercan: uno con miedo, otro con esperanza.) Os escucho.',{cls:''});
+  for(const [who,txt,opts] of [['Un vecino asustado','Tengo miedo de que todo se repita.',['«Tienes miedo de que se repita, ¿es así?»','«No pasará, tranquilo.»','«Pues haz algo.»']],['Una vecina','Creo que puedo empezar de nuevo.',['«Hay algo en ti que ya empezó.»','«Eso está bien.»','«Pues date prisa.»']]]){
+    await showLine(who,txt,{cls:''});const i=await choose(opts.map((t,k)=>({tag:['Reflejar','Tranquilizar','Aconsejar'][k],text:t})));
+    if(i===0){gain(0,3);bond(2,-1)}else if(i===1)gain(1,1)}
+  fogP=Math.max(fogP,0);S.fogSoft=true;
+  await showLine('Liam','«La oscuridad no desapareció, pero se disipó el silencio que la alimentaba.» Escuchar es una forma de luz.',{cls:'liam'});
+  energy=100;depleted=false;toast('Escuchar es una forma de luz: tu lámpara se recarga.',3000);dlgHide();save()}
+async function nodeLuz(){nodeBusy=true;S.nodes.luz=1;
+  await showLine('Elara','Esa noche no leyeron ninguna fábula. Se contaron, por turnos, sus propias historias.',{cls:''});
+  const first=await choose([{tag:'Liam primero',text:'Que cuente Liam su historia.'},{tag:'Elara primero',text:'Que cuente Elara la suya.'}]);
+  const liam=async()=>{await showLine('Liam','A veces la responsabilidad de guiar al pueblo me abruma. Temo no estar a la altura.',{cls:'liam'});
+    const j=await choose([{tag:'Avanzar',text:'Caminar hacia la sombra del miedo.'},{tag:'Rodear',text:'Rodearla; hoy no puedo.'}]);
+    if(j===0){bond(5,-4);gain(5,0);await showLine('Liam','No se combate: se abraza. Y se encoge.',{cls:'liam'})}else{S.fat+=8;bond(0,5);await showLine('Liam','…La sombra se hace más grande cuando huyo.',{cls:'liam'})}};
+  const elara=async()=>{await showLine('Elara','Mi empatía tiene un precio: absorbo la tristeza y el miedo ajenos hasta sentirme desbordada.',{cls:''});
+    const j=await choose([{tag:'Respirar',text:'Sentarte junto a la lámpara y respirar.'},{tag:'Seguir',text:'Seguir adelante sin parar.'}]);
+    if(j===0){S.fat=Math.max(0,S.fat-15);gain(0,5);bond(5,-4);await showLine('Liam','Respira. Lo que sientes no es solo tuyo.',{cls:'liam'})}else{S.fat+=8;bond(0,5)}};
+  if(first===0){await liam();await elara()}else{await elara();await liam()}
+  await showLine('Liam','Para transformar al pueblo, primero tenemos que transformarnos nosotros.',{cls:'liam'});
+  S.compass=true;toast('La brújula dorada se activa: te señala el siguiente claro.',3400);dlgHide();save();nodeBusy=false}
+async function peso(){
+  await showLine('Callum','Queda lo último: el peso. Alguien tiene que decidir quién lo lleva.',{cls:''});
+  const i=await choose([{tag:'Liam',text:'«Lo llevaré yo. Soy el que ilumina.»'},{tag:'Elara',text:'«Lo sostendré yo. Siento lo que los demás callan.»'},{tag:'Compartir',text:'«Lo llevamos entre los dos. Pesa menos entre dos.»'}]);
+  S.ending=i===0?'A':i===1?'B':(branch()==='C'||S.vin>=65?'C':'C2');
+  const t={A:'Liam carga en soledad: la luz brilla, pero a costa de quien la sostiene. (Final: El Mártir)',B:'Elara absorbe de nuevo el dolor ajeno. (Final: La Mártir)',C:'El peso se reparte; la luz no es de uno, sino del espacio entre los dos. (Final: El Oficio de la Luz)',C2:'Queréis compartirlo, pero aún os cuesta confiar. El oficio queda a medio camino. (Final: El Oficio, en camino)'}[S.ending];
+  await showLine('Callum',t,{cls:''});dlgHide()}
+async function houseExtra(n){
+  if(n===3){
+    await showLine('Callum','Lo que ya ha brotado son los hechos de tu vida, Aides. Lo que siembras sobre ellos son tus juicios. Algunos darán flores; otros, maleza. Tu tarea es distinguirlos.',{cls:''});
+    const i=await choose([{tag:'Reflexión',text:'«Entonces… ¿mis juicios son los que ahogan mis flores?»'},{tag:'Defensa · Rojo',text:'«¿Y los hechos no importan? ¡Mira este desastre, es real!»'},{tag:'Acción · Negro',text:'«¿Qué hago con los juicios malos? ¿Los arranco con rabia?»'}]);
+    if(i===0){gain(5,2);S.skills.observar=1;await showLine('Callum','Exacto. Observa la maleza sin juzgarla: le quitas el poder que le diste. (Aides aprende «Observar».)',{cls:''})}
+    else if(i===1){gain(0,5);S.ca=Math.min(100,S.ca+15);S.skills.respirar=1;S.ac=Math.min(100,S.ac+20);await showLine('Callum','Los hechos importan. Pero tu rabia es otra semilla. (Aides aprende «Respirar».)',{cls:''})}
+    else{gain(3,0);S.ca=Math.min(100,S.ca+10);S.skills.luzSolar=1;await showLine('Callum','Arranca el resto sin rencor, Aides. Si usas rabia, solo rompes la tierra. (Aides aprende «Luz solar».)',{cls:''})}}
+  else if(n===4){
+    await showLine('Callum','Recuerda: el jardín necesita cuidado constante. Pero el jardinero también. Siéntate, Aides. El té se enfría.',{cls:''});
+    const i=await choose([{tag:'Descanso · Azul',text:'«Tienes razón, Callum. Solo un momento.» (Sentarse y beber)'},{tag:'Trabajo',text:'«No puedo, Callum. Si me detengo, las zarzas volverán.»'}]);
+    if(i===0){S.ca=Math.max(0,S.ca-50);S.ac=Math.min(100,S.ac+15);gain(2,5);S.skills.riegoAuto=1;S.seedVine=true;S.restT=120;await showLine('Callum','Mira el vapor del té: sube, se expande y se va. Así deben irse tus preocupaciones. (Aides aprende el «Riego automático» y Callum te da la Semilla de Enredadera.)',{cls:''})}
+    else{S.ca=Math.min(100,S.ca+30);gain(5,-5>0?0:0);S.pe=Math.max(0,S.pe-5);await showLine('Callum','El agua que derramas por cansancio no llega a las raíces. Vuelve cuando tus manos dejen de temblar.',{cls:''})}}
+  else if(n===5){
+    await showLine('Aides','¡Esa zarza no sale! Está demasiado arraigada. ¡La odio!',{cls:''});
+    await showLine('Callum','(Voz en recuerdo.) La maleza también te enseña dónde falta luz, Aides. No luches contra ella. Pregúntale qué necesita.',{cls:''});
+    const i=await choose([{tag:'Rojo · preguntar',text:'«¿Qué necesitas? ¿Dónde te duele la tierra?»'},{tag:'Blanco · observar',text:'«Mira dónde nace: ahí falta luz.»'},{tag:'Orden',text:'«Arráncala ya.»'}]);
+    if(i===0){gain(0,10);S.ac2=Math.min(100,S.ac2+10);S.ca=Math.max(0,S.ca-10)}else if(i===1){gain(6,3)}else{S.ca=Math.min(100,S.ca+15);S.ac2=Math.max(0,S.ac2-10)}
+    await showLine('Aides',i===0?'Tiene miedo a quedarse sin sitio… ahora lo entiendo.':i===1?'Ahí falta luz. Lo apunto.':'(Tira con rabia y rompe la tierra.)',{cls:''})}}
+/* ---- sinergia y acciones en equipo ---- */
+const synOK=()=>!!(S.nodes&&S.nodes.expl)||S.vin>=60;
+function focusAdd(k,dt,on){focusT[k]=on?(focusT[k]||0)+dt:Math.max(0,(focusT[k]||0)-dt*2);return focusT[k]}
+function eqNeed(){const m=mood();return m==='harmony'?2:m==='neutral'?4:7}
+function bridgeSolids(){if(!S.bridge)return[];const a=hidden[0],b=hidden[1];return[{x:1980,y:a.y,w:a.x-1980+2,h:6},{x:a.x+a.w-2,y:b.y,w:b.x-(a.x+a.w)+4,h:6}]}
+function drawBridge(t){if(!S.bridge)return;const a=hidden[0],b=hidden[1];
+  [[1980,a.x+1,a.y],[a.x+a.w-1,b.x+1,b.y]].forEach(([x0,x1,y])=>{ctx.save();ctx.strokeStyle='#3d8a3a';ctx.lineWidth=3;ctx.lineCap='round';
+    for(let k=0;k<2;k++){ctx.beginPath();ctx.moveTo(x0,y+1);ctx.quadraticCurveTo((x0+x1)/2,y+4+k*2+Math.sin(t*1.5+k)*.8,x1,y+1);ctx.stroke()}
+    ctx.fillStyle='#6fc45a';for(let x=x0+3;x<x1;x+=6){ctx.beginPath();ctx.ellipse(x,y+2+Math.sin(t+x)*.5,2.4,1.2,.5,0,6.283);ctx.fill()}
+    if(mood()==='harmony'){ctx.fillStyle='#ffd0e0';for(let x=x0+6;x<x1;x+=12)ctx.fillRect(x,y-1,1.6,1.6)}ctx.restore()})}
+function eqTick(dt){
+  eqBar=null;const dbl=lamp.dbl&&!dialogActive;
+  // EQ-01 Poda resonante
+  let tw=null;if(dbl)weeds.forEach(w=>{if(w.st===0&&Math.abs(w.x-P.x)<90&&rectLit({x:w.x-10,y:GROUND-34,w:20,h:34},lamp)&&(!tw||Math.abs(w.x-P.x)<Math.abs(tw.x-P.x)))tw=w});
+  if(tw){if(eqState.w!==tw){eqState.w=tw;eqState.t=0}eqState.t+=dt;const need=eqNeed();eqBar={x:tw.x,y:GROUND-52,p:Math.min(1,eqState.t/need),l:'Poda resonante'};
+    if(eqState.t>=need){const m=mood(),tier=m==='harmony'?'c':m==='neutral'?'n':'f';eqState.w=null;eqState.t=0;
+      if(tier==='f'){tw.hard=true;energy=Math.max(0,energy-20);S.fat+=10;S.dud=30;bond(-6,10);puff(tw.x,GROUND,12);toast('La sinergia se desordenó: la zarza se hizo más profunda. Escuchaos antes de volver a intentarlo.',3600)}
+      else{tw.hard=false;tw.st=2;S.weeds[tw.id]=2;puff(tw.x,GROUND,10);spark(tw.x,GROUND-20,18,'rgba(255,255,255,.95)');
+        if(tier==='c'){S.guided++;gain(15,15);bond(4,-6);weeds.forEach(w=>{if(w.st===5&&Math.abs(w.x-tw.x)<130)w.g+=3});toast('Poda resonante perfecta: +15 Grano, +15 Pétalos y una Semilla de Luz.',3600)}
+        else{gain(5,5);bond(2,-2);toast('Poda resonante: la zarza cede.',2600)}
+        if(S.team)qadd(tw,'sow')}
+      save()}}
+  else{if(eqState.t>0&&eqState.w){S.fat+=2;toast('La luz doble se cortó. Mantén la sinergia hasta que se llene la barra.',2400,'eqcut')}eqState.w=null;eqState.t=0}
+  // sinergia sobre Aides / Callum / plantas
+  const cn=npcs[1],inC=(x,y)=>dbl&&inCone(x,y,lamp);
+  if(S.team&&!S.aidesStay){const f=focusAdd('aides',dt,inC(A.x,GROUND-26));if(f>0&&!eqBar)eqBar={x:A.x,y:GROUND-62,p:Math.min(1,f/3),l:'Catarsis'};
+    if(f>=3){focusT.aides=0;S.ca=5;S.ac=90;gain(0,10);bubble('aides','Como si me hubieran quitado una piedra de encima.',3400);sparkMix();A.cheer=1}}
+  if(!S.aidesStay&&!S.inside){const f=focusAdd('callum',dt,inC(cn.x,GROUND-26));if(f>0&&!eqBar)eqBar={x:cn.x,y:GROUND-66,p:Math.min(1,f/3),l:'Resonancia'};
+    if(f>=3){focusT.callum=0;S.cAuraT=600;S.cr=Math.min(100,S.cr+15);gain(10,10);bubble('callum','Os veo a los dos a la vez… eso es la luz entera.',3600);sparkMix()}}
+  if(dbl)weeds.forEach(w=>{if(w.st===5&&w.g<GROW_RIPE&&rectLit({x:w.x-9,y:GROUND-30,w:18,h:30},lamp)){w.lg=Math.min(4,w.lg+dt);w.le=Math.min(4,w.le+dt);S.lt[w.id]=[w.lg,w.le]}});
+  // lámpara simple sobre Callum
+  const cn2=!S.aidesStay&&!S.inside&&lamp.on&&!lamp.dbl&&inCone(cn.x,GROUND-26,lamp);callumFoc=cn2?callumFoc+dt:0;
+  if(callumFoc>1.4&&focusT.cd<=0||callumFoc>1.4&&focusT.cd===undefined){focusT.cd=60;callumFoc=0;
+    if(lamp.who==='liam'){S.cAuraT=240;gain(3,0);bubble('callum','Los hechos se ven mejor con luz firme.',3200)}else{S.cr=Math.min(100,S.cr+5);gain(0,5);bubble('callum','Gracias por mirar también mi cansancio.',3200)}}
+  if(focusT.cd>0)focusT.cd-=dt;
+  // EQ-04 puente de raíces
+  const nearEdge=P.x>1935&&P.x<2000&&P.on;
+  if(!S.bridge&&S.seedVine&&nearEdge&&lamp.on&&lamp.who==='liam'&&S.team&&!S.aidesStay&&Math.abs(A.x-P.x)<90){bridgeP+=dt;const need=mood()==='harmony'?3.5:5;eqBar={x:1990,y:GROUND-46,p:Math.min(1,bridgeP/need),l:'Puente de raíces'};
+    if(bridgeP>=need){S.bridge=true;S.ac=Math.max(0,S.ac-5);spark(2010,GROUND-4,24,'rgba(110,200,100,.95)');toast('Puente de raíces: Aides siembra y Liam ilumina. El lago es más fácil ahora.',3800);save()}}
+  else bridgeP=Math.max(0,bridgeP-dt*2);
+  if(!S.bridge&&S.seedVine&&nearEdge)toast('Con la Semilla de Enredadera: Aides cerca y la luz de Liam mantenida (F) hacen crecer un puente.',3800,'bridgehint')
+}
+function drawEq(t){if(!eqBar)return;const b=eqBar,w=34;ctx.save();ctx.fillStyle='rgba(30,24,50,.8)';ctx.beginPath();ctx.roundRect(b.x-w/2-1,b.y-1,w+2,7,3);ctx.fill();
+  const g=ctx.createLinearGradient(b.x-w/2,0,b.x+w/2,0);g.addColorStop(0,'#ffd86a');g.addColorStop(1,'#c58cf0');ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(b.x-w/2,b.y,w*b.p,5,2.5);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='700 6px '+FF;ctx.textAlign='center';ctx.fillText(b.l,b.x,b.y-4);ctx.restore()}
+function drawSyn(t){if(!lamp.dbl)return;ctx.save();ctx.globalCompositeOperation='lighter';const lx=lamp.x,ly=lamp.y,g=ctx.createRadialGradient(lx,ly,3,lx,ly,lamp.len);g.addColorStop(0,'rgba(255,255,255,.5)');g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(lx,ly);ctx.arc(lx,ly,lamp.len,lamp.ang-lamp.half,lamp.ang+lamp.half);ctx.closePath();ctx.fill();ctx.restore()}
+/* ---- bucle de la fase B ---- */
+let landT=0,poseT=0,wasMel=false,hurtT=0,runT=0,brakeT=0,brakeDir=1,pvx=0,pOn=false,pvy=0;
+function evTickB(dt){
+  // movimiento: transicion a correr, frenado y aterrizaje
+  {const sp=Math.abs(P.vx);runT=S.pace&&P.on&&sp>78?runT+dt:Math.max(0,runT-dt*3);
+   const ax=(key.right-key.left)+touch.ax;
+   if(P.on&&Math.abs(pvx)>70&&(Math.abs(ax)<.1||Math.sign(ax)!==Math.sign(pvx))&&Math.abs(P.vx)<Math.abs(pvx)-1&&brakeT<=0&&!dialogActive){brakeT=.22;brakeDir=Math.sign(pvx);puff(P.x-brakeDir*5,GROUND,3);SFX.skid()}
+   brakeT=Math.max(0,brakeT-dt);
+   if(P.on&&!pOn&&pvy>230){puff(P.x-5,GROUND,3);puff(P.x+5,GROUND,3);landT=.16}
+   pvx=P.vx;pvy=P.vy;pOn=P.on;landT=Math.max(0,landT-dt)}
+  poseT=Math.max(0,poseT-dt);hurtT=Math.max(0,hurtT-dt);if(S.pace&&P.on&&Math.abs(P.vx)>90&&Math.random()<dt*7)puff(P.x-P.face*6,GROUND,2);A.getT=Math.max(0,(A.getT||0)-dt);{const m=S.team&&!S.aidesStay&&aidesEmo()==='melancolia';if(wasMel&&!m)A.getT=1.2;wasMel=m}
+  callCD=Math.max(0,callCD-dt);resLog&&(resLog.t-=dt,resLog.t<=0&&(resLog=null));restT=Math.max(0,restT-dt);S.cAuraT=Math.max(0,S.cAuraT-dt);S.restT=Math.max(0,S.restT-dt);S.obey=Math.max(0,S.obey-dt);S.dud=Math.max(0,S.dud-dt);
+  // fatiga
+  S.fat=clamp(S.fat+((lamp.on?1.2:.25)*(isNight()?1.4:1)-(S.aidesStay?0:0))*dt,0,100);
+  if(isNight()&&S.fat>55){fatWarn-=dt;if(fatWarn<=0&&!banterBusy&&!dialogActive){fatWarn=90;banter([['elara','Se me cierran los ojos… ¿descansamos junto a la próxima vela?']])}}
+  // Aides: carga, melancolía
+  if(S.team){if(A.st==='work')S.ca=Math.min(100,S.ca+.9*dt);else if(!S.aidesStay)S.ca=Math.max(0,S.ca-.25*dt);else S.ca=Math.max(0,S.ca-4*dt);
+    if(S.ca>60&&!S.aidesStay)S.ac=Math.max(0,S.ac-.5*dt);if(hat==='yellow'&&Math.abs(A.x-P.x)<200)S.ac=Math.min(100,S.ac+.4*dt)}
+  // lecciones
+  LESS.forEach(l=>{const s=S.lec[l.id];if(s&&!s.done&&S.time>=s.t0+l.min*60*LESS_SC){s.done=true;toast('Aides ha aprendido: «'+l.n+'». '+l.fx,4200);if(S.team&&!S.aidesStay)bubble('aides','Ahora lo entiendo mejor.',3000);save()}});
+  // llamada
+  if(pressedCall){pressedCall=false;if(S.team&&!S.aidesStay&&!dialogActive&&!wheelOpen)aidesTalk()}
+  // zonas de sombreros, consejero
+  hatChk-=dt;if(hatChk<=0){hatChk=1.5;hatCheck()}
+  const sig=S.flowers.length+'|'+Object.keys(S.done).length+'|'+Object.keys(S.shadows).length+'|'+S.cp+'|'+Object.keys(S.nodes).length+'|'+S.gr+'|'+S.pe;
+  if(P.x>maxX+30||sig!==progSig){maxX=Math.max(maxX,P.x);progSig=sig;stuckT=0}else if(!dialogActive&&!inHouse)stuckT+=dt;
+  if(stuckT>45&&!dialogActive){stuckT=0;whisper()}
+  // nodos de escena
+  if(!dialogActive&&!nodeBusy&&!banterBusy&&P.on&&!inHouse){
+    if(!S.nodes.sombra&&!S.shadows.tomas&&Math.abs(P.x-2440)<190&&P.x>2260)nodeSombra();
+    else if(S.shadows.tomas&&!S.nodes.luz&&P.x>2560&&P.x<2720)nodeLuz()}
+  // botones táctiles
+  const bc=$('#b-call'),bs=$('#b-syn');if(bc)bc.style.display=S.team&&!S.aidesStay?'':'none';if(bs)bs.style.display=synOK()?'':'none';
+  eqTick(dt)}
+
+
+function drawHUDB(t){
+  ctx.save();ctx.textAlign='left';
+  // recursos y fatiga
+  const x=8,y=66;parch(x,y,150,26,6);ctx.font='700 7px '+FF;ctx.fillStyle='#3b2a1a';
+  ctx.fillStyle='#d4a72c';ctx.beginPath();ctx.arc(x+10,y+10,3.4,0,6.283);ctx.fill();ctx.fillStyle='#3b2a1a';ctx.fillText('Grano '+S.gr,x+17,y+12.5);
+  ctx.fillStyle='#b66fd6';ctx.beginPath();ctx.ellipse(x+68,y+10,2.4,3.6,.6,0,6.283);ctx.fill();ctx.fillStyle='#3b2a1a';ctx.fillText('Pétalos '+S.pe,x+74,y+12.5);
+  ctx.font='600 5.5px '+FF;ctx.fillText('Cansancio',x+7,y+22);const fw=80;ctx.fillStyle='rgba(59,42,26,.25)';ctx.fillRect(x+44,y+18.5,fw,3.4);
+  ctx.fillStyle=S.fat>80?'#c0504a':S.fat>55?'#d9a03a':'#6fae5a';ctx.fillRect(x+44,y+18.5,fw*S.fat/100,3.4);
+  if(resLog){ctx.globalAlpha=Math.min(1,resLog.t);ctx.font='700 7px '+FF;ctx.fillStyle=resLog.g<0||resLog.p<0?'#c0504a':'#3f8a34';ctx.fillText((resLog.g?(resLog.g>0?'+':'')+resLog.g+' G ':'')+(resLog.p?(resLog.p>0?'+':'')+resLog.p+' P':''),x+112,y+12.5);ctx.globalAlpha=1}
+  // panel de Aides
+  if(S.team&&!S.aidesStay){const px=W-120,py=54;parch(px,py,112,45,6);const e=aidesEmo();ctx.fillStyle='#3b2a1a';ctx.font='700 7px '+FF;ctx.fillText('Aides · '+EMON[e],px+7,py+11);
+    ctx.font='600 5.5px '+FF;ctx.fillText(A.st==='work'?'Trabajando':e==='melancolia'?'Necesita compañía':'Te sigue',px+7,py+19);
+    const bar=(yy,v,c,l)=>{ctx.fillStyle='rgba(59,42,26,.25)';ctx.fillRect(px+34,yy,70,3.2);ctx.fillStyle=c;ctx.fillRect(px+34,yy,70*v/100,3.2);ctx.fillStyle='#3b2a1a';ctx.fillText(l,px+7,yy+3.2)};
+    bar(py+22,S.ac,'#6fae5a','Calma');bar(py+28,S.ca,'#c0504a','Carga');ctx.fillText(K('V · llamar a Aides','Botón Llamar'),px+7,py+42)}
+  // aviso de sombreros activos
+  ctx.restore()}
 
 /* ---------- dibujo ---------- */
 const lerpC=(a,b,t)=>a.map((v,i)=>Math.round(lerp(v,b[i],t)));
@@ -1321,10 +1603,10 @@ function drawWorld(t){
   npcs.forEach(n=>{if(n.id==='aides'&&(S.team||S.aidesStay))return;if(n.id==='callum'&&S.inside)return;const wk=n.id==='callum'&&S.aidesStay;drawChar(n.sprite,n.x,GROUND,52,{flip:wk?false:P.x<n.x,move:wk?1:0,phase:t*10,t:t});if(hat==='red')label(n.x,GROUND-58,n.emo,'#ffc0a0')});
   spr('rabbit',rabbit.x,GROUND+1+(Math.abs(Math.sin(t*1.5))>.9?-3:0),28,{flip:true});
   for(const k in shadowsDef)drawShadow(k,t);
-  drawAuras(t);
+  drawAuras(t);drawSyn(t);
   // compañero
   const ref=hist.length?hist.find(h=>h.t>=S.time-.7)||hist[0]:null,other=S.who==='liam'?'elara':'liam';
-  if(ref){const mvv=Math.hypot(ref.x-P.x,ref.y-P.y)>6;const md=mood();cgap=lerp(cgap,md==='harmony'?9:md==='friction'?34:18,.03);
+  if(ref){const mvv=Math.hypot(ref.x-P.x,ref.y-P.y)>6;const md=mood();cgap=lerp(cgap,md==='harmony'?9:md==='friction'?34:md==='distance'?46:18,.03);
     const cx=mvv?ref.x-ref.f*(cgap-4):P.x-P.face*cgap,cy=(mvv?ref.y:P.y)-(cHop>0?Math.abs(Math.sin(cHop*Math.PI*3))*4:0);let fl=(mvv?ref.f:P.face)<0;
     if(!mvv){const toward=P.x<cx;if(talkT>0||cHop>0)fl=toward;else if(md==='friction'&&idleT>3)fl=!toward}
     cpos.x=cx;cpos.y=cy;drawChar(other,cx,cy,50,{flip:fl,move:mvv?1:0,phase:t*14,t:t})}
@@ -1336,15 +1618,15 @@ function drawWorld(t){
     const push=Math.abs(P.x-gx)<20?Math.sign(gx-P.x)*(20-Math.abs(P.x-gx))*.35:0;
     for(let b=0;b<6;b++){const bx=gx+b*2.4,h=12+rnd(gx+b)*11,sw=Math.sin(t*1.7+gx*.05+b)*2+push;ctx.strokeStyle=b%2?'#3f8a34':'#56a640';ctx.lineWidth=1.6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(bx,GROUND+6);ctx.quadraticCurveTo(bx+sw*.4,GROUND-h*.5,bx+sw,GROUND-h);ctx.stroke()}}
   particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,p.s,p.s)});ctx.globalAlpha=1;
-  if(curTarget&&!dialogActive&&P.lock<=0){const o=curTarget.o,txt=curTarget.type==='pull'?'Arrancar':curTarget.type==='door'?'Entrar':'Hablar';label(o.x,GROUND-(curTarget.type==='npc'?68:48),K('E',' ⚡')+' · '+txt,'#ffe9a0')}
+  if(curTarget&&!dialogActive&&P.lock<=0){const o=curTarget.o,txt=curTarget.type==='pull'?'Arrancar':curTarget.type==='door'?'Entrar':curTarget.type==='rest'?'Descansar':'Hablar';label(o.x,GROUND-(curTarget.type==='npc'||curTarget.type==='aidesTalk'?68:48),K('E',' ⚡')+' · '+txt,'#ffe9a0')}
   if(P.x<330)label(190,GROUND-76,K('← → mover · ↑ saltar · F o clic: lámpara · Tab: cambiar','joystick: mover · botón grande: saltar'),'#f3e6c8');
-  drawBubbles(t);
+  drawBridge(t);drawEq(t);drawBubbles(t);
   ctx.restore();
 }
 function drawPlayer(t){
   const moving=P.on&&Math.abs(P.vx)>10;
   const st=clamp(-P.vy/1200,-.1,.12),sq=P.land>0?P.land*.5:0;if(P.land>0)P.land-=1/60;
-  drawChar(S.who,P.x,P.y,52,{anim:lamp.on&&P.on?'lamp':null,air:!P.on,vy:P.vy,flip:P.face<0,move:moving?1:0,phase:P.t*(8+Math.abs(P.vx)/10),t:t,rot:moving?P.vx/105*.07:0,sx:1-st*.5+sq,sy:1+st-sq});
+  drawChar(S.who,P.x,P.y,52,{anim:hurtT>0?'hurt':poseT>0&&P.on?'victory':lamp.on&&P.on?'lamp':S.pace&&moving&&P.on&&Math.abs(P.vx)>78&&runT>.15?'run':null,at:hurtT>0?.9-hurtT:P.t,fps:hurtT>0?2.5:S.pace?Math.max(5,Math.abs(P.vx)/12):3,air:!P.on,vy:P.vy,flip:P.face<0,move:moving?1:0,phase:P.t*(8+Math.abs(P.vx)/10),t:t,rot:brakeT>0?-brakeDir*.1:moving?P.vx/105*.07:0,a:hurtT>0?.62+.38*Math.abs(Math.sin(hurtT*14)):null,sx:1-st*.5+sq,sy:1+st-sq});
 }
 const dkc=document.createElement('canvas');dkc.width=W;dkc.height=H;const dk=dkc.getContext('2d');
 function drawLight(t){
@@ -1400,11 +1682,12 @@ function drawHUD(t){
   // medallón de sombrero
   if(S.hats){
     const hx=W-84,hy=24;ctx.fillStyle='#f8edd3';ctx.beginPath();ctx.arc(hx,hy,16,0,6.283);ctx.fill();ctx.strokeStyle='#b8912e';ctx.lineWidth=1.8;ctx.stroke();
-    if(hat)hatIcon(hx,hy-1,hat==='white'?'#fffdf4':'#c23b3b',1.1);else{ctx.strokeStyle='rgba(59,42,26,.5)';ctx.setLineDash([2,2]);ctx.beginPath();ctx.arc(hx,hy,9,0,6.283);ctx.stroke();ctx.setLineDash([])}
-    ctx.fillStyle='#3b2a1a';ctx.font='700 6.5px '+FF;ctx.textAlign='center';ctx.fillText(hat==='white'?'Blanco':hat==='red'?'Rojo':'Q',hx,hy+25);ctx.textAlign='left';
+    if(hat)hatIcon(hx,hy-1,HATC[hat],1.1);else{ctx.strokeStyle='rgba(59,42,26,.5)';ctx.setLineDash([2,2]);ctx.beginPath();ctx.arc(hx,hy,9,0,6.283);ctx.stroke();ctx.setLineDash([])}
+    ctx.fillStyle='#3b2a1a';ctx.font='700 6.5px '+FF;ctx.textAlign='center';ctx.fillText(hat?HATS.find(h=>h.id===hat).name:'Q',hx,hy+25);ctx.textAlign='left';
   }
-  if(hat){const c=hat==='white'?'255,255,255':'255,70,50',pul=hat==='red'?.05*Math.sin(t*3):0;const g=ctx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${(hat==='white'?.3:.32)+pul})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(hat==='white'||hat==='red'){const c=hat==='white'?'255,255,255':'255,70,50',pul=hat==='red'?.05*Math.sin(t*3):0;const g=ctx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${(hat==='white'?.3:.32)+pul})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     ctx.fillStyle=hat==='white'?'rgba(255,255,255,.07)':'rgba(255,90,60,.06)';ctx.fillRect(0,0,W,H)}
+  drawHUDB(t);
   if(flashT>0){ctx.fillStyle=`rgba(255,255,255,${flashT*.8})`;ctx.fillRect(0,0,W,H)}
 }
 
@@ -1476,7 +1759,7 @@ function startGame(cont){
   auInit();if(AU.c&&AU.c.state==='suspended')AU.c.resume();
   const sv=cont?loadSave():null;S=sv?Object.assign(freshState(),sv):freshState();if(sv&&!sv.v7){if(S.cp>=3)S.cp++;S.v7=true}
   if(!cont)clearSave();
-  fogP=0;endTriggered=false;pressedAct=pressedSwap=pressedHat=false;S.fog=!!S.fog;
+  fogP=0;endTriggered=false;pressedAct=pressedSwap=pressedHat=false;S.fog=!!S.fog;focusT={};eqState={w:null,t:0};
   if(S.shadows.tomas&&!S.flowers.includes('d_tomas')){}
   setupRuntime();
   if(S.hats===undefined)S.hats=false;
@@ -1500,14 +1783,15 @@ $('#wclose').onclick=()=>toggleWheel(false);
   let tm;const auto=()=>{clearTimeout(tm);tm=setTimeout(()=>{S.journal={f:$('#jFlores').value,m:$('#jMalezas').value,a:$('#jAcc').value};save();$('#jMsg').textContent='Guardado automáticamente.'},3000)};
   ['#jFlores','#jMalezas','#jAcc'].forEach(q=>{const t=$(q);t.addEventListener('input',auto);t.addEventListener('focus',()=>setTimeout(()=>t.scrollIntoView({block:'center',behavior:'smooth'}),300))});
 })();
-$('#jSave').onclick=()=>{S.journal={f:$('#jFlores').value,m:$('#jMalezas').value,a:$('#jAcc').value};save();$('#jMsg').textContent='Guardado en tu Diario (solo en este dispositivo).'};
+$('#jSave').onclick=()=>{S.journal={f:$('#jFlores').value,m:$('#jMalezas').value,a:$('#jAcc').value};if(!S.diaryPaid&&(S.journal.f||S.journal.m||S.journal.a)){S.diaryPaid=1;gain(0,10)}save();$('#jMsg').textContent='Guardado en tu Diario (solo en este dispositivo).'};
 $('#jAgain').onclick=()=>{clearSave();$('#end').hidden=true;showMenu()};
 document.addEventListener('visibilitychange',()=>{if(AU.c){if(document.hidden)AU.c.suspend();else AU.c.resume()}});
 
 /* ---------- arranque ---------- */
 function loadImages(){return Promise.all(Object.entries(ASSETS).map(([k,src])=>new Promise(r=>{const i=new Image();i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src})))}
 loadImages().then(()=>{buildSheets();$('#loading').hidden=true;showMenu();requestAnimationFrame(frame)});
-window.__rda={get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
+const VERSION='v16';
+window.__rda={VERSION,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
   tp:(x,y)=>{P.x=x;P.y=y==null?GROUND:y;P.vx=P.vy=0},setHat:chooseHat,press:{act:()=>{pressedAct=true},swap:()=>{pressedSwap=true}},
   key,mouse,startGame,setFog:v=>{fogP=v},get dialogActive(){return dialogActive}};
 })();

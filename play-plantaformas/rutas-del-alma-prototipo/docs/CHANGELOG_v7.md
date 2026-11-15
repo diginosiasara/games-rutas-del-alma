@@ -25,3 +25,30 @@
 - `INFORME_TECNICO_REVISION_Y_PLAN_v8` (.md/.docx): revisión de todos los informes y plan por fases con casillas.
 - `SEGUIMIENTO_INFORMES_v8.xlsx`: 113 requisitos con estado, fase y prioridad; hoja de plan; lista de archivos.
 - `informes_origen/`: informes originales con nombres legibles.
+
+## v9 — Fase B: sistemas narrativos del Nivel 1
+- B1 Economía: Grano de Luz y Pétalos de Eco (HUD, ganancias en flores, cosecha por variante, sombras, velas y Diario); 5 lecciones de Callum con coste, duración y efecto real; té de hierbas raras.
+- B2 Emociones de Aides: Melancolía, Ansiedad, Alegría y Serenidad según calma y carga; multiplican el crecimiento; diálogos por estado (tecla E sobre Aides o V).
+- B3 Panel de Aides en el HUD, llamada (V / botón), susurros del Consejero a los 45 s sin progreso, sombreros Negro/Amarillo/Verde/Azul desbloqueados por zona (teclas 3–6).
+- B4 Sinergia (G / botón): doble luz que gasta energía; focos de 3 s sobre Aides, Callum y plantas; lámpara simple sobre Callum.
+- B5 Poda Resonante (3 resultados según vínculo), variante guiada y puente de raíces en el lago (con la Semilla de Enredadera).
+- B6 Escenas: Sombra difícil, Peso compartido (finales A/B/C), tres árboles Callum–Aides, Sauce actos 3–4, Luz Interior.
+- B7 Fatiga, descanso en vela (E), estado Distancia.
+- Parcial: Aides sin sprite sentada, sin EQ-03, día/noche ligado a la ruta, sin música por estado.
+- Pruebas: regresión (test, t2, t4, t5, lago 4 tiempos de salto: 0 caídas) y b1/b2 nuevas, sin errores de consola.
+
+## v9.1 — arte estilo A limpio (primera integración)
+- Aides se sienta en Melancolía (sprite existente) y se levanta al ser consolada (getup 4f, tus frames limpios).
+- Liam levanta la lámpara (victory_03) y Elara usa su pose con lámpara (interact_01) mientras la mantienen encendida.
+- Liam hace su animación de victoria en la escena final.
+- Hojas nuevas: +52 KB, build ≈ 1,67 MB; cada hoja < 25 KB.
+- Pendiente de decisión: estilo B (solo Liam), sustituir el resto de frames por los limpios, láminas del Jardín de la Mente.
+- v9.1b: Liam y Elara corren (con «ritmo firme») y tropiezan al ser recogidas por la vela (hurt). +84 KB.
+
+## v15 — cierre de V14 y pulido
+- Versión canónica etiquetada (menú y \`__rda.VERSION\`); ZIP = HTML.
+- hurt sin depender de P.on; carrera solo > 78 px/s con fotogramas ligados a la velocidad; polvo al correr.
+- Pruebas: lake10 (10 recorridos × 2 modos, 6 velas), evid (capturas sin overlays + vídeo), perf. Ver docs/INFORME_VALIDACION_V15.md.
+
+## v16 — pulido de movimiento
+- Histéresis de carrera, frenado (inclinación+polvo+sonido), polvo de aterrizaje, parpadeo en impacto, chapuzón distinto de caída. Sin cambios de física.

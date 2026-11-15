@@ -1,0 +1,187 @@
+{
+ "res": {
+  "normal": {
+   "runs": [
+    {
+     "n": 1,
+     "ok": true,
+     "falls": 0,
+     "x": 2255
+    },
+    {
+     "n": 2,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 3,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    },
+    {
+     "n": 4,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 5,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    },
+    {
+     "n": 6,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    },
+    {
+     "n": 7,
+     "ok": true,
+     "falls": 0,
+     "x": 2255
+    },
+    {
+     "n": 8,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    },
+    {
+     "n": 9,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    },
+    {
+     "n": 10,
+     "ok": true,
+     "falls": 0,
+     "x": 2253
+    }
+   ],
+   "totalFalls": 0,
+   "asistido": false
+  },
+  "historia": {
+   "runs": [
+    {
+     "n": 1,
+     "ok": true,
+     "falls": 0,
+     "x": 2252
+    },
+    {
+     "n": 2,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 3,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 4,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 5,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 6,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 7,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 8,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 9,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    },
+    {
+     "n": 10,
+     "ok": true,
+     "falls": 0,
+     "x": 2251
+    }
+   ],
+   "totalFalls": 0,
+   "asistido": false
+  },
+  "velas": [
+   {
+    "vela": 0,
+    "xVela": 40,
+    "xRespawn": 40,
+    "hurtT": 0.75,
+    "mueve": true,
+    "enSuelo": true
+   },
+   {
+    "vela": 1,
+    "xVela": 1450,
+    "xRespawn": 1450,
+    "hurtT": 0.77,
+    "mueve": true,
+    "enSuelo": true
+   },
+   {
+    "vela": 2,
+    "xVela": 1950,
+    "xRespawn": 1950,
+    "hurtT": 0.78,
+    "mueve": true,
+    "enSuelo": true
+   },
+   {
+    "vela": 3,
+    "xVela": 2064,
+    "xRespawn": 2060,
+    "hurtT": 0.78,
+    "mueve": true,
+    "enSuelo": true
+   },
+   {
+    "vela": 4,
+    "xVela": 2250,
+    "xRespawn": 2250,
+    "hurtT": 0.77,
+    "mueve": true,
+    "enSuelo": true
+   },
+   {
+    "vela": 5,
+    "xVela": 2620,
+    "xRespawn": 2620,
+    "hurtT": 0.78,
+    "mueve": true,
+    "enSuelo": true
+   }
+  ]
+ },
+ "errs": []
+}
