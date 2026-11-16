@@ -65,3 +65,11 @@
 - Tres ramas: Hechos (Liam), Emociones (Elara), Cuidado (Callum y Aides); 14 saberes con progreso visible. Se desbloquean por lo que se hace (usos de lámpara, escuchar a Tomás, nombrar emociones, cosechas, lecciones, claridad, calma).
 - Efectos reales: cono de Liam +10, lámparas −10 % gasto, recarga +10 %/+15 %, cono de Elara más abierto, carga de Aides baja x2, plantas +10 %, más las lecciones de Callum.
 - Se guardan en la partida (S.kn). Interpretación mía de «ramas de conocimiento»: dime si querías otra cosa.
+
+## v20 — Saberes con pérdidas/compensaciones y ramificación por decisiones de juego
+- Cada saber del Cuaderno (H2, H3, E1, E2, C1) pasa a ser una elección entre dos opciones: una ganancia y una pérdida explícitas. Cambiar cuesta 20 Pétalos.
+- Maestrías exclusivas por rama (Lupa de la razón / Marea empática / Jardín vivo), con coste. Cambiar cuesta 40 Pétalos.
+- Registro de decisiones (`S.pth`, `S.ledger`): las opciones de diálogo (`choose`), sombras resueltas, cosechas, descansos en vela y uso de lámparas suman al camino Hechos/Emociones/Cuidado. 6 puntos en una rama abren su maestría.
+- Los modificadores se calculan en un caché `FX` (liamLen, elaraLen, elaraHalf, drain, regen, growth, caDecay, speed, grain, petal, fat).
+- Final: epílogo de Callum según la rama dominante y resumen de decisiones en la pantalla final.
+- Límite: no hay bifurcación de geometría del nivel; la ramificación es de sistemas, economía y final.
