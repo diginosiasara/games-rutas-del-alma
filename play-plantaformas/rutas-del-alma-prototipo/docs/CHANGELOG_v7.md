@@ -52,3 +52,16 @@
 
 ## v16 — pulido de movimiento
 - Histéresis de carrera, frenado (inclinación+polvo+sonido), polvo de aterrizaje, parpadeo en impacto, chapuzón distinto de caída. Sin cambios de física.
+
+## v17 — expresiones de Liam y Elara en los diálogos
+- Retratos con expresión (alegría, sorpresa, duda, preocupación, ojos cerrados, enfado) a partir de tus fotogramas de estilo A; se eligen por el tono del texto (¡!, ¿?, …), el vínculo y la fatiga. +55 KB.
+- Pruebas: port.js (capturas de 6 casos), regresión b2 y lago sin cambios.
+
+## v18 — cooperación visible
+- El compañero levanta su lámpara mientras el jugador hace Poda Resonante o Sinergia; Elara se sienta al descansar en una vela; Liam (como compañero) celebra en la escena final. +6 KB.
+- Pendiente: gestos de conversación con fotogramas de pareja en estilo A (no hay).
+
+## v19 — ramas de conocimiento (Cuaderno de saberes, tecla K / botón 📖)
+- Tres ramas: Hechos (Liam), Emociones (Elara), Cuidado (Callum y Aides); 14 saberes con progreso visible. Se desbloquean por lo que se hace (usos de lámpara, escuchar a Tomás, nombrar emociones, cosechas, lecciones, claridad, calma).
+- Efectos reales: cono de Liam +10, lámparas −10 % gasto, recarga +10 %/+15 %, cono de Elara más abierto, carga de Aides baja x2, plantas +10 %, más las lecciones de Callum.
+- Se guardan en la partida (S.kn). Interpretación mía de «ramas de conocimiento»: dime si querías otra cosa.

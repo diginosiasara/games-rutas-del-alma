@@ -74,6 +74,15 @@ button{font-family:inherit;color:inherit}
 #b-syn{right:max(98px,env(safe-area-inset-right,0px));bottom:max(176px,env(safe-area-inset-bottom,0px));width:54px;height:54px;font-size:.7rem}
 #b-swap{right:max(176px,env(safe-area-inset-right,0px));bottom:max(100px,env(safe-area-inset-bottom,0px));width:58px;height:58px}
 /* end / journal */
+#know{background:rgba(18,20,42,.9);overflow:auto;align-items:flex-start;z-index:28}
+#know .sheet{background:var(--parch);color:var(--ink);border:3px solid var(--gold);border-radius:14px;width:min(56rem,94vw);margin:max(16px,env(safe-area-inset-top,0px)) auto 24px;padding:1rem 1.2rem}
+#know h2{margin:0}#know .note{font-size:.8rem;color:#6b4a2a;font-style:italic;margin:.2rem 0 .6rem}
+.kcols{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}@media(max-width:720px){.kcols{grid-template-columns:1fr}}
+.kcol{background:#fff8e4;border:2px solid var(--c);border-radius:10px;padding:.5rem .6rem}.kcol h3{margin:0;font-size:1.1rem}.ksub{font-size:.72rem;color:#6b4a2a;margin-bottom:.4rem}
+.kn{position:relative;padding:.35rem .4rem;margin-top:.5rem;border-radius:8px;border:1px solid #d9c79a;opacity:.62}.kn.on{opacity:1;background:#fff;border-color:var(--c);box-shadow:0 0 0 2px var(--c)}
+.kn b{display:block;font-size:.95rem}.kn small{display:block;font-size:.76rem;line-height:1.3}.kn em{display:block;font-size:.76rem;color:#3f6a2a;margin-top:.15rem}
+.kn i{display:block;height:5px;background:#e2d3ab;border-radius:3px;margin:.25rem 0 .1rem;overflow:hidden}.kn i u{display:block;height:100%;background:var(--emerald)}
+#know .row{display:flex;gap:.6rem;margin-top:.8rem}
 #end{background:rgba(18,20,42,.88);overflow:auto;align-items:flex-start;z-index:30}
 #end .sheet{background:var(--parch);color:var(--ink);border:3px solid var(--gold);border-radius:14px;width:min(40rem,92vw);margin:max(16px,env(safe-area-inset-top,0px)) auto 24px;padding:1.2rem 1.4rem;box-shadow:0 10px 40px rgba(0,0,0,.6)}
 #end h2{margin:0 0 .2rem;font-size:1.6rem}
@@ -108,7 +117,7 @@ body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
 </style>
 
 <canvas id="game" aria-label="Rutas del Alma: Nivel 1" role="img"></canvas>
-<div id="hudbtn"><button id="btnSound" aria-label="Silenciar o activar el sonido" title="Sonido (M)">🔊</button></div>
+<div id="hudbtn"><button id="btnKnow" aria-label="Cuaderno de saberes" title="Saberes (K)">📖</button><button id="btnSound" aria-label="Silenciar o activar el sonido" title="Sonido (M)">🔊</button></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <div id="touch">
@@ -122,12 +131,13 @@ body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
   <div class="tb" id="b-syn" data-act="syn" style="display:none">Sinergia</div>
 </div>
 
+<div id="know" class="ov" hidden><div class="sheet"></div></div>
 <div id="wheel" class="ov" hidden><div class="ring" id="ring"><div class="mid" id="wmid">Elige un sombrero</div></div><button class="btn ghost" id="wclose" style="margin-top:1rem">Cerrar (Q)</button></div>
 <div id="dlg" hidden aria-live="polite"><img id="dport" alt="" hidden><span class="who" id="dwho"></span><div class="txt" id="dtxt"></div><div class="hint" id="dhint"></div><div class="opts" id="dopts"></div><button class="btn next" id="dnext" hidden>Continuar ▸</button></div>
 
 <div id="menu" class="ov" hidden>
   <img id="mLamp" alt="">
-  <h1>Rutas del Alma</h1><div style="font-size:.7rem;opacity:.6;margin-top:-.4rem">build v16 · 2026-11-15</div>
+  <h1>Rutas del Alma</h1><div style="font-size:.7rem;opacity:.6;margin-top:-.4rem">build v19 · 2026-11-16</div>
   <p class="sub">Nivel 1 · El Valle y el Jardín de la Mente · Prototipo</p>
   <div class="row">
     <button class="btn" id="mStart">Comenzar</button>
@@ -325,6 +335,7 @@ addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','Tab'].includes(e.code))e.preventDefault();
   if(e.repeat)return;
   auInit();
+  if(knOpen){if(e.code==='KeyK'||e.code==='Escape')knToggle(false);return}
   if(dialogActive){dlgKey(e);return}
   switch(e.code){
     case 'ArrowLeft':case 'KeyA':key.left=1;break;
@@ -345,7 +356,8 @@ addEventListener('keydown',e=>{
     case 'Digit5':chooseHat('green');break;
     case 'Digit6':chooseHat('blue');break;
     case 'KeyM':setMuted(!muted);break;
-    case 'Escape':if(wheelOpen)toggleWheel(false);break;
+    case 'KeyK':knToggle();break;
+    case 'Escape':if(knOpen)knToggle(false);else if(wheelOpen)toggleWheel(false);break;
   }
 });
 addEventListener('keyup',e=>{
@@ -414,8 +426,13 @@ function typeText(text,speaker){
 }
 const PORT={'Liam':'p_liam','Elara':'p_elara','Aides':'p_aides','Callum':'p_callum','Consejero de Sombreros':'p_consejero','Sombra de Tomás':'p_tomas_sh','Sombra de Javier':'p_javier_sh'};
 function setWho(name,cls){const w=$('#dwho');w.textContent=name;w.className='who '+(cls||'');const k=PORT[name],im=$('#dport');if(k&&ASSETS[k]){im.src=ASSETS[k];im.hidden=false;$('#dlg').classList.add('hasp')}else{im.hidden=true;$('#dlg').classList.remove('hasp')}}
+function portExpr(name,text){
+  if(name!=='Liam'&&name!=='Elara')return;const m=mood(),bad=m==='friction'||m==='distance',q=/\?/.test(text),ex=/!/.test(text),dots=/…|\.\.\./.test(text);let k=null;
+  if(name==='Liam'){if(bad&&ex)k=3;else if(bad||dots||q)k=2;else if(ex)k=1}
+  else{if(bad&&ex)k=4;else if(S.fat>55&&dots||dots&&bad)k=3;else if(q)k=2;else if(ex)k=(m==='harmony'?0:1);else if(m==='harmony'&&/gracias|luz|juntos|bien/i.test(text))k=0}
+  const key=k==null?null:'px_'+name.toLowerCase()+'_'+k;if(key&&ASSETS[key])$('#dport').src=ASSETS[key]}
 async function showLine(name,text,o){
-  o=o||{};dlgShow();setWho(name,o.cls);$('#dopts').innerHTML='';dlgChoices=null;$('#dhint').textContent=o.hint||'';
+  o=o||{};dlgShow();setWho(name,o.cls);portExpr(name,text);$('#dopts').innerHTML='';dlgChoices=null;$('#dhint').textContent=o.hint||'';
   const nx=$('#dnext');nx.hidden=true;
   $('#dtxt').onclick=()=>{if(dlgSkip)dlgSkip();else if(!nx.hidden)nx.click()};
   await typeText(text,o.cls);
@@ -593,11 +610,11 @@ function update(dt){
   lamp.who=S.who;lamp.x=P.x+P.face*5;lamp.y=P.y-P.h*.62;
   if(S.who==='liam'){
     if(depleted&&energy>25)depleted=false;
-    lamp.on=wantLamp&&energy>0&&!depleted;lamp.half=.78;lamp.len=S.faro?148:130;
-    if(lamp.on&&!story)energy=Math.max(0,energy-(S.syncT>0?8:10)*dt);
-    else if(!lamp.on)energy=Math.min(100,energy+20*dt);
+    lamp.on=wantLamp&&energy>0&&!depleted;lamp.half=.78;lamp.len=(S.faro?148:130)+(kn('H2')?10:0);
+    if(lamp.on&&!story)energy=Math.max(0,energy-(S.syncT>0?8:10)*(kn('H3')?.9:1)*dt);
+    else if(!lamp.on)energy=Math.min(100,energy+20*(kn('H4')?1.1:1)*(kn('E3')?1.15:1)*dt);
     if(energy<=0&&!story){depleted=true;if(wantLamp)toast('Tu lámpara se queda sin luz. Descansa un momento junto a una vela.',2500,'dep')}
-  }else{lamp.on=wantLamp;lamp.half=.52;lamp.len=115;energy=Math.min(100,energy+20*dt)}
+  }else{lamp.on=wantLamp;lamp.half=.52+(kn('E1')?.06:0);lamp.len=115;energy=Math.min(100,energy+20*dt)}
   lamp.dbl=!!(lamp.on&&wantSyn);if(lamp.dbl){lamp.half=.6;energy=Math.max(0,energy-(S.who==='liam'?14:34)*dt)}
   if(lamp.on){lamp.ang=aimAngle();const c=Math.cos(lamp.ang);if(Math.abs(c)>.2)P.face=c>0?1:-1}
   if(lamp.on&&!was){(S.who==='liam'?SFX.lampL:SFX.lampE)();S.act[S.who]++;S.lastLamp={who:S.who,t:S.time}}
@@ -675,7 +692,7 @@ function plantTick(w,dt){
 }
 function harvest(w){
   const v=w.vr||variantOf(w),wilted=w.g>=GROW_RIPE+winLen();
-  collect('s_'+w.id,w.x,GROUND-14,true);S.done[w.id]=1;
+  collect('s_'+w.id,w.x,GROUND-14,true);S.done[w.id]=1;S.harv=(S.harv||0)+1;
   if(!wilted&&v!=='plain'){
     if(v==='gold'||v==='both'){energy=100;depleted=false;spark(P.x,P.y-20,14,'rgba(255,215,90,.95)')}
     if(v==='violet'||v==='both'){const c=clues[(S.found.n||0)%clues.length];S.found.n=(S.found.n||0)+1;toast('Un susurro de la flor: «'+c.t+'»',4200,'whisper');spark(P.x,P.y-20,14,'rgba(190,120,230,.95)')}
@@ -1021,7 +1038,7 @@ async function lessonMenu(){
 function aidesEmo(){const c=S.ca,k=S.ac;if(k<25)return'melancolia';if(c>70||(k<38&&c>=45))return'ansiedad';if(k>82&&c<15)return'alegria';if(k>62&&c<35)return'serenidad';return'neutral'}
 const EMON={melancolia:'Melancolía',ansiedad:'Ansiedad',alegria:'Alegría',serenidad:'Serenidad',neutral:'Aprendiendo'};
 function growMul(w){let m=1;if(S.team){const e=aidesEmo();m*=e==='serenidad'||e==='alegria'?1.5:e==='ansiedad'?.6:e==='melancolia'?.25:1}
-  if(S.aidesStay&&lessonDone('descanso'))m*=1.3;if(S.restT>0)m*=1.2;if(hat==='green'&&Math.abs(P.x-w.x)<170)m*=1.25;if(S.skills.riegoAuto&&w.g>=GROW_RIPE)m*=.5;return m}
+  if(S.aidesStay&&lessonDone('descanso'))m*=1.3;if(S.restT>0)m*=1.2;if(kn('E4'))m*=1.1;if(hat==='green'&&Math.abs(P.x-w.x)<170)m*=1.25;if(S.skills.riegoAuto&&w.g>=GROW_RIPE)m*=.5;return m}
 async function aidesTalk(){
   if(dialogActive||callCD>0)return;callCD=3;
   if(Math.abs(A.x-P.x)>200){A.x=P.x-P.face*40;A.moving=false;spark(A.x,GROUND-24,8,'rgba(150,230,150,.9)')}
@@ -1029,7 +1046,7 @@ async function aidesTalk(){
   if(!S.nodes.a1&&S.team&&weeds.some(w=>w.st===0)){S.nodes.a1=1;
     await W_('Aides','Esta zarza… sus raíces son muy profundas. Siento que si tiro con fuerza, romperé la tierra buena. ¿Qué hacemos?');
     const i=await choose([{tag:'Elara · Sombrero Rojo',text:'«¿Qué te dice tu instinto, Aides? ¿Qué emoción la alimenta?»'},{tag:'Liam · Sombrero Blanco',text:'«Observemos los hechos: la raíz principal está al norte. Si la iluminamos, podrás tirar con seguridad.»'},{tag:'Orden directa',text:'«Tira fuerte, Aides. No hay tiempo que perder.»'}]);
-    if(i===0){S.ac2+=15;S.ca=Math.max(0,S.ca-10);gain(0,5);bond(3,-3);await W_('Aides','Tiene miedo. Como yo. Pero al nombrarlo, ya no me asusta.')}
+    if(i===0){S.named=(S.named||0)+1;S.ac2+=15;S.ca=Math.max(0,S.ca-10);gain(0,5);bond(3,-3);await W_('Aides','Tiene miedo. Como yo. Pero al nombrarlo, ya no me asusta.')}
     else if(i===1){S.ac2+=10;gain(5,0);energy=Math.max(0,energy-15);S.skills.semillaClaridad=1;await W_('Aides','La luz muestra el camino, pero mis manos hacen el trabajo. Gracias.')}
     else{S.ac2-=20;S.ca=Math.min(100,S.ca+25);S.ac=Math.max(0,S.ac-8);S.obey=90;bond(-3,5);await W_('Aides','Sí… como tú digas. (Trabajará más despacio un rato.)')}
     S.ac2=clamp(S.ac2,0,100);dlgHide();save();return}
@@ -1037,12 +1054,12 @@ async function aidesTalk(){
     await W_('Aides','Perdona… voy deprisa y no termino nunca. Cada zarza que arranco me parece que nace otra detrás.');
     const i=await choose([{tag:'Liam · hechos',text:'«Hagamos una lista: lo urgente primero. Una zarza cada vez.»'},{tag:'Elara · empatía',text:'«Se nota cuánto cargas. ¿Respiramos un momento juntas?»'},{tag:'Orden',text:'«No hay tiempo, Aides. Sigue.»'}]);
     if(i===0){S.ca=Math.max(0,S.ca-30);S.ac=Math.min(100,S.ac+10);gain(5,0);await W_('Aides','Una cada vez… sí, eso puedo hacerlo.')}
-    else if(i===1){S.ca=Math.max(0,S.ca-25);S.ac=Math.min(100,S.ac+20);S.ac2=Math.min(100,S.ac2+8);gain(0,5);await W_('Aides','(Respira hondo.) Ya no tiemblo tanto. Gracias.')}
+    else if(i===1){S.ca=Math.max(0,S.ca-25);S.ac=Math.min(100,S.ac+20);S.ac2=Math.min(100,S.ac2+8);gain(0,5);S.named=(S.named||0)+1;await W_('Aides','(Respira hondo.) Ya no tiemblo tanto. Gracias.')}
     else{S.ca=Math.min(100,S.ca+15);S.ac=Math.max(0,S.ac-15);S.obey=60;bond(-2,4);await W_('Aides','Sí… como tú digas.')}}
   else if(e==='melancolia'){
     await W_('Aides','No sé si sirve de algo… cuido el jardín y siempre vuelven las zarzas.');
     const i=await choose([{tag:'Reflejar',text:'«Estás cansada y algo triste, ¿verdad? Sentirlo no es fracasar.»'},{tag:'Acompañar',text:'(Sentarte a su lado, en silencio.)'},{tag:'Animar',text:'«Anímate, hay mucho por hacer.»'}]);
-    if(i===0){S.ac=Math.min(100,S.ac+40);S.ca=Math.max(0,S.ca-15);gain(0,8);S.ac2=Math.min(100,S.ac2+10);await W_('Aides','…Gracias por nombrarlo. Pesa menos dicho en voz alta.')}
+    if(i===0){S.named=(S.named||0)+1;S.ac=Math.min(100,S.ac+40);S.ca=Math.max(0,S.ca-15);gain(0,8);S.ac2=Math.min(100,S.ac2+10);await W_('Aides','…Gracias por nombrarlo. Pesa menos dicho en voz alta.')}
     else if(i===1){S.ac=Math.min(100,S.ac+28);S.ca=Math.max(0,S.ca-5);gain(0,3);await W_('Aides','(Apoya la cabeza en tu hombro un rato.)')}
     else{S.ac=Math.min(100,S.ac+5);S.ca=Math.min(100,S.ca+5);await W_('Aides','Ya… claro.')}}
   else if(e==='serenidad'||e==='alegria'){
@@ -1201,14 +1218,14 @@ function evTickB(dt){
   S.fat=clamp(S.fat+((lamp.on?1.2:.25)*(isNight()?1.4:1)-(S.aidesStay?0:0))*dt,0,100);
   if(isNight()&&S.fat>55){fatWarn-=dt;if(fatWarn<=0&&!banterBusy&&!dialogActive){fatWarn=90;banter([['elara','Se me cierran los ojos… ¿descansamos junto a la próxima vela?']])}}
   // Aides: carga, melancolía
-  if(S.team){if(A.st==='work')S.ca=Math.min(100,S.ca+.9*dt);else if(!S.aidesStay)S.ca=Math.max(0,S.ca-.25*dt);else S.ca=Math.max(0,S.ca-4*dt);
+  if(S.team){if(A.st==='work')S.ca=Math.min(100,S.ca+.9*dt);else if(!S.aidesStay)S.ca=Math.max(0,S.ca-.25*(kn('E2')?2:1)*dt);else S.ca=Math.max(0,S.ca-4*dt);
     if(S.ca>60&&!S.aidesStay)S.ac=Math.max(0,S.ac-.5*dt);if(hat==='yellow'&&Math.abs(A.x-P.x)<200)S.ac=Math.min(100,S.ac+.4*dt)}
   // lecciones
   LESS.forEach(l=>{const s=S.lec[l.id];if(s&&!s.done&&S.time>=s.t0+l.min*60*LESS_SC){s.done=true;toast('Aides ha aprendido: «'+l.n+'». '+l.fx,4200);if(S.team&&!S.aidesStay)bubble('aides','Ahora lo entiendo mejor.',3000);save()}});
   // llamada
   if(pressedCall){pressedCall=false;if(S.team&&!S.aidesStay&&!dialogActive&&!wheelOpen)aidesTalk()}
   // zonas de sombreros, consejero
-  hatChk-=dt;if(hatChk<=0){hatChk=1.5;hatCheck()}
+  hatChk-=dt;if(hatChk<=0){hatChk=.8;hatCheck();knTick();if(S.ac>=80)S.calmSeen=1}
   const sig=S.flowers.length+'|'+Object.keys(S.done).length+'|'+Object.keys(S.shadows).length+'|'+S.cp+'|'+Object.keys(S.nodes).length+'|'+S.gr+'|'+S.pe;
   if(P.x>maxX+30||sig!==progSig){maxX=Math.max(maxX,P.x);progSig=sig;stuckT=0}else if(!dialogActive&&!inHouse)stuckT+=dt;
   if(stuckT>45&&!dialogActive){stuckT=0;whisper()}
@@ -1237,6 +1254,34 @@ function drawHUDB(t){
     bar(py+22,S.ac,'#6fae5a','Calma');bar(py+28,S.ca,'#c0504a','Carga');ctx.fillText(K('V · llamar a Aides','Botón Llamar'),px+7,py+42)}
   // aviso de sombreros activos
   ctx.restore()}
+
+
+/* ===== Ramas de conocimiento ===== */
+const KN=[
+ {id:'hechos',n:'Hechos',sub:'Liam · Sombrero Blanco',col:'#cfd8ea',nodes:[
+  {id:'H1',n:'Observar',d:'Mirar antes de juzgar: explica la sombra con Liam por primera vez.',fx:'Desbloquea la Sinergia (G).',ok:()=>!!S.nodes.expl},
+  {id:'H2',n:'Verificar',d:'Comprobar con la luz de Liam (20 usos).',fx:'Su cono llega 10 más lejos.',ok:()=>S.act.liam>=20,pr:()=>[S.act.liam,20]},
+  {id:'H3',n:'Distinguir',d:'Lección «Distinguir hechos de juicios» de Callum, o su charla «Hechos y juicios».',fx:'Las lámparas gastan un 10 % menos.',ok:()=>lessonDone('hechos')||!!S.skills.observar},
+  {id:'H4',n:'Claridad',d:'Reunir 80 de Claridad con Callum.',fx:'Recarga de energía +10 %.',ok:()=>S.cr>=80||!!S.claridad,pr:()=>[S.cr,80]}]},
+ {id:'emociones',n:'Emociones',sub:'Elara · Sombrero Rojo',col:'#f0c0b8',nodes:[
+  {id:'E1',n:'Escuchar',d:'Escuchar a Tomás hasta el final.',fx:'El cono de Elara se abre algo más.',ok:()=>!!S.shadows.tomas},
+  {id:'E2',n:'Nombrar',d:'Nombrar una emoción con Aides dos veces (Reflejar o Elara).',fx:'La carga de Aides baja el doble de rápido.',ok:()=>(S.named||0)>=2,pr:()=>[S.named||0,2]},
+  {id:'E3',n:'Empatía',d:'Usar la luz de Elara 20 veces.',fx:'Recarga de energía +15 % al descansar la lámpara.',ok:()=>S.act.elara>=20,pr:()=>[S.act.elara,20]},
+  {id:'E4',n:'Serenidad',d:'Llevar a Aides a una Calma de 80 o más.',fx:'Las plantas crecen un 10 % más rápido.',ok:()=>!!S.calmSeen}]},
+ {id:'cuidado',n:'Cuidado',sub:'Callum y Aides',col:'#c4e0b4',nodes:[
+  {id:'C1',n:'Sembrar',d:'Primera cosecha del jardín.',fx:'Abre las lecciones de Callum.',ok:()=>(S.harv||0)>=1,pr:()=>[S.harv||0,1]},
+  ...LESS.map(l=>({id:'C-'+l.id,n:l.n,d:'Lección de Callum ('+l.g+' Grano, '+l.p+' Pétalos).',fx:l.fx,ok:()=>lessonDone(l.id)}))]}
+];
+let KNU={},knInit=false,knOpen=false;
+const kn=id=>!!KNU[id];
+function knTick(){let first=!knInit;KNS=S.kn=S.kn||{};
+  KN.forEach(b=>b.nodes.forEach(n=>{let ok=false;try{ok=!!n.ok()}catch(e){}KNU[n.id]=ok;
+    if(ok&&!KNS[n.id]){KNS[n.id]=1;if(!first){toast('Saber nuevo · '+b.n+': '+n.n+' — '+n.fx,4200);SFX.good();save()}}}));knInit=true}
+let KNS={};
+function knRender(){const el=$('#know');const tot=KN.reduce((a,b)=>a+b.nodes.length,0),got=KN.reduce((a,b)=>a+b.nodes.filter(n=>KNU[n.id]).length,0);
+  el.querySelector('.sheet').innerHTML='<h2>Cuaderno de saberes</h2><p class="note">'+got+' de '+tot+' saberes · lo que aprendéis queda con vosotros</p><div class="kcols">'+KN.map(b=>'<div class="kcol" style="--c:'+b.col+'"><h3>'+b.n+'</h3><div class="ksub">'+b.sub+'</div>'+b.nodes.map((n,i)=>{const ok=KNU[n.id],p=!ok&&n.pr?n.pr():null;return'<div class="kn'+(ok?' on':'')+'">'+(i?'<span class="kl"></span>':'')+'<b>'+(ok?'● ':'○ ')+n.n+'</b><small>'+n.d+'</small><em>'+(ok?'Efecto: ':'Al lograrlo: ')+n.fx+'</em>'+(p?'<i><u style="width:'+Math.min(100,Math.round(100*p[0]/p[1]))+'%"></u></i><small>'+Math.min(p[0],p[1])+' / '+p[1]+'</small>':'')+'</div>'}).join('')+'</div>').join('')+'</div><div class="row"><button class="btn" id="knClose">Cerrar (K)</button></div>';
+  $('#knClose').onclick=()=>knToggle(false)}
+function knToggle(v){if(v===undefined)v=!knOpen;if(v&&(dialogActive||mode!=='play'))return;knOpen=v;$('#know').hidden=!v;if(v){knTick();knRender()}dialogActive=v}
 
 /* ---------- dibujo ---------- */
 const lerpC=(a,b,t)=>a.map((v,i)=>Math.round(lerp(v,b[i],t)));
@@ -1609,7 +1654,8 @@ function drawWorld(t){
   if(ref){const mvv=Math.hypot(ref.x-P.x,ref.y-P.y)>6;const md=mood();cgap=lerp(cgap,md==='harmony'?9:md==='friction'?34:md==='distance'?46:18,.03);
     const cx=mvv?ref.x-ref.f*(cgap-4):P.x-P.face*cgap,cy=(mvv?ref.y:P.y)-(cHop>0?Math.abs(Math.sin(cHop*Math.PI*3))*4:0);let fl=(mvv?ref.f:P.face)<0;
     if(!mvv){const toward=P.x<cx;if(talkT>0||cHop>0)fl=toward;else if(md==='friction'&&idleT>3)fl=!toward}
-    cpos.x=cx;cpos.y=cy;drawChar(other,cx,cy,50,{flip:fl,move:mvv?1:0,phase:t*14,t:t})}
+    cpos.x=cx;cpos.y=cy;const coop=!mvv&&(eqBar||lamp.dbl),cAn=restT>0&&other==='elara'?'sit':poseT>0&&other==='liam'?'victory':coop?'lamp':null;
+    if(coop)fl=false;drawChar(other,cx,cy,50,{flip:fl,move:mvv?1:0,phase:t*14,t:t,anim:cAn,at:t,fps:3})}
   if(A.st!=='work')drawAides(t);
   drawPlayer(t);
   if(A.st==='work')drawAides(t);
@@ -1626,7 +1672,7 @@ function drawWorld(t){
 function drawPlayer(t){
   const moving=P.on&&Math.abs(P.vx)>10;
   const st=clamp(-P.vy/1200,-.1,.12),sq=P.land>0?P.land*.5:0;if(P.land>0)P.land-=1/60;
-  drawChar(S.who,P.x,P.y,52,{anim:hurtT>0?'hurt':poseT>0&&P.on?'victory':lamp.on&&P.on?'lamp':S.pace&&moving&&P.on&&Math.abs(P.vx)>78&&runT>.15?'run':null,at:hurtT>0?.9-hurtT:P.t,fps:hurtT>0?2.5:S.pace?Math.max(5,Math.abs(P.vx)/12):3,air:!P.on,vy:P.vy,flip:P.face<0,move:moving?1:0,phase:P.t*(8+Math.abs(P.vx)/10),t:t,rot:brakeT>0?-brakeDir*.1:moving?P.vx/105*.07:0,a:hurtT>0?.62+.38*Math.abs(Math.sin(hurtT*14)):null,sx:1-st*.5+sq,sy:1+st-sq});
+  drawChar(S.who,P.x,P.y,52,{anim:hurtT>0?'hurt':restT>0&&S.who==='elara'?'sit':poseT>0&&P.on?'victory':lamp.on&&P.on?'lamp':S.pace&&moving&&P.on&&Math.abs(P.vx)>78&&runT>.15?'run':null,at:hurtT>0?.9-hurtT:P.t,fps:hurtT>0?2.5:S.pace?Math.max(5,Math.abs(P.vx)/12):3,air:!P.on,vy:P.vy,flip:P.face<0,move:moving?1:0,phase:P.t*(8+Math.abs(P.vx)/10),t:t,rot:brakeT>0?-brakeDir*.1:moving?P.vx/105*.07:0,a:hurtT>0?.62+.38*Math.abs(Math.sin(hurtT*14)):null,sx:1-st*.5+sq,sy:1+st-sq});
 }
 const dkc=document.createElement('canvas');dkc.width=W;dkc.height=H;const dk=dkc.getContext('2d');
 function drawLight(t){
@@ -1776,6 +1822,7 @@ $('#mLarge').onclick=()=>{large=!large;savePrefs();syncPrefsUI()};
 syncPrefsUI();
 $('#mSound').onclick=()=>{auInit();setMuted(!muted)};
 $('#btnSound').onclick=()=>{auInit();setMuted(!muted)};
+$('#btnKnow').onclick=()=>{knToggle()};
 $('#wclose').onclick=()=>toggleWheel(false);
 (function(){const e=$('#end');
   function fit(){const v=window.visualViewport;if(!v)return;e.style.height=v.height+'px';e.style.top=v.offsetTop+'px';e.style.bottom='auto'}
@@ -1790,8 +1837,8 @@ document.addEventListener('visibilitychange',()=>{if(AU.c){if(document.hidden)AU
 /* ---------- arranque ---------- */
 function loadImages(){return Promise.all(Object.entries(ASSETS).map(([k,src])=>new Promise(r=>{const i=new Image();i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src})))}
 loadImages().then(()=>{buildSheets();$('#loading').hidden=true;showMenu();requestAnimationFrame(frame)});
-const VERSION='v16';
-window.__rda={VERSION,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
+const VERSION='v19';
+window.__rda={VERSION,knToggle,knTick,kn,KN,showLine,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
   tp:(x,y)=>{P.x=x;P.y=y==null?GROUND:y;P.vx=P.vy=0},setHat:chooseHat,press:{act:()=>{pressedAct=true},swap:()=>{pressedSwap=true}},
   key,mouse,startGame,setFog:v=>{fogP=v},get dialogActive(){return dialogActive}};
 })();
