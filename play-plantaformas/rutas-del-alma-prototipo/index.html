@@ -1046,7 +1046,7 @@ async function lessonMenu(){
 function aidesEmo(){const c=S.ca,k=S.ac;if(k<25)return'melancolia';if(c>70||(k<38&&c>=45))return'ansiedad';if(k>82&&c<15)return'alegria';if(k>62&&c<35)return'serenidad';return'neutral'}
 const EMON={melancolia:'Melancolía',ansiedad:'Ansiedad',alegria:'Alegría',serenidad:'Serenidad',neutral:'Aprendiendo'};
 function growMul(w){let m=1;if(S.team){const e=aidesEmo();m*=e==='serenidad'||e==='alegria'?1.5:e==='ansiedad'?.6:e==='melancolia'?.25:1}
-  if(S.aidesStay&&lessonDone('descanso'))m*=1.3;if(S.restT>0)m*=1.2;m*=fxv('growth');if(hat==='green'&&Math.abs(P.x-w.x)<170)m*=1.25;if(S.skills.riegoAuto&&w.g>=GROW_RIPE)m*=.5;return m}
+  if(S.aidesStay&&lessonDone('descanso'))m*=1.3;if(S.restT>0)m*=1.2;m*=fxv('growth');if(S.fr&&S.fr.aides&&auOf(S.fr.aides)>=3)m*=1.05;if(hat==='green'&&Math.abs(P.x-w.x)<170)m*=1.25;if(S.skills.riegoAuto&&w.g>=GROW_RIPE)m*=.5;return m}
 async function aidesTalk(){
   if(dialogActive||callCD>0)return;callCD=3;
   if(Math.abs(A.x-P.x)>200){A.x=P.x-P.face*40;A.moving=false;spark(A.x,GROUND-24,8,'rgba(150,230,150,.9)')}
@@ -1408,23 +1408,27 @@ const FR=[
 const PROM={aides:{kind:'harv',text:'cosechar juntos una planta'}};
 const promCnt=k=>k==='harv'?(S.harv||0):evn('rest');
 function addProm(f){S.prom=S.prom||[];if(S.prom.some(p=>p.who===f.id&&p.st==='open'))return;const P0=PROM[f.id]||{kind:'rest',text:'descansar junto a una vela y volver a hablar'};S.prom.push({id:f.id+'_'+Math.round(S.time),who:f.id,text:P0.text,kind:P0.kind,base:promCnt(P0.kind),st:'open'});if(S.prom.length>20)S.prom.shift();toast('Promesa con '+f.n+': '+P0.text+'.',3400)}
-function promCheck(){(S.prom||[]).forEach(p=>{if(p.st==='open'&&promCnt(p.kind)>p.base){p.st='kept';const f=FR.find(x=>x.id===p.who),d=frs(p.who);d.c+=1;gain(0,3);pathAdd('cuidado',1,'Cumplir lo prometido a '+(f?f.n:p.who));toast('Promesa cumplida con '+(f?f.n:p.who)+': '+p.text+'.',3600);save()}})}
+function promCheck(){if(auOf(frs('aides'))>=3&&!S.auT){S.auT=1;toast('Aides ya cuida las plantas por iniciativa propia: crecen un 5 % más rápido.',4200);save()}(S.prom||[]).forEach(p=>{if(p.st==='open'&&promCnt(p.kind)>p.base){p.st='kept';const f=FR.find(x=>x.id===p.who),d=frs(p.who);d.c+=1;d.pk=(d.pk||0)+1;gain(0,3);pathAdd('cuidado',1,'Cumplir lo prometido a '+(f?f.n:p.who));toast('Promesa cumplida con '+(f?f.n:p.who)+': '+p.text+'.',3600);save()}})}
+const trOf=d=>{const k=d.k||{};return(k.escuchar||0)+(k['reparación']||0)+(d.pk||0)};
+const auOf=d=>{const k=d.k||{};return(k['apoyo pedido']||0)+(k.espacio||0)};
+const lvl=n=>n>=5?'firme':n>=2?'creciendo':'incipiente';
 const frs=id=>{S.fr=S.fr||{};return S.fr[id]=S.fr[id]||{c:0,last:-999,topics:[],met:Math.round(S.time)}};
 function knAmistades(){const known=FR.filter(f=>f.ok());
   if(!known.length)return'<p class="note">Aún no habéis conocido a nadie a quien llamar. Las amistades aparecen aquí cuando conocéis a alguien en el camino.</p>';
   return'<p class="note">Una amistad se cuida con escucha, preguntas y espacio. No hay una barra que llenar: cada persona tiene su ritmo y puede pedir tiempo.</p><div class="fcards">'+known.map(f=>{const d=frs(f.id),st=stg(d.c),tp=d.topics.length?d.topics[d.topics.length-1]:null,cool=S.time-d.last<40;
-   return'<div class="fc"><b>'+f.n+'</b><small>'+f.rel+'</small><span>Ahora: '+f.emo()+'</span><span>Vínculo: '+(d.tn?'reparándose':STG[st])+'</span><small>Último contacto: '+(d.last>-900?'hace '+Math.max(1,Math.round((S.time-d.last)/60))+' min':'aún no habéis hablado')+'</small>'+(tp?'<small>Pendiente: «'+tp+'»</small>':'')+((S.prom||[]).filter(p=>p.who===f.id&&p.st==='open').map(p=>'<small>Prometido: '+p.text+'</small>').join(''))+(d.tn?'<small>Pendiente: reparar (ayudasteis sin preguntar).</small>':'')+'<small>'+(cool?'Prefiere un rato de silencio.':'Puedes llamar ahora.')+'</small><button class="btn" onclick="__call(\''+f.id+'\')">Llamar</button></div>'}).join('')+'</div>'}
+   return'<div class="fc"><b>'+f.n+'</b><small>'+f.rel+'</small><span>Ahora: '+f.emo()+'</span><span>Vínculo: '+(d.tn?'reparándose':STG[st])+'</span>'+(f.id==='aides'?'<span>Confianza: '+lvl(trOf(d))+' · Autonomía: '+lvl(auOf(d))+'</span>':'')+'<small>Último contacto: '+(d.last>-900?'hace '+Math.max(1,Math.round((S.time-d.last)/60))+' min':'aún no habéis hablado')+'</small>'+(tp?'<small>Pendiente: «'+tp+'»</small>':'')+((S.prom||[]).filter(p=>p.who===f.id&&p.st==='open').map(p=>'<small>Prometido: '+p.text+'</small>').join(''))+(d.tn?'<small>Pendiente: reparar (ayudasteis sin preguntar).</small>':'')+'<small>'+(cool?'Prefiere un rato de silencio.':'Puedes llamar ahora.')+'</small><button class="btn" onclick="__call(\''+f.id+'\')">Llamar</button></div>'}).join('')+'</div>'}
 async function callFriend(id){const f=FR.find(x=>x.id===id);if(!f||!f.ok())return;knToggle(false);const d=frs(id),me=S.who==='liam'?'Liam':'Elara';
   const prev=d.topics.length?d.topics[d.topics.length-1]:null;
   await showLine(f.n,prev?'Me alegra que llames. La última vez hablamos de «'+prev+'».':'Me alegra que llames.',{cls:''});
-  const i=await choose([{tag:'Llamada · Escuchar',text:'«Cuéntame cómo estás. Te escucho.»',noled:1},{tag:'Llamada · Preguntar',text:'«¿Cómo te sientes hoy?»',noled:1},{tag:'Llamada · Apoyo',text:'«¿Te ayudo con algo?»',noled:1},{tag:'Llamada · Espacio',text:'«Solo quería saludarte. Descansa.»',noled:1}].concat(d.tn?[{tag:'Llamada · Reparar',text:'«Perdona: debí preguntarte antes de ayudar.»',noled:1}]:[]));
-  const k=['escuchar','preguntar','apoyo','espacio','reparar'][i];S.ev=S.ev||{};S.ev['c_'+k]=(S.ev['c_'+k]||0)+1;const cool=S.time-d.last<40;let gainC=0,tpc=k;
+  const i=await choose([{tag:'Llamada · Escuchar',text:'«Cuéntame cómo estás. Te escucho.»',noled:1},{tag:'Llamada · Preguntar',text:'«¿Cómo te sientes hoy?»',noled:1},{tag:'Llamada · Apoyo',text:'«¿Te ayudo con algo?»',noled:1},{tag:'Llamada · Espacio',text:'«Solo quería saludarte. Descansa.»',noled:1}].concat(d.tn?[{tag:'Llamada · Reparar',text:'«Perdona: debí preguntarte antes de ayudar.»',noled:1}]:[]).concat(id==='aides'&&trOf(d)>=3?[{tag:'Llamada · Confidencia',text:'«¿Quieres contarme algo que no sueles decir?»',noled:1}]:[]));
+  const k=['escuchar','preguntar','apoyo','espacio'].concat(d.tn?['reparar']:[]).concat(id==='aides'&&trOf(d)>=3?['confidencia']:[])[i];S.ev=S.ev||{};S.ev['c_'+k]=(S.ev['c_'+k]||0)+1;const cool=S.time-d.last<40;let gainC=0,tpc=k;
   if(cool){await showLine(f.n,f.r.cool,{cls:''})}
   else if(k==='apoyo'){const j=await choose([{tag:'Llamada · Ayudar',text:'«Voy y lo hago yo por ti.»',noled:1},{tag:'Llamada · Preguntar',text:'«¿Qué apoyo te serviría? Tú decides.»',noled:1}]);
     if(j===0){await showLine(f.n,f.r.direct,{cls:''});tpc='ayuda no pedida';d.tn=1;toast('Ayudar sin preguntar deja un tema pendiente con '+f.n+': podéis repararlo en otra llamada.',3800)}else{await showLine(f.n,f.r.ask,{cls:''});gainC=2;f.fx('ask');tpc='apoyo pedido';addProm(f)}}
+  else if(k==='confidencia'){await showLine(f.n,'A veces me da miedo equivocarme con las semillas. Pero cuando me dejáis decidir, aprendo más rápido.',{cls:''});gainC=1;tpc='confidencia';pathAdd('emociones',1,'Aides se abre: confidencia')}
   else if(k==='reparar'){await showLine(f.n,'Gracias por decirlo. Se nota que lo piensas.',{cls:''});gainC=1;d.tn=0;tpc='reparación';pathAdd('emociones',1,'Reparar con '+f.n)}
   else{let t=f.r[k];if(k==='preguntar'&&!t){await showLine(f.n,'Una pista general: mirad primero lo que tenéis cerca y qué os falta para seguir.',{cls:''});const h=await choose([{tag:'Pista',text:'«¿Algo más concreto, por favor?»',noled:1},{tag:'Pista',text:'«Así está bien, lo intento.»',noled:1}]);if(h===0){S.ev.hint=(S.ev.hint||0)+1;await showLine(f.n,'Más concreto: '+objective(),{cls:''})}}else await showLine(f.n,t,{cls:''});gainC=1;f.fx(k);if(f.id==='aides'&&k==='escuchar'){S.ev=S.ev||{}}}
-  if(!cool){const before=stg(d.c);d.c+=gainC;d.last=S.time;d.topics.push(tpc==='escuchar'?'tu escucha':tpc==='preguntar'?'cómo se sentía':tpc==='espacio'?'su tiempo a solas':tpc);if(d.topics.length>6)d.topics.shift();
+  if(!cool){d.k=d.k||{};d.k[tpc]=(d.k[tpc]||0)+1;const before=stg(d.c);d.c+=gainC;d.last=S.time;d.topics.push(tpc==='escuchar'?'tu escucha':tpc==='preguntar'?'cómo se sentía':tpc==='espacio'?'su tiempo a solas':tpc);if(d.topics.length>6)d.topics.shift();
     if(stg(d.c)>before){gain(0,4);pathAdd('cuidado',1,'La amistad con '+f.n+' florece');toast('Amistad · con '+f.n+': '+STG[stg(d.c)],3200)}}
   dlgHide();save();knToggle(true,'ami')}
 window.__call=callFriend;
@@ -1996,7 +2000,7 @@ document.addEventListener('visibilitychange',()=>{if(AU.c){if(document.hidden)AU
 /* ---------- arranque ---------- */
 function loadImages(){return Promise.all(Object.entries(ASSETS).map(([k,src])=>new Promise(r=>{const i=new Image();i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src})))}
 loadImages().then(()=>{buildSheets();$('#loading').hidden=true;showMenu();requestAnimationFrame(frame)});
-const VERSION='v23';
+const VERSION='v24';
 window.__rda={VERSION,promCheck,addProm,reflect,evoLines,EVST,diaInit,TREES:KTREES,FR,trState,trLearn,treeTick,callFriend,frs,knTab:()=>knTab,knToggle,knTick,kn,KN,MAS,knPick,masPick,pathAdd,pathLead,fxv,showLine,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
   tp:(x,y)=>{P.x=x;P.y=y==null?GROUND:y;P.vx=P.vy=0},setHat:chooseHat,press:{act:()=>{pressedAct=true},swap:()=>{pressedSwap=true}},
   key,mouse,startGame,setFog:v=>{fogP=v},get dialogActive(){return dialogActive}};

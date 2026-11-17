@@ -91,3 +91,8 @@
 - Ayudar sin preguntar deja el vínculo «reparándose»; una llamada nueva ofrece «Perdona: debí preguntarte» y lo repara.
 - Pista graduada en la llamada «Preguntar» (Callum, Consejero): primero general, y una concreta solo si se pide.
 - Pruebas: prom.js (promesa, cumplimiento sin duplicado, tensión, reparación, pista), regresión kn3/evo/b1/b2/lake3.
+
+## v24 — Ciclo de cuidado de Aides: confianza y autonomía
+- La tarjeta de Aides muestra Confianza y Autonomía (incipiente / creciendo / firme), derivadas de lo ya guardado: escuchar, reparar y promesas cumplidas suman confianza; pedir apoyo y dar espacio suman autonomía. Sin variables duplicadas.
+- Confianza ≥ 3: nueva llamada «Confidencia» con Aides. Autonomía ≥ 3: Aides cuida las plantas por iniciativa propia (+5 % de crecimiento, aviso único).
+- Pruebas: prom2.js; regresión kn3, evo, b1, b2, lake3.
