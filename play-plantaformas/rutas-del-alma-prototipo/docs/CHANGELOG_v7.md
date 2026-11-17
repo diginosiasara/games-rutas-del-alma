@@ -73,3 +73,21 @@
 - Los modificadores se calculan en un caché `FX` (liamLen, elaraLen, elaraHalf, drain, regen, growth, caDecay, speed, grain, petal, fat).
 - Final: epílogo de Callum según la rama dominante y resumen de decisiones en la pantalla final.
 - Límite: no hay bifurcación de geometría del nivel; la ramificación es de sistemas, economía y final.
+
+## v21 — Árboles del Conocimiento y Amistades (Cuaderno: pestañas Saberes · Árboles · Amistades)
+- Árboles (Claridad, Escucha, Cuidado, Cooperación): raíz → tronco → rama → fruto, aprendidos por evidencia (lo hecho, sin coste). Cada fruto da un talento pequeño (−5 % gasto, +5 % recarga, +5 % crecimiento, −5 % fatiga). Estados: desconocido, en crecimiento, disponible, aprendido.
+- Amistades (anexo técnico): tarjetas de Aides, Callum, Consejero, Tomás y Javier, solo cuando se les ha conocido. Emoción actual y vínculo (etapas, sin porcentaje) separados; último contacto y tema pendiente.
+- Llamadas narrativas: escuchar, preguntar, apoyo (ayudar sin preguntar no suma; preguntar qué necesita sí), espacio. Memoria del último tema, respeto del silencio (40 s sin sumar por repetir). Persistente en S.fr; partidas antiguas migran sin cambios.
+- Pendiente (anexo F3–F5): promesas y reparación, ciclo completo de cuidado de Aides (autonomía/confianza), conversaciones diferenciadas por capítulo, llaves de la mente (capítulos posteriores).
+
+## v22 — Evolución del jugador (diario de aprendizaje)
+- Nueva pestaña «Evolución» en el Cuaderno: mapa de aprendizaje (7 nodos con evidencias), formas de jugar probadas (7), reflexiones opcionales, ver y copiar el texto (el visor no permite descargas) y borrado.
+- Nuevos contadores: cambios de sombrero (S.ev.hat), tipo de llamada (S.ev.c_*), reflexiones (S.dia). Reflexión opcional tras descansar o escuchar a la sombra; enfriamiento 60 s; se deja de ofrecer tras 2 omisiones.
+- Sin etiquetas ni perfiles del jugador; todo local.
+- Documentación: INFORME_EVOLUCION_JUGADOR_v22.docx, INDICE_INFORMES_Y_ESTADO_v22.docx; informes recibidos en docs/informes_origen/v22_recibidos.
+
+## v23 — Promesas, reparación y pista graduada (anexo de amistades F5 parcial)
+- Pedir a Aides «¿qué apoyo te serviría?» crea una promesa (con Aides: cosechar juntos; con el resto: descansar en una vela). Se cumple sola al hacer la acción; suma vínculo una vez (sin duplicar). Sin plazos ni castigos.
+- Ayudar sin preguntar deja el vínculo «reparándose»; una llamada nueva ofrece «Perdona: debí preguntarte» y lo repara.
+- Pista graduada en la llamada «Preguntar» (Callum, Consejero): primero general, y una concreta solo si se pide.
+- Pruebas: prom.js (promesa, cumplimiento sin duplicado, tensión, reparación, pista), regresión kn3/evo/b1/b2/lake3.

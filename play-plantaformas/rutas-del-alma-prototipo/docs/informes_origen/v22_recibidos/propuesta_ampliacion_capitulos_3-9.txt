@@ -1,0 +1,1450 @@
+He revisado los dos archivos que has adjuntado: `rutas-del-alma-proyecto_v20.zip`**&#x20;y&#x20;**`CORRECION.zip`, incluyendo el manuscrito corregido de *Rutas del Alma*, la documentación técnica del videojuego, los informes de validación y los materiales de desarrollo.
+
+La propuesta que te presento no consiste simplemente en ampliar los diálogos. Se trata de desarrollar una **continuación narrativa y jugable de mayor profundidad**, convirtiendo cada capítulo en una experiencia interactiva con escenarios propios, personajes, mecánicas, decisiones, acontecimientos, elementos visuales, animaciones y progresión emocional.
+
+# **INFORME TÉCNICO DE DESARROLLO**
+
+## **RUTAS DEL ALMA**
+
+**Ampliación narrativa, jugable y audiovisual del prólogo y los capítulos 3 al 9**
+
+[LANDING | SEAL MYTH OF MAJAPAHIT](https://images.openai.com/static-rsc-4/4qeSmKFnJLoY-i6GjM8NFi4cAayK6HhglgDlZecgD9l4wSada_Y8xdtu9m4PYzpfqWDlHR2Ey-q-Z0FCH-Hd_tD1nZMakvQd76EOd5xhn1xvlFeBSZxnKbaYrt6Z90mIWDnXtUutt6Zot1ir1t91c1jcChTA-evHiub69sTlVis?purpose=inline)
+
+[sealmajapahit.com](https://sealmajapahit.com/?utm_source=chatgpt.com)
+
+Documento de diseño
+
+Ampliación narrativa
+
+Desarrollo de videojuegos
+
+**Objetivo general:** transformar los ocho bloques narrativos en una aventura de plataformas, exploración, cooperación, resolución de enigmas y descubrimiento personal.
+
+## **1. Objetivos generales del desarrollo**
+
+La ampliación debe conseguir que el jugador no sea un mero espectador de la historia. Tiene que participar en ella, descubrir información, tomar decisiones y experimentar las consecuencias.
+
+Se establecen seis objetivos:
+
+1. Profundizar en la historia de Liam y Elara y en el misterio de las lámparas.
+2. Conectar el mundo de los guardianes con el mundo de Aides, Callum y el pueblo.
+3. Introducir mecánicas de pensamiento, percepción, memoria y toma de decisiones.
+4. Convertir el Gran Libro de Fábulas y la Brújula Dorada en sistemas interactivos fundamentales.
+5. Desarrollar escenarios que evolucionen según las decisiones del jugador.
+6. Preparar la transición hacia *Ecos del Alma* y los acontecimientos posteriores del universo narrativo.
+
+### **Principio fundamental de diseño**
+
+Cada capítulo debe tener cuatro dimensiones:
+
+- **Narrativa:** qué sucede y qué descubre el jugador.
+- **Exploración:** qué lugares recorre y qué secretos encuentra.
+- **Interacción:** qué puede hacer con los personajes, objetos y escenarios.
+- **Transformación:** qué cambia en el mundo como consecuencia de sus decisiones.
+
+La progresión no debe basarse exclusivamente en conseguir objetos o superar plataformas. Debe basarse también en comprender lo que sucede.
+
+## **2. Arquitectura narrativa y progresión del videojuego**
+
+Antes de desarrollar los escenarios hay que establecer una estructura narrativa común.
+
+El videojuego debe mantener dos planos de realidad:
+
+**PLANO A. El mundo de los guardianes**
+
+[Bot Verification](https://images.openai.com/static-rsc-4/uJm5hrKxMSMgHQVuo1P8pgUpzLpXLIKkT7mNSRayqcLWrTav0Ijn4LxuITD799eLsCBl1skga8zce8RL_3_mIpy9bWIEHoJptH5RCGrU4ljAOs8aZKaayw-5oDNB8rdvsBc8-eLfF_2Tqq1Pn9vWN4LaoKf0HyU75SanBSmZ14A?purpose=inline)
+
+[adventurebooksfortheyoung.com](https://adventurebooksfortheyoung.com/?utm_source=chatgpt.com)
+
+- Liam: exploración, dirección, luz dorada y revelación.
+- Elara: sensibilidad, intuición, sombras y memoria.
+- Gran Libro de Fábulas.
+- Brújula Dorada.
+- Aves negras y Custodias.
+
+  **PLANO B. Las historias contenidas en el libro**
+
+  [PostgreSQL 大法师 · 老冯云数](https://images.openai.com/static-rsc-4/arKtOBQvmWsLUMG7Ammf98EJoIUrssqIFjPWWD2eiG55jD-hWHQH2SG7IbJHSIdv7OciHr02cdCxRi0hZujpIME97aXKvDAzGxbdojhPsZCTYZ5oPcT7qBo3iYBDwDyK91KuaunmDGfFggqQ3jnx6TZRNtG1mQuFJI7_BZabjpA?purpose=inline)
+
+  [vonng.com](https://vonng.com/pg/?utm_source=chatgpt.com)
+- Aides: protagonista de la historia del Jardín de la Mente.
+- Callum: mentor y consejero.
+- El pueblo: comunidad donde se manifiestan las consecuencias de las historias.
+- Personajes secundarios: Tomás, Javier, María, Ana, Lucía y Roberto.
+
+Esta separación es especialmente importante: Aides no debe confundirse con Liam ni con Elara. El primero pertenece a la historia que se narra dentro del Gran Libro, mientras que los otros dos son sus guardianes y lectores.
+
+### **2.1. Estructura de progresión**
+
+| Bloque                        | Experiencia principal     | Resultado                                            |
+| ----------------------------- | ------------------------- | ---------------------------------------------------- |
+| Prólogo                       | Misterio y presentación   | Descubrimiento de las lámparas                       |
+| 3. La Luz Interior            | Identidad y cooperación   | Comprender a los guardianes                          |
+| 4. Las Llaves del Pensamiento | Puzzles y perspectivas    | Desbloquear los seis sombreros                       |
+| 5. Historias Ocultas          | Exploración social        | Reconstruir relatos personales                       |
+| 6. Grano y Paja               | Investigación             | Diferenciar hechos y juicios                         |
+| 7. Libro Vivo                 | Misterio y descubrimiento | Activar libro y brújula                              |
+| 8. Sueños Paralelos           | Exploración onírica       | Obtener llave y amuleto                              |
+| 9. Circo de los Nómadas       | Experiencias y decisiones | Conectar las historias y abrir la siguiente aventura |
+
+La progresión debe ser acumulativa: las capacidades que se adquieren en un capítulo se reutilizan en los siguientes.
+
+# **3. DESARROLLO TÉCNICO POR CAPÍTULOS**
+
+## **3.1. PRÓLOGO — El Legado de las Lámparas Mágicas**
+
+[Void Shard Summon Events Incoming – x2 & x10 Boosts - HellHades](https://images.openai.com/static-rsc-4/aF9glUraCuzO8tfO8aVEias9xYviWiF4YdDgX5YxSSdzDk0aGq1Z1F0CQQpETAO8K1bZdl3v7vDPMSKTVO11vcHH7NS-lgRP7N9Hz0z5zq4Esq--A0OEGWz3pZ83mRF9-afi2n949XIGBqyVG7uZ863bytYTocu3Nhn9J5_TUkY?purpose=inline)
+
+[Download Enchanted\_ Spellbook\_ Glowing\_ Magic Wallpaper | Wallpapers.com](https://images.openai.com/static-rsc-4/c75VC-w67ArP49EEOry6EhgpFedlMflYowgojzyG5tbl4Q_-ydqRaQ3pX2blHtR7NzNJ9DGrxZAFdXrQui22s-UmajD2zpArtaZYAQ7OeFB2pFRl6iNt2P9Z6VQyKg_vpgklzSrdZLc_6he2zDdK9D0EqPPYSaEJKtfyu7XVO9c?purpose=inline)
+
+10
+
+**Función narrativa:** presentar el universo, los dos protagonistas, sus poderes y el conflicto principal.
+
+El prólogo debe convertirse en una introducción jugable y no limitarse a una secuencia cinematográfica.
+
+### **A. Escenario y distribución**
+
+Se propone un escenario dividido en cuatro espacios:
+
+1. Pueblo olvidado: introducción al entorno, habitantes, casas y plaza.
+2. Camino de la colina: recorrido tutorial con pequeñas plataformas y elementos interactivos.
+3. Templo de las Fábulas: espacio central donde se encuentra el Gran Libro.
+4. Exterior del templo: primera aparición de las aves negras y comienzo del misterio.
+
+**Dirección artística**
+
+- Arquitectura fantástica medieval.
+- Piedra antigua, vegetación, madera y detalles dorados.
+- Montañas y bosques con profundidad mediante parallax.
+- Iluminación ambiental dinámica.
+- Cielo con evolución desde el amanecer hasta la tormenta.
+
+### **B. Mecánicas de los protagonistas**
+
+[2023.08.17 - 1.2 更新日志 :: 永恒轮回](https://images.openai.com/static-rsc-4/YvdVvbnN_LeBxq6q7bci3-BmIqiIC-HXM3ZWWKPFCdcYtzl3eF2RBztfEnK4WokpxtbFVj_Bo83mleTZ68PSaVqtVqNy1stvuUIfr1NKV2tB7xiL6G-5cObrCg96aBVAF0pAhyuQmw1NJmB0ZSbk9OQCbtxMtvnEnOvNtTRmKRg?purpose=inline)
+
+**Liam — Lámpara dorada**
+
+- Revelar caminos ocultos.
+- Activar mecanismos.
+- Iluminar inscripciones.
+- Descubrir objetos invisibles.
+- Abrir determinadas puertas.
+
+[HoYoLAB - Official Community](https://images.openai.com/static-rsc-4/HnsbMyMx-0X15y9EqceiraL2A2R93sbpdF85F5xQbAjgB79UqQIE9_Vafr-MJtohKZ0xlGqnUcTzChmejC8Kec4-HYK0-Htrx-Qu5yL7GPcov5UBFf3dkCSxTLvVWTB81T4u9EJSMPE3zZNLaY_FEQhz39-2sYkm-h5RGrmfVHg?purpose=inline)
+
+**Elara — Lámpara de las sombras**
+
+- Hacer hablar a las sombras.
+- Descubrir recuerdos.
+- Revelar relatos ocultos.
+- Interpretar símbolos emocionales.
+- Activar interacciones narrativas.
+
+Las lámparas deben tener sistemas de interacción independientes, pero también permitir acciones combinadas.
+
+### **C. Nueva mecánica: resonancia de las lámparas**
+
+Se propone introducir una tercera modalidad:
+
+**Sinergia de luz Liam + Elara.**
+
+Cuando ambos personajes iluminan simultáneamente un objeto:
+
+- Aparecen símbolos ocultos.
+- Se reconstruyen fragmentos de texto.
+- Se desbloquean recuerdos.
+- Se activan mecanismos que ninguna lámpara puede activar individualmente.
+
+Esta mecánica será fundamental para resolver los enigmas posteriores.
+
+### **D. El enjambre de aves negras**
+
+Las aves deben ser un elemento narrativo y ambiental, no enemigos convencionales.
+
+Comportamientos:
+
+- Posarse sobre cornisas y árboles.
+- Reaccionar al acercamiento de los protagonistas.
+- Desplazarse colectivamente cuando cambia la iluminación.
+- Proyectar sombras que forman símbolos.
+- Abrir un corredor visual cuando se resuelve el primer enigma.
+
+No deben atacar sin motivo. Su función es generar misterio y anticipar la existencia de las Custodias.
+
+### **E. Gran Libro de Fábulas**
+
+[My Essential Spiritual Reading List: Books on Past Lives, ETs, Hypnosis, Energy & the 5D Shift\<br/>\<br/>\<br/> — LARA ✦ STARR](https://images.openai.com/static-rsc-4/AgHKqOBOi_ACEemy_r-tHS_da095sQ5V46xTirhlNEwGm-alD4LyHOB_q4_lbIlr3aUMMCiotvg0lSJx6xpfC6GHpLn9H96HCP2vpH7uojX-xCjQwQgZiX4Av5VGSqmawvZf3ZSDrPmDG3bM9VwG3O9GLB36z5Z_zK7efgZchH0?purpose=inline)
+
+[astrallara.com](https://www.astrallara.com/blog-1-1/reading-list-of-spiritual-development-books?utm_source=chatgpt.com)
+
+El libro debe convertirse en un objeto interactivo persistente.
+
+Funciones:
+
+- Consultar capítulos desbloqueados.
+- Visualizar relatos y fragmentos recuperados.
+- Mostrar ilustraciones.
+- Registrar decisiones.
+- Conservar pistas.
+- Acceder al diario de descubrimientos.
+
+**Requisito técnico:** cada página debe tener estados: bloqueada, descubierta, parcialmente reconstruida y completa.
+
+### **F. Secuencia final del prólogo**
+
+1. Liam y Elara encuentran el libro.
+2. Aparecen las aves negras.
+3. Se activa el primer diálogo sobre el miedo y las apariencias.
+4. Se descubre la Brújula Dorada.
+5. Se muestra su pregunta central: «¿Quién quieres ser para llegar adonde vas?».
+6. El jugador activa el primer capítulo.
+
+**Criterio de aceptación:** el jugador debe haber aprendido a desplazarse, interactuar, cambiar de personaje y utilizar las dos lámparas antes de iniciar la siguiente aventura.
+
+## **3.2. CAPÍTULO 3 — La Luz Interior**
+
+[Supercharge Your Images with AI: A Simple Real-ESRGAN Image Enhancer in Python | by Harish K | Medium](https://images.openai.com/static-rsc-4/G3kwPeLTKGT9g3skq-ih_wiXcZJCGb-_iQzjELdoj8W1eP4QRw5w8Q22YQEHFqphiTKMGCJEZ6f0QeobZyu5AOYkM-Ec1gnuCN5dySh8_FBiHubkEago_4shpUOYaq4VCu-JawMEYDnAfxXCDB-OT1gw-67mT-jyjnGv_SQMjM0?purpose=inline)
+
+[ソード オブ ザ バークラント プレイ感想#1 | 三本足鳥の囀＠麻生壱埜](https://images.openai.com/static-rsc-4/LHw_efsMeeX_PCEgWFUXAAz4WwCCtu8DzFd0TVYJZE1bjDUF-QSAFFUbzHiVO5WT9ltRQQrMfF71cJ9VsvSf36Qxs2lyoR-yZo4Xrt3FsOxmqT1SUMf2YHYYoz9gAQ-z-t1McTi12lfjo1ZTnpZunjeaJo9gJVrNaEvEOYs6-88?purpose=inline)
+
+[Eldoria's Enchanted Mirror: A Tale of Truth and Transformation Short Story](https://images.openai.com/static-rsc-4/3J4t__SgqJQ1peOwodir_j0p8Sw9oybAO6quGiiTf2EMSkB_auF0JOW9rTa0kK8fLWxCU5sv8d1xFX33CoxF74mChmU5PbslnkEwz2SpPHYpLaKWQeiDXCIqKhQtaaI_m9vLn9EfsJ3UXBLPjwAhZek9Vw9ZESGkzfVx00Zi2as?purpose=inline)
+
+10
+
+**Función narrativa:** profundizar en las personalidades de Liam y Elara, sus capacidades, limitaciones y relación.
+
+Este capítulo debe ampliar la dimensión emocional del videojuego.
+
+### **A. Desarrollo de los personajes**
+
+| Característica | Liam                             | Elara                         |
+| -------------- | -------------------------------- | ----------------------------- |
+| Personalidad   | Explorador visionario            | Guardiana del alma            |
+| Fortaleza      | Iniciativa y visión              | Empatía e intuición           |
+| Debilidad      | Duda y exceso de responsabilidad | Sobrecarga emocional          |
+| Poder          | Luz dorada                       | Luz violeta y sombras         |
+| Necesidad      | Aprender a confiar               | Aprender a establecer límites |
+
+### **B. Nuevo sistema: equilibrio interior**
+
+Se propone incorporar dos variables:
+
+- `vision_liam`
+- `equilibrio_elara`
+
+Estas variables no representan quién es mejor, sino el estado de desarrollo de cada personaje.
+
+Las acciones pueden modificar sus estados:
+
+- Investigar aumenta la confianza de Liam.
+- Escuchar recuerdos aumenta la comprensión de Elara.
+- Resolver un enigma conjuntamente mejora el vínculo.
+- Actuar sin escuchar al compañero puede generar fricción.
+- Descansar después de una experiencia intensa recupera el equilibrio.
+
+El sistema debe integrarse con las variables de vínculo, tensión y fatiga que ya aparecen en la arquitectura del prototipo.
+
+### **C. Escenario: el Santuario del Reflejo Interior**
+
+Se propone un nuevo espacio:
+
+- Dos plataformas enfrentadas.
+- Un espejo antiguo.
+- Un estanque de reflejos.
+- Dos zonas de iluminación.
+- Un espacio central donde ambos personajes pueden reunirse.
+
+**Puzzle principal: los dos reflejos.**
+
+El jugador tendrá que:
+
+1. Iluminar el espejo con Liam.
+2. Revelar con Elara una inscripción que aparece en su sombra.
+3. Interpretar ambos mensajes.
+4. Colocar a los dos personajes en sus posiciones.
+5. Activar la resonancia conjunta.
+
+### **D. Escenas narrativas**
+
+Se deben incorporar tres secuencias:
+
+- Escena 1: Liam reconoce que tiene miedo de no estar a la altura.
+- Escena 2: Elara reconoce que absorbe el sufrimiento de los demás.
+- Escena 3: ambos comprenden que sus diferencias son necesarias.
+
+### **E. Animaciones específicas**
+
+- Liam observa las estrellas.
+- Elara se concentra y medita.
+- Ambos se miran durante el diálogo.
+- Animación de escucha activa.
+- Animación de apoyo entre personajes.
+- Animación de activación de Sinergia.
+
+**Resultado del capítulo:** desbloqueo de la cooperación emocional y narrativa, necesaria para los desafíos posteriores.
+
+## **3.3. CAPÍTULO 4 — Las Llaves del Pensamiento**
+
+[Six Thinking Hats Top Hat Creativity Clip Art - Edward De Bono PNG](https://images.openai.com/static-rsc-4/LLRWXItjvN2qFTg4tE5eYvgztNjUrAt-uFeBTlRI_eziPd87F-NZhdGINW1m4xjtUA3LRvIlD3aSUwehqTKXKergTycKLD8iHVvr56hC2jJ1BWsG3ik3eMMsDfRLHcDcLzAO1TV9TvbxHabbm1rH6viqtmUsgd2sxhmbHoPujCY?purpose=inline)
+
+**Función narrativa:** convertir el pensamiento y la capacidad de cambiar de perspectiva en mecánicas de juego.
+
+Este capítulo es especialmente importante porque introduce el sistema de los seis sombreros.
+
+### **A. Escenario: el Claro de los Seis Sombreros**
+
+Elementos:
+
+- Mesa de madera central.
+- Seis sombreros.
+- Senderos que se bifurcan.
+- Conejo gris con lazo rojo.
+- Consejero misterioso.
+- Puertas de colores.
+- Mecanismos de activación mental.
+
+El escenario debe tener una estética diferente al templo: más lúdica, misteriosa y ligeramente surrealista.
+
+### **B. Sistema interactivo de seis sombreros**
+
+## **Los seis modos de pensamiento**
+
+[Enchanted Witch hat White/gold | Roblox Item - Rolimon's](https://images.openai.com/static-rsc-4/ZkGNgzgvc-l_UgPJnmT9Q-D7KuEUoNMZszCq_XBha1rRxMuLz4kobGK3ADXIgg7ZpaSMtZmdEyMqV0GLHz7PMgRYKHDnPbhqWZiBt_ovL9ue2w59SPSFo-1R2K8k4_pyoDbjk-8FBaORzSTlvrZQLptLoIZjBHdpr2k859dhbg0?purpose=inline)
+
+**Blanco — Datos**
+
+Revela pistas, hechos y elementos ocultos.
+
+[Sky children of the light (cotl)Scarecrow farmer spirit warm | Inspire Uplift](https://images.openai.com/static-rsc-4/RFyQW-w8FoZXvZdTooFJeH2fyEAb0zYCu7URQZk9s02NoMW5Kd_4o-ZfJjK7YqLa_qfv67ZIMIN4jgxeBlqvEmPgO4iDMqpnV1nBBFikVDcwIheaWVtPpKe4v0pn7S1j_m7cZLYCmZERt9kJ8PR3mWkNpo-A8qfdId6KwUviDTI?purpose=inline)
+
+**Rojo — Emoción**
+
+Permite comprender y responder a emociones.
+
+[Witch Hands Images | Free Photos, PNG Stickers, Wallpapers & Backgrounds - rawpixel](https://images.openai.com/static-rsc-4/5_VF5C7mDlw73ndf7grQUKZKbZi4n5BG2x-IWCClk-F2K0SJdSGiRpizUXzwWjPvoyClbZOjn8GTbv1VoNay-O4YOwDZDXglVMi9J4SJpLbQ-i_Mod1nq_ZP9br9xHcutzPvW80Q5gA9ysxEDwt6AT5fBxuMtHPnAbdewestApk?purpose=inline)
+
+**Negro — Cautela**
+
+Detecta trampas, riesgos y plataformas falsas.
+
+[Download Gold Wizard Hat Png 05032024 | Wallpapers.com](https://images.openai.com/static-rsc-4/5y_KQf-F7EM7_fOs-BEYGQN6vISl6hmHv3CCQkp4Ba-IyXQE6_FGEcYH_W5vjYiJWByE9yi-r4cy5vYbHhKvhun-jqbmTEy8DCGsltJZ1dhQOi1fVh87w_3-XoYh-UkRcpLh0zZxvCYG8gnHIWbqPYWTsnE3fCei1CLZ1pXac28?purpose=inline)
+
+**Amarillo — Optimismo**
+
+Activa mecanismos y descubre oportunidades.
+
+[รูปภาพวาดหมวกสีเขียวแนวแฟนตาซีพร้อมเครื่องประดับ PNG , หมวกสีเขียว, เครื่องประดับ, จิตรกรรมภาพ PNG สำหรับการดาวน์โหลดฟรี](https://images.openai.com/static-rsc-4/r7MlhMist-wYj_2_r7kJtUkYkggVSEm2wknTQKNPFMRV1T-KMmIXzltYUsJpBAFSkGUkNKa_berLGjN6qFN1xlEwvvbklqndM88X1_g1rfgGKLPTsh2gruabFATOA54DDcCCx2bHimGopubby9cAr1L4J8Mk6kb6SNNofQ8L7Xg?purpose=inline)
+
+**Verde — Creatividad**
+
+Permite construir soluciones y rutas alternativas.
+
+[Wizards Blue Hat With Golden Emblem PNG Images | PNG Free Download - Pikbest](https://images.openai.com/static-rsc-4/Ec7rQnEbV3U0n_sO8M75s-C5ePzcIojTQQpyrqQKaxM4pLL8z8aXv6VADeca6DbMrQe4IGzOmA30D0UEkLfr0UU_tVqlLBKEj6ipU8ncaO3TSn3QCsC4ZCH-DJEmIFo0srMcu1mh3DmSoJubE2OwSTNt6Uah4bucbPVD_KRkLpc?purpose=inline)
+
+**Azul — Organización**
+
+Gestiona el mapa, el inventario y la secuencia de acciones.
+
+### **C. Comportamiento técnico**
+
+Cada sombrero debe modificar el estado de interacción, sin sustituir los controles de movimiento.
+
+| Sistema       | Comportamiento                                 |
+| ------------- | ---------------------------------------------- |
+| Selección     | Rueda o menú de sombreros                      |
+| Activación    | Tecla o botón específico                       |
+| Efecto        | Cambia la información o interacción disponible |
+| Desactivación | Volver al modo normal                          |
+| Persistencia  | Guardar sombreros desbloqueados                |
+| Feedback      | Icono, aura y sonido diferenciados             |
+
+El jugador no debe tener todos los sombreros disponibles desde el principio. El desbloqueo debe producirse durante la progresión narrativa.
+
+### **D. Puzzles propuestos**
+
+**Puzzle 1. El camino verdadero**
+
+- Blanco: descubre tres símbolos.
+- Negro: detecta una plataforma falsa.
+- Amarillo: activa el mecanismo.
+- Azul: organiza la secuencia correcta.
+
+**Puzzle 2. La conversación interrumpida**
+
+- Rojo: identifica el estado emocional de un personaje.
+- Verde: propone una respuesta alternativa.
+- El jugador debe elegir cómo continuar la conversación.
+
+**Puzzle 3. El puente imposible**
+
+- Negro: identifica el peligro.
+- Verde: encuentra una solución alternativa.
+- Amarillo: activa la energía necesaria.
+- Liam y Elara: ejecutan conjuntamente la acción.
+
+### **E. El conejo gris y el Consejero**
+
+El conejo debe tener un comportamiento propio:
+
+- Aparecer y desaparecer.
+- Correr cuando el jugador se aproxima.
+- Dejar pistas.
+- Guiar hacia caminos secundarios.
+- Aparecer ocasionalmente en sueños.
+
+El Consejero será una figura de orientación, no un personaje que resuelva los problemas por el jugador.
+
+**Resultado:** el jugador aprende a cambiar de perspectiva y desbloquea un sistema de resolución de problemas reutilizable.
+
+## **3.4. CAPÍTULO 5 — El Despertar de las Historias Ocultas**
+
+[Social Quest Club - Summer Engine](https://images.openai.com/static-rsc-4/cXbeq-lIEqAeS05bLuD4yGuTz36kEGcmLhTtHVzh9htS_NcP5TTcBZhVqh3OsLDmRvgXqF5GshYNJQkkvDlbAuE5cWyrH9-b9ksEwQYiJzaRFYxR2jkask_ZSwATBJ1XD8SkVodwnmU9Qvhq4BgYVyrBKBIv3UeCLO71GCMojr8?purpose=inline)
+
+[Daisy the Dragon of Table Mountain | Story.com](https://images.openai.com/static-rsc-4/RbYHQaycHY3OPQvmpugIbNGakIE48XmgKMk7gKWWkJwGa1zdEM-8MtzfBEYXMByh2-qUX2q2rERXpTvZN3Z4j7j_zLZH0M481Geh4deGBAS1Aj1r821kd3g_ytWL25iK1lK_-wR-_N5rulc1T9zgrS3G2_V30See1TFHl8GLIc0?purpose=inline)
+
+[Restoration Art - Octopath Traveler 0 Art Gallery](https://images.openai.com/static-rsc-4/3xuXrBIHxPh2n45pW7C9Izw28xC_WpWKC8lHVQ8AVrBQhXSJA5rDpW6tUXI8SlEBR-m1zectmrUB8SlEUAtJM_4Z9trJZlO_k5D8sfYW6Tf4bRztXlxyToV36xXggu9Yp38GqZJOmcHIvuJE94WCl-KT-ZR7r5ea3D8v089XdeQ?purpose=inline)
+
+13
+
+**Función narrativa:** trasladar la transformación individual al ámbito colectivo.
+
+Aquí el videojuego debe dejar de ser únicamente una aventura de exploración y empezar a incorporar una dimensión social.
+
+### **A. Escenario: la Plaza de las Historias**
+
+La plaza debe ser un espacio vivo y modificable.
+
+Elementos:
+
+- Banco central de reunión.
+- Fuente.
+- Casas de los vecinos.
+- Tablón de anuncios.
+- Pequeños puestos de oficios.
+- Espacios de reunión.
+- Personajes con rutinas y estados emocionales.
+
+### **B. Sistema de historias personales**
+
+Cada NPC tendrá una ficha narrativa.
+
+| NPC     | Conflicto inicial               | Posible evolución                 |
+| ------- | ------------------------------- | --------------------------------- |
+| María   | Pérdida de historias familiares | Recuperación de la memoria        |
+| Javier  | Miedo al cambio                 | Reconocimiento de sus capacidades |
+| Ana     | Incertidumbre sobre el futuro   | Confianza y participación         |
+| Tomás   | Pérdida de la cosecha           | Nuevo propósito                   |
+| Lucía   | Búsqueda de conocimiento        | Investigación y descubrimiento    |
+| Roberto | Recuerdos del pasado            | Recuperación de la historia       |
+
+### **C. Mecánica: escuchar y reconstruir**
+
+Se introduce un sistema de conversaciones ramificadas.
+
+El jugador debe:
+
+1. Acercarse a un vecino.
+2. Escoger una opción de diálogo.
+3. Escuchar sin interrumpir.
+4. Identificar emociones.
+5. Formular preguntas.
+6. Descubrir información.
+7. Proponer una acción o dejar que el personaje encuentre su propia solución.
+
+La respuesta del NPC dependerá de la manera en que se haya desarrollado la conversación.
+
+### **D. Sistema de comunidad**
+
+Se propone incorporar un indicador de cohesión colectiva.
+
+Variables:
+
+- `confianza_comunidad`
+- `historias_recuperadas`
+- `proyectos_comunitarios`
+- `npc_vinculos`
+- `memoria_colectiva`
+
+Las decisiones pueden desbloquear:
+
+- Una escuela comunitaria.
+- Ferias de oficios.
+- Nuevas conversaciones.
+- Accesos a casas y espacios.
+- Actividades secundarias.
+
+### **E. Evolución visual**
+
+La plaza debe reflejar el progreso del jugador.
+
+[Conyberry Settlement in The Owl Friends | World Anvil](https://images.openai.com/static-rsc-4/3-n-ss1GcT-2ttWrHYR1ypHlRVolicu7e2oHCG6kAgMHf_s2WjJLGqgHRmWQndbna5m1lCYHJtXEJh9HCEfhyxqVNGHKGtpDWXDKOmouaPxzSUWyl2So7Ks8CZvZeqzpLMCA-44ch4IEhHOfhjd7IzO0SmjMqnkZhwSSmchKODw?purpose=inline)
+
+**Estado inicial**
+
+Poca actividad, espacios vacíos y habitantes aislados.
+
+[Social Quest Club - Summer Engine](https://images.openai.com/static-rsc-4/cXbeq-lIEqAeS05bLuD4yGuTz36kEGcmLhTtHVzh9htS_NcP5TTcBZhVqh3OsLDmRvgXqF5GshYNJQkkvDlbAuE5cWyrH9-b9ksEwQYiJzaRFYxR2jkask_ZSwATBJ1XD8SkVodwnmU9Qvhq4BgYVyrBKBIv3UeCLO71GCMojr8?purpose=inline)
+
+**Estado evolucionado**
+
+Más actividad, puestos, flores y reuniones.
+
+**Resultado:** el jugador comprende que las historias individuales influyen en la comunidad y que la transformación requiere participación colectiva.
+
+## **3.5. CAPÍTULO 6 — El Grano y la Paja de la Historia**
+
+[На дне Иссык-Куля найдены следы средневекового города](https://images.openai.com/static-rsc-4/FfcDS4s4zTfXT4V864MN5-JFFt8qfgXCf8hT7NYi1UVJ_KqTbc7NqIXwu5umPzgkH_jKlJPBkR7HcHEhJQZqlyxlbHrnzTwLt7kP0FA7dyAQxHcWAw-aHNvhVDLipygt7p54bARkinsBJe9BxqiYBHDB7VWFkdiH8K4z6BImp4c?purpose=inline)
+
+[Panda Wewa Ruins: Explore Sri Lanka's Ancient Hydraulic Engineering Marvel](https://images.openai.com/static-rsc-4/MpHtIYbj4H4uh1w-oNEBfGNBfArA89K4OVauzVEAZAX3ZtKUfu7CYlvQ-zOiNvxOBYpQhXF0K0AigtP-ciwIVgPw-Qb0yokvFItVBAjiKXXpiGpNo4I2hA_nvsc76vQHXWjKY2SNtNBnCOJ9WNuUY2U6fYjVABDKt784cNmXwxA?purpose=inline)
+
+[The Secret Mechanism Inside the Antikythera Device : The World’s First Computer | by The Hidden Footprints | Medium](https://images.openai.com/static-rsc-4/pMYpfEqSkf8-1oXELEBbcma-B_0J7Vj6OztYWUXRhov6yNgcDDMNoTjbYCPFeS3Gz0JsLtWTFzfKRGEF8iCNYpYm-AJOjaJCFk2tA53bSZlw0NGWNcRo9S8PTnjl26OY-dSgZg3twGoTWtMak6hcUx1xq5CzchUo-ON23_noRCk?purpose=inline)
+
+14
+
+**Función narrativa:** introducir una mecánica de investigación y diferenciación entre hechos, interpretaciones y rumores.
+
+Este capítulo debe ser una experiencia de exploración e investigación.
+
+### **A. Escenario: el Pueblo Sumergido**
+
+El escenario tendrá tres zonas:
+
+1. Presa exterior.
+2. Orilla y accesos al lago.
+3. Ruinas sumergidas.
+
+La tercera zona debe poder explorarse mediante plataformas subacuáticas, cámaras de aire y mecanismos de acceso.
+
+### **B. Nueva mecánica: Grano y Paja**
+
+Se propone incorporar un sistema de clasificación de información.
+
+**GRANO — Información verificable**
+
+Hechos
+
+- Documentos originales.
+- Objetos arqueológicos.
+- Testimonios contrastados.
+- Mapas y registros.
+
+**PAJA — Interpretaciones**
+
+Juicios y suposiciones
+
+- Miedo colectivo.
+- Rumores.
+- Explicaciones sin pruebas.
+- Creencias heredadas.
+
+El jugador tendrá que recopilar pruebas y organizarlas.
+
+### **C. Sistema de investigación**
+
+Cada descubrimiento tendrá:
+
+- Identificador.
+- Fuente.
+- Descripción.
+- Categoría.
+- Personaje relacionado.
+- Grado de verificación.
+- Capítulo de origen.
+
+Ejemplo:
+
+| Elemento               | Clasificación  |
+| ---------------------- | -------------- |
+| Existencia de la presa | Hecho          |
+| Ruinas bajo el agua    | Hecho          |
+| Pueblo maldito         | Interpretación |
+| Aves como amenaza      | Suposición     |
+| Documentos antiguos    | Evidencia      |
+
+### **D. Puzzle principal: la historia de la presa**
+
+1. Liam revela inscripciones con su lámpara.
+2. Elara escucha los ecos de antiguos habitantes.
+3. El jugador encuentra un mapa.
+4. Recupera documentos.
+5. Compara los testimonios con las evidencias.
+6. Clasifica las afirmaciones.
+7. Reconstruye la historia del pueblo sumergido.
+
+### **E. Mecánica subacuática**
+
+- Movimiento con flotabilidad.
+- Corrientes.
+- Burbujas de oxígeno o zonas de respiración.
+- Plataformas sumergidas.
+- Puertas que se activan mediante luz.
+- Ecos que permiten descubrir rutas.
+
+Se recomienda que la exploración subacuática sea accesible y que el oxígeno no provoque una penalización excesiva.
+
+### **F. Consecuencia narrativa**
+
+El pueblo comienza a comprender que las aves negras no son necesariamente una amenaza y que la historia de la presa es más compleja de lo que se había contado.
+
+**Resultado:** desbloqueo de la investigación histórica y acceso al misterio de las Custodias.
+
+## **3.6. CAPÍTULO 7 — El Libro Vivo y la Brújula Dorada**
+
+[Movitoir Studios: Singapore Digital Marketing Experts | Movitoir Studios](https://images.openai.com/static-rsc-4/97JMj-xYU0QpjPXZJQ3QTqalmSfxBDmUT9y97ugMsDi7IbhirwDCm_g8g_qczab32GjGps4vsgLp9H99yRBbC13WpLNSGs6MF_sJfebylzs3bZDxivML_KN_4Sn3k_eczTTKvijleh7Axhh6gXyXGzp69LBj_HUDpWEdT8ozlEM?purpose=inline)
+
+[The Fantasy Story Compass — Free Field Guide · The Tale Tinkerer](https://images.openai.com/static-rsc-4/yu1KFoGUVaxCYl7698W_7_rE4cdV1j8L-IsYo4jWzmQyKOX_004oCZR3RrIQ4vYOtjB7X8LAr8qorYgHgxTM-77TDcNnth8LNeM1gd6x7CzpKs_E2X_PIhbWGe3oKrChxsm5RCMv2ydQeoxin-z52G5rhkjn8dKiXjo-jmqws8E?purpose=inline)
+
+[Anna's Merge Adventure-Offline 3.60.0 Free Download](https://images.openai.com/static-rsc-4/8FK9ksBM5_Ia4fNNlOko-Ay9pgZyQB-HcTH68RuYqiXX6V05X7P7r_Ba4nBpmOleBnNND3D-E78AegWegu5lNxzFqW-6TJDC2_2LmhmTSvBOvAymcE-mU0RVc4giiKYnIVdb6pAHbdVzRIdp4SZ24uD6PnAuIZkBH_LSqlI-i_M?purpose=inline)
+
+12
+
+**Función narrativa:** convertir los dos objetos centrales de la saga en sistemas de juego interconectados.
+
+Este capítulo debe ser uno de los más importantes desde el punto de vista técnico.
+
+### **A. El Libro Vivo**
+
+El libro deja de ser un simple inventario de historias.
+
+Debe reaccionar al jugador.
+
+Comportamientos:
+
+- Páginas que se escriben automáticamente.
+- Letras que aparecen y desaparecen.
+- Ilustraciones que cobran movimiento.
+- Fragmentos que se reconstruyen.
+- Páginas que cambian de color.
+- Textos que reaccionan a las lámparas.
+- Nuevas entradas al completar acontecimientos.
+
+### **B. La Brújula Dorada**
+
+[The Fantasy Story Compass — Free Field Guide · The Tale Tinkerer](https://images.openai.com/static-rsc-4/yu1KFoGUVaxCYl7698W_7_rE4cdV1j8L-IsYo4jWzmQyKOX_004oCZR3RrIQ4vYOtjB7X8LAr8qorYgHgxTM-77TDcNnth8LNeM1gd6x7CzpKs_E2X_PIhbWGe3oKrChxsm5RCMv2ydQeoxin-z52G5rhkjn8dKiXjo-jmqws8E?purpose=inline)
+
+[thetaletinkerer.com](https://thetaletinkerer.com/the-compass?utm_source=chatgpt.com)
+
+La brújula debe funcionar como un sistema de orientación narrativa.
+
+No debe limitarse a indicar la dirección física.
+
+Debe señalar:
+
+- Preguntas sin resolver.
+- Recuerdos incompletos.
+- Elementos que requieren dos perspectivas.
+- Lugares relacionados con una historia.
+- Decisiones que todavía no se han comprendido.
+
+### **C. Sistema de sincronización**
+
+Se propone una interacción de tres elementos:
+
+| Elemento | Función              |
+| -------- | -------------------- |
+| Liam     | Ilumina y revela     |
+| Elara    | Interpreta y escucha |
+| Brújula  | Orienta y conecta    |
+
+Cuando los tres elementos interactúan correctamente, el Libro Vivo puede reconstruir una página.
+
+### **D. Nuevo escenario: Cámara de las Custodias**
+
+La cámara debe contener:
+
+- Inscripciones antiguas.
+- Paredes con símbolos.
+- Cofres.
+- Pergaminos.
+- Mapas.
+- Pedestales.
+- Una representación de las aves negras.
+
+El descubrimiento debe revelar la palabra «Custodias» y vincular las aves con la protección de los conocimientos sellados.
+
+### **E. Puzzles de reconstrucción**
+
+Se proponen tres:
+
+**Puzzle 1. Las páginas perdidas**
+
+Reconstruir fragmentos del libro utilizando las dos lámparas.
+
+**Puzzle 2. La brújula de las plumas**
+
+Orientar las plumas azules y rosadas según pistas de los documentos.
+
+**Puzzle 3. El mensaje incompleto**
+
+Relacionar las inscripciones del templo con los documentos encontrados en el capítulo anterior.
+
+### **F. Persistencia**
+
+Los descubrimientos deben guardarse en el estado global del juego.
+
+Variables propuestas:
+
+- `book_pages`
+- `book_fragments`
+- `compass_state`
+- `custodians_clues`
+- `ancient_documents`
+- `transmutation_keys`
+
+No deben perderse al cambiar de escena ni al recargar el juego.
+
+**Resultado:** se desbloquea el acceso a los sueños paralelos.
+
+## **3.7. CAPÍTULO 8 — Sueños Paralelos y Revelaciones Internas**
+
+[Ефектът на Зейгарник, прокрастинацията и тяхното влияние върху нашата енергия, емоции и вътрешен баланс](https://images.openai.com/static-rsc-4/OKEiTTT0CUhf0FpsNQL4aQjLw4XvICmS9fjshI6-EfR6m9nZTyhH3QFFjpUB5lVZe42ul6Agx3JUL-guQHSpNKcbLgKbhA159rg_SSzBBC6nH1e6w7gsIvLvuMz-0DMuGF2_jCPZvpv1zlm4gK-5DAHOdlFQZ13Dl8ApnmUjeUE?purpose=inline)
+
+[The Uncharted Experience | UJET](https://images.openai.com/static-rsc-4/4sG3smQcMedITFJlFo3oyAs6Apv7ClMe71sczVw7UugnqDA3hPs08pkLOATNjqpjU6fGl6Jas587c8snI3tj-QCooZCH27Ew55ZbVou3u6g_xFORihsC-R-5A0eRQCYt_KNcECTl0q_8Pljsgrv-fiawhrHkBmfLFxwUyp-GY_I?purpose=inline)
+
+[Throne Room Mystic | Patreon](https://images.openai.com/static-rsc-4/RXmAavKZre1AB88L_AXssDQal7BNnCyQ4JlLA7Jk79PHGd9LdHqy3BlFWowkULxleOMUPtJqE7ZLdxd2pPmNVd9A13PSJOFRC4UntBPM0VaDegX0DliyquTNg3CX_u8jlZv67_oyCDoa6w3B0KvQeX2-pElJ4AY58JVX58Isaes?purpose=inline)
+
+11
+
+**Función narrativa:** desarrollar una experiencia de exploración paralela en la que Liam y Elara recorren mundos oníricos independientes.
+
+Este capítulo debe cambiar radicalmente la ambientación.
+
+### **A. Estructura del nivel**
+
+Se divide en dos escenarios conectados.
+
+[Beautiful Serene astral fantasy - Free AI Photo Generator - starryai](https://images.openai.com/static-rsc-4/R3gMWlI1EX2v0AjZAGaE2e6DaI-ofMScsjxruwxlqs4j_oyMBjS9mWjyfJ_L1yOudnLMBeI5mbmAsAefQvyIIHJuTmQ7E9tWlXJhRtYgCMXsGpg0f84Fxg0YBWRBIasfBV5jzdRWtey7lk08UjKcxLAC0Cohia0fE0e8R1U37s8?purpose=inline)
+
+**El sueño de Elara**
+
+- Jardín mágico.
+- Estanque de reflejos.
+- Doble luminoso.
+- Amuleto de intuición.
+
+[Rüyalar ve Bilinçaltı: Neden Rüya Görürüz?](https://images.openai.com/static-rsc-4/EZG6zzKzyb8j-rFVby9t32xszsZqY4CIR3B92V_5RkXO-1S47mMXmi58sw954X6w2jVFCxg0eZYQh7lGoOdBouwACcA7F6YECKdgb8veSppgsumi7jTDihyp0uNHyUiGaz-V2GvHs1674J4INvgNoUNS7VpzpXslqnLsBH5kHvU?purpose=inline)
+
+**El sueño de Liam**
+
+- Mapa vivo.
+- Caminos cambiantes.
+- Liam joven.
+- Puerta de bronce.
+- Espejo del futuro.
+
+### **B. Sistema de mundos paralelos**
+
+El jugador alternará entre ambos sueños.
+
+La solución de un enigma en un mundo puede modificar el otro.
+
+Ejemplo:
+
+- Elara descubre un símbolo en el estanque.
+- El símbolo aparece en el mapa de Liam.
+- Liam abre un camino.
+- El camino permite a Elara acceder al amuleto.
+
+### **C. Mecánica del mapa vivo**
+
+El mapa debe generarse por estados:
+
+- Caminos ocultos.
+- Caminos descubiertos.
+- Caminos bloqueados.
+- Caminos alternativos.
+- Caminos completados.
+
+Las rutas deben responder a las decisiones del jugador.
+
+### **D. El Liam joven**
+
+Se propone una secuencia de diálogo con una representación más joven de Liam.
+
+La escena debe mostrar:
+
+- Dudas.
+- Inseguridad.
+- Preguntas sobre el futuro.
+- Contraste entre la versión joven y adulta.
+
+No debe convertirse en un enemigo ni en un jefe. Es una representación simbólica de la vulnerabilidad del protagonista.
+
+### **E. Objetos desbloqueables**
+
+[O Código do Silêncio Masculino](https://images.openai.com/static-rsc-4/XlQqYY3eJKl6U1r7u9NEqEu1x091nk9odMQcfnzArtKXLG43UZ2HHL9Rpk-ypFRD1sj1S1IruHtrstkiPksV6bCv-I4HOb7bi4aWWYro3xpWMuJ4NhIEe0Od2nhb7OULTKUa2za7FFda402cR5Fu0Myq9wQqTn6RiwLQP0yMRfw?purpose=inline)
+
+**Llave de metal**
+
+Desbloquea mecanismos y accesos relacionados con el mapa.
+
+[Ref.PD1166  – PORTAL GLASTONBURY LIMITED](https://images.openai.com/static-rsc-4/qjXXRmG0LXaECgXrGHkP1oaYSvFZDtE84XGX8YF4FdmPk8A7KCGNPZHi3084ZcJCbQ655hbPbGr_vLHFNNRyxb0GgWN9caS4kDwroZkZ2rffXQI4iPrHGCg2pJNROmbqQaon-6wLvK5WbYDaomXCt-rVhmMhBGyv1RklpptV3Tg?purpose=inline)
+
+**Amuleto**
+
+Representa la intuición y permite detectar determinados elementos oníricos.
+
+### **F. Secuencia final**
+
+Al despertar:
+
+- Liam conserva la llave.
+- Elara conserva el amuleto.
+- Ambos reconocen que los sueños estaban conectados.
+- La brújula reacciona a los dos objetos.
+
+**Resultado:** desbloqueo de la capacidad de interpretar sueños y conectar escenarios narrativos.
+
+## **3.8. CAPÍTULO 9 — El Regreso de las Historias y el Circo de los Nómadas**
+
+[Créez votre empire médiéval dans le jeu de stratégie Kingdom Maker | Articles | Pocket Gamer France](https://images.openai.com/static-rsc-4/2z0ZPR8WV9Z0cCoQ21A7Pjna5t2qRkUQIfWp9GVF1nwCOwLlcVoizMkUGQsI3uAjtXVflB4IsrFPvbbkL1lkboJhGRQTRTw-ZPlJjDIoJzLZdx5abEoboRftQiS9gBbmVOSbWHDegTrvD4Ah0VfeXNEFBYMkcb5O8XRC6HypltE?purpose=inline)
+
+[Book Review: “The Night Circus” by Erin Morgenstern | by Elizabeth Gray | Medium](https://images.openai.com/static-rsc-4/manHKRSW9pxn2xzAcc9biT6cGEriVkqL6kYOvwKNnZF9PyAI_HJJETao9tbYxGF25-dgp5f-GHNJLwiHmghFCgFIl2ne7uQT9wleXCRK58kkBDHdTYFX2UxjulK3_G0VLOzTHlaMw6FXiBeQh0OrJDXWKmyXI1S80Bo8vuzmoD4?purpose=inline)
+
+[幻想サーカス＜綱渡り編＞ - akiの作品 - Aipictors - AI画像投稿サイト・生成サイト](https://images.openai.com/static-rsc-4/PirrTX5vHs014ESXJ5aDs7Xv8047ngmBkE8v42It5X6UPBHp13Nak0ZIY_h1cwJCHnKASAJ_8DmOlrrHKwu5mzbN7BeqMnyfKLpYu1P9lvNt30c1J1-lfITNrqcG-PgydiKWGENvyp2X3W6OVl6aQw_R5iEYkZPJPfZK7WOu1SY?purpose=inline)
+
+12
+
+**Función narrativa:** reunir los aprendizajes anteriores en una experiencia colectiva y preparar la continuidad de la saga.
+
+Este capítulo debe ser más amplio que los anteriores. No debe tratarse como una simple escena de llegada de una caravana.
+
+### **A. Escenario: el campamento nómada**
+
+Elementos principales:
+
+- Siete carromatos azules.
+- Gran pabellón azul oscuro.
+- Estrellas doradas.
+- Antorchas y faroles.
+- Escenario central.
+- Zona de artistas.
+- Taller de objetos.
+- Espacio de reunión.
+- Zona de relatos.
+
+La caravana debe tener animaciones ambientales: telas moviéndose, luces, personajes caminando y objetos interactivos.
+
+### **B. Personajes y relaciones**
+
+- Callum: sabiduría y conexión con la historia de Aides.
+- María: recuperación de relatos antiguos.
+- Tomás: resiliencia y reconstrucción de su propósito.
+- Javier: búsqueda de relaciones entre símbolos y enseñanzas.
+- Aides: evolución de protagonista a figura sabia.
+
+La aparición de Aides debe respetar su condición de personaje de la historia contenida en el libro. Se debe cuidar la transición entre los dos planos narrativos.
+
+### **C. El Circo de las Sombras y los Sueños**
+
+El espectáculo debe contener cuatro actos jugables.
+
+[\[Top Choices\] 20 Good Roleplay Ideas for Character AI](https://images.openai.com/static-rsc-4/d51gyACg7kB1lxpf8b-upNvSs39-tJ9qoW5TvIehduXOgI8bqqwWUiurmfEAHI5N1vXVnAO2oX0c8YnaUS22fBPcqagmHEZQDyxhKC6Tvm5v5HDvABSkWQ4v705kT12WD9pEG_MHcopYY7to14hmPbvIsbhg0gJziP2GFFj0zlo?purpose=inline)
+
+**Acto 1. El equilibrista**
+
+El jugador debe atravesar una cuerda suspendida mientras escucha una historia sobre una caída y la recuperación.
+
+Mecánica: equilibrio, movimiento y control del ritmo.
+
+[Big Top Building / Landmark in Wild Beyond the Witchlight Campaign Expansion | World Anvil](https://images.openai.com/static-rsc-4/13rQAhkld_ui8_knBFqHaxQfS0NtvUVBPhRIlTlc1bed9nshOI03EfZQKJonNZ3-F8sXgJDtoRlGPcKPo0kYd3YShuOfMkimaRFTRYTq7lw8DgxdypMN0HOK-bQ1qebBE60foiXlvGWyCtyTsYIJu9AVcxqnxwGfz9b_AtXkoLs?purpose=inline)
+
+**Acto 2. Los malabaristas de los recuerdos**
+
+Se lanzan lamparillas que representan recuerdos olvidados.
+
+Mecánica: recoger, ordenar y relacionar recuerdos.
+
+[A Tale for the Ages Price | mtg](https://images.openai.com/static-rsc-4/5GyVvB2YmO8lFei3ScSOmfzF_FJKuSyhrPQ82N9VNvlNEr84qDjNNyWGJLPgR6uk3Qiti6Zi0MSDtuYxALaMFw9O7--4Ex5bz-Z7nMTdZVzXZ1haGShyGN8XOTgUFfiLy_b4vEZ6BZska6vypNj1xoTf9LxWRPVge8hd6gwpx7s?purpose=inline)
+
+**Acto 3. El pueblo que emerge**
+
+Un coro infantil representa el pueblo sumergido.
+
+Mecánica: reconstrucción de escenas y asociación de hechos históricos.
+
+[Discovering Wonders: Faith and Fantasy in Caraval | by BGodInspired | Medium](https://images.openai.com/static-rsc-4/6qYqE7kZPxIdpfrb8xT7JuVbqJgVtICwmlpO-WDtl2QFIknuCLnsstro2RxwpHQ7HADTStbu2ccSurRGVeaEiWLgEImOH95IOW5QWeLx1nw4n5LOiJYjexy2BoTyYRUSOjB4uFu_gpWwFDv_H8e6eDZ7F200ve8lkCO2SHpYfro?purpose=inline)
+
+**Acto 4. La historia compartida**
+
+El público reconoce sus propias experiencias en los relatos.
+
+Mecánica: decisiones narrativas y conversaciones con personajes.
+
+### **D. Sistema de recuerdos**
+
+Se propone introducir una nueva colección:
+
+`memorias_circo`
+
+Cada recuerdo contiene:
+
+- Personaje de origen.
+- Fragmento narrativo.
+- Imagen asociada.
+- Emoción vinculada.
+- Lugar donde se descubrió.
+- Relación con otros recuerdos.
+
+Al reunir determinados recuerdos, se desbloquearán secuencias adicionales.
+
+### **E. Música y ambiente**
+
+El circo necesita una identidad audiovisual propia.
+
+- Música de bienvenida.
+- Música de exploración.
+- Tema del equilibrista.
+- Música de los malabaristas.
+- Tema del pueblo sumergido.
+- Música del espectáculo final.
+
+La música debe cambiar en función del acto y de las acciones del jugador.
+
+### **F. Final del capítulo**
+
+El espectáculo termina con la reunión de las historias.
+
+El Gran Libro permanece abierto y muestra que todavía quedan páginas por escribir.
+
+Se debe preparar una transición narrativa hacia los siguientes acontecimientos de *Ecos del Alma*, sin introducir anticipadamente sucesos que correspondan a los capítulos posteriores.
+
+**Resultado:** culminación de la primera gran etapa de aprendizaje y apertura del siguiente arco narrativo.
+
+# **4. SISTEMAS TRANSVERSALES QUE DEBEN DESARROLLARSE**
+
+Los capítulos anteriores necesitan compartir una arquitectura común. No conviene programar ocho sistemas independientes.
+
+## **4.1. Sistema de decisiones narrativas**
+
+Cada decisión importante debe quedar registrada.
+
+Ejemplo de estructura:
+
+```
+gameState.narrative = {
+  choices: {},
+  discoveries: [],
+  memories: [],
+  relationships: {},
+  unlockedChapters: [],
+  completedPuzzles: []
+};
+```
+
+Los diálogos deben permitir:
+
+- Elegir respuestas.
+- Preguntar de nuevo.
+- Descubrir información adicional.
+- Modificar relaciones.
+- Desbloquear nuevas conversaciones.
+- Obtener consecuencias posteriores.
+
+Las decisiones importantes deben tener efectos visibles, no limitarse a cambiar una frase.
+
+## **4.2. Sistema de personajes y emociones**
+
+Se propone un sistema común para Liam, Elara, Aides y los NPC.
+
+| Variable    | Uso                        |
+| ----------- | -------------------------- |
+| `trust`     | Confianza                  |
+| `bond`      | Vínculo entre personajes   |
+| `tension`   | Conflicto o fricción       |
+| `fatigue`   | Cansancio                  |
+| `emotion`   | Estado emocional           |
+| `knowledge` | Conocimientos descubiertos |
+
+No todos los personajes necesitan todas las variables. Deben utilizarse únicamente las que tengan una función narrativa o jugable.
+
+## **4.3. Sistema de objetos y coleccionables**
+
+Los objetos fundamentales deben estar diferenciados de los coleccionables secundarios.
+
+| Tipo          | Objetos                       |
+| ------------- | ----------------------------- |
+| Narrativos    | Gran Libro, Brújula           |
+| Personales    | Llave, amuleto                |
+| Investigación | Mapas, pergaminos, documentos |
+| Recuerdos     | Fragmentos, lamparillas       |
+| Progresión    | Sombreros y claves            |
+| Ambientales   | Velas, faroles, plumas        |
+
+Los objetos esenciales no deben poder perderse por error.
+
+## **4.4. Sistema de iluminación y ciclo ambiental**
+
+Se recomienda mantener las lámparas como elementos gráficos independientes.
+
+[Ori and the Will of the Wisps: 5 big changes that are coming to Ori 2 | TechRadar](https://images.openai.com/static-rsc-4/CH9lny3V8ziczolTqQ5dmDMnfL8zoSC5FdX9t1DGhvpOxfpcgpMQyzxQseJv9PB4V2S426-rWC7W4vkXwuqBMmL4eozvW3rqT1_IDaEMiG0Mu6zHN8ncuY_oVW8h6tHqVKzgTw6o5ZhyA7Buw3i6vhVqGu1FEJEhyBmEc-2B9mA?purpose=inline)
+
+[Designing Honest AI: Visual Patterns for Transparency and Trust](https://images.openai.com/static-rsc-4/wfSCjL4lB7ut5KKVsgbKSBguqPig5K7VAMgm5FSKA0twFCJu0DMsZbeIsYaPD3o-jdX-bINjYj_jY3NmlffRovjfL-S_TU8GgLmkWqPvSsVpKbDcdlwLp1sieJmbsCAsHfVqAmcA2zJ7781OEyrC6Ou-3ZfYEYGwRnI2sTf43m4?purpose=inline)
+
+[Magical Forest - 2D Parallax Background Pack by Mavs](https://images.openai.com/static-rsc-4/ZhvvfwH-r7s2xvkc2GopUwjTszMwyhxW4YWRjTLaP7AfANHhoRC_BYK52O2xaldxtgwdrvADCEaRYU2w1Mm1phH3K11L6-Q-KYafRHywb4-2qW7VW18bQVXqlA6s9-LF-0NJj_97aIDLoCrSObUDHhBchlEa-D59S5uTZGBig1U?purpose=inline)
+
+15
+
+El sistema debe permitir:
+
+- Mañana.
+- Mediodía.
+- Tarde.
+- Noche.
+
+El sol y la luna deben tener movimiento independiente y reaccionar a las transiciones del escenario.
+
+La iluminación de Liam y Elara no debe confundirse con la iluminación ambiental.
+
+## **4.5. Sistema de checkpoints y recuperación**
+
+Se deben mantener las velas como puntos de control.
+
+Cada escenario debe definir:
+
+- Punto de inicio.
+- Velas intermedias.
+- Punto de recuperación.
+- Estado de objetos recogidos.
+- Estado de puzzles.
+- Estado de personajes.
+- Última escena narrativa completada.
+
+La recuperación debe permitir continuar sin repetir conversaciones o perder descubrimientos.
+
+## **4.6. Sistema de accesibilidad**
+
+Requisitos comunes:
+
+- Modo Historia.
+- Ayudas de orientación.
+- Velocidad de texto configurable.
+- Subtítulos legibles.
+- Contraste suficiente.
+- Controles táctiles.
+- Botones adaptados a pantallas pequeñas.
+- Alternativa a acciones que dependan exclusivamente del color.
+- Posibilidad de saltar secuencias ya vistas.
+
+# **5. ESPECIFICACIONES TÉCNICAS PARA EL DESARROLLADOR**
+
+## **5.1. Arquitectura recomendada**
+
+La ampliación debe respetar la arquitectura del prototipo existente y evitar duplicar sistemas que ya funcionan.
+
+Se propone organizar el desarrollo de esta manera:
+
+```
+RUTAS_DEL_ALMA/
+│
+├── core/
+│   ├── game_state.js
+│   ├── chapter_manager.js
+│   ├── scene_manager.js
+│   ├── save_manager.js
+│   └── checkpoint_manager.js
+│
+├── characters/
+│   ├── liam.js
+│   ├── elara.js
+│   ├── aides.js
+│   ├── callum.js
+│   └── npcs.js
+│
+├── systems/
+│   ├── lamp_system.js
+│   ├── synergy_system.js
+│   ├── hats_system.js
+│   ├── compass_system.js
+│   ├── living_book.js
+│   ├── dialogue_system.js
+│   ├── memories_system.js
+│   ├── investigation_system.js
+│   └── dream_system.js
+│
+├── chapters/
+│   ├── prologue/
+│   ├── chapter_03/
+│   ├── chapter_04/
+│   ├── chapter_05/
+│   ├── chapter_06/
+│   ├── chapter_07/
+│   ├── chapter_08/
+│   └── chapter_09/
+│
+├── assets/
+│   ├── backgrounds/
+│   ├── characters/
+│   ├── animations/
+│   ├── objects/
+│   ├── vfx/
+│   ├── audio/
+│   └── ui/
+│
+└── tests/
+    ├── narrative/
+    ├── gameplay/
+    ├── interactions/
+    ├── persistence/
+    └── performance/
+```
+
+Es una arquitectura objetivo, no una instrucción para reorganizar todo el proyecto de golpe. El desarrollador deberá adaptar los módulos a la estructura real del código existente.
+
+## **5.2. Gestión de capítulos**
+
+Cada capítulo debe tener un controlador propio con las siguientes funciones:
+
+- Inicialización.
+- Carga de escenario.
+- Presentación narrativa.
+- Activación de personajes.
+- Gestión de objetivos.
+- Activación de puzzles.
+- Registro de descubrimientos.
+- Condiciones de finalización.
+- Guardado.
+- Transición al siguiente capítulo.
+
+Ejemplo conceptual:
+
+```
+const chapter = {
+  id: "chapter_07",
+  title: "El Libro Vivo y la Brújula Dorada",
+
+  requirements: [
+    "chapter_06_completed",
+    "lake_discovered"
+  ],
+
+  state: {
+    bookFragments: [],
+    compassActivated: false,
+    cluesFound: []
+  },
+
+  objectives: [
+    "reveal_inscriptions",
+    "activate_compass",
+    "open_secret_chamber",
+    "complete_living_book"
+  ]
+};
+```
+
+## **5.3. Requisitos para el arte**
+
+Cada escenario debe entregarse por capas y no como una única imagen plana.
+
+| Capa | Contenido                               |
+| ---- | --------------------------------------- |
+| 1    | Fondo lejano y cielo                    |
+| 2    | Montañas, bosques y estructuras lejanas |
+| 3    | Arquitectura y elementos principales    |
+| 4    | Plataformas y superficies transitables  |
+| 5    | Elementos interactivos                  |
+| 6    | Personajes y NPC                        |
+| 7    | Efectos de iluminación                  |
+| 8    | Partículas y efectos ambientales        |
+| 9    | Elementos de primer plano               |
+
+**Importante:** las plataformas deben tener colisiones independientes de la ilustración. El arte no debe definir por sí solo la geometría jugable.
+
+## **5.4. Animaciones nuevas**
+
+Además de caminar, correr, saltar, caer, recuperarse e interactuar, se necesitan animaciones específicas:
+
+| Personaje/objeto | Animaciones                                               |
+| ---------------- | --------------------------------------------------------- |
+| Liam             | Iluminar, observar, reflexionar, leer, sincronizar        |
+| Elara            | Escuchar sombras, meditar, interpretar, leer, sincronizar |
+| Conejo           | Aparecer, correr, detenerse, mirar atrás                  |
+| Consejero        | Aparecer, hablar, señalar, desaparecer                    |
+| NPC              | Conversar, escuchar, emocionarse, caminar                 |
+| Aves             | Volar, posarse, agruparse, desplazarse                    |
+| Libro            | Abrirse, pasar páginas, escribir, brillar                 |
+| Brújula          | Girar, señalar, vibrar, sincronizar                       |
+| Circo            | Malabares, equilibrio, actuación, celebración             |
+
+Las animaciones de los personajes deben respetar sus proporciones, línea de pies y estilo visual ya establecido.
+
+# **6. FICHAS DE ESCENARIOS Y ENTREGABLES GRÁFICOS**
+
+La producción artística debe organizarse por paquetes para que el diseñador pueda trabajar mientras se desarrolla la programación.
+
+| Escenario         | Artes principales             | Elementos animados            |
+| ----------------- | ----------------------------- | ----------------------------- |
+| Prólogo           | Pueblo, templo, camino        | Aves, libro, lámparas         |
+| Luz Interior      | Santuario, espejo, estanque   | Reflejos, partículas, auras   |
+| Seis Sombreros    | Claro, mesa, puertas          | Conejo, sombreros, mecanismos |
+| Historias Ocultas | Plaza, casas, escuela         | NPC, fuente, puestos          |
+| Grano y Paja      | Presa, lago, ruinas           | Agua, corrientes, objetos     |
+| Libro Vivo        | Templo interior, cámara       | Libro, brújula, inscripciones |
+| Sueños Paralelos  | Jardín onírico, mapa          | Caminos, amuleto, puerta      |
+| Circo             | Caravana, pabellón, escenario | Telas, faroles, artistas      |
+
+### **Reglas para la entrega de artes**
+
+1. PNG con transparencia real para objetos y personajes.
+2. Sprite sheets con fotogramas ordenados.
+3. Fondos separados por capas.
+4. Colisiones identificadas.
+5. Elementos interactivos con estados visuales.
+6. Versiones de cada escenario según la iluminación.
+7. Nomenclatura consistente.
+8. Ningún personaje importante debe quedar integrado de manera irreversible en el fondo.
+
+# **7. PLAN DE DESARROLLO Y PRIORIDADES**
+
+Recomiendo no desarrollar los ocho capítulos simultáneamente. Primero hay que cerrar las mecánicas compartidas y después producir cada escenario.
+
+## **Fases de producción propuestas**
+
+1. **Fase 1. Consolidación del prólogo**
+
+   Prioridad alta
+
+   Cerrar presentación de personajes, lámparas, aves, libro y brújula.
+2. **Fase 2. Identidad y cooperación**
+
+   Desarrollar La Luz Interior y el sistema de equilibrio entre Liam y Elara.
+3. **Fase 3. Pensamiento y diálogo**
+
+   Implementar los seis sombreros, puzzles y conversaciones ramificadas.
+4. **Fase 4. Mundo social**
+
+   Desarrollar la plaza, los NPC, las historias personales y la evolución comunitaria.
+5. **Fase 5. Investigación y misterio**
+
+   Construir el pueblo sumergido, el sistema Grano/Paja y la Cámara de las Custodias.
+6. **Fase 6. Objetos narrativos**
+
+   Completar el Libro Vivo y la Brújula Dorada.
+7. **Fase 7. Mundos oníricos**
+
+   Desarrollar los dos sueños y sus mecánicas interconectadas.
+8. **Fase 8. Circo de los Nómadas**
+
+   Producir la caravana, el espectáculo, los cuatro actos y el cierre narrativo.
+
+### **Estimación inicial de producción**
+
+Son estimaciones de planificación, no plazos comprometidos por el equipo.
+
+| Trabajo                          | Estimación                          |
+| -------------------------------- | ----------------------------------- |
+| Diseño narrativo y documentación | 1–2 semanas                         |
+| Arquitectura y sistemas comunes  | 2–3 semanas                         |
+| Desarrollo de escenarios         | 2–4 semanas por escenario           |
+| Arte y animación                 | En paralelo, 2–4 semanas por bloque |
+| Integración y pruebas            | 1–2 semanas por bloque              |
+
+Se pueden solapar tareas, pero los capítulos con mecánicas nuevas requieren más validación.
+
+# **8. ESTADO DEL PROYECTO Y ADAPTACIÓN AL PROTOTIPO ACTUAL**
+
+Hay una consideración importante: no debemos desarrollar este documento como si el videojuego comenzara desde cero.
+
+El paquete del proyecto ya contiene una base jugable con sistemas que debemos aprovechar.
+
+Según el informe técnico v9 incluido en el ZIP:
+
+| Sistema existente             | Estado documentado                       |
+| ----------------------------- | ---------------------------------------- |
+| Movimiento y plataformas      | Implementado                             |
+| Lámparas de Liam y Elara      | Implementado                             |
+| Jardín y evolución de plantas | Implementado                             |
+| Interacciones con Aides       | Implementado                             |
+| Conversaciones con Callum     | Implementado                             |
+| Lago y checkpoints            | Implementado                             |
+| Sistema de sombreros          | Parcial en su alcance global             |
+| Sinergia de personajes        | Implementada parcialmente en el conjunto |
+| Libro y brújula               | Requieren ampliación narrativa           |
+| Sistema de recuerdos          | Nueva ampliación propuesta               |
+| Mundos oníricos               | Nuevo desarrollo propuesto               |
+| Circo de los Nómadas          | Nuevo desarrollo propuesto               |
+
+El informe v9 también recoge una serie de tareas de arte y validación pendientes. La documentación de validación v15 advierte que las pruebas en dispositivos móviles reales todavía no están cerradas.
+
+Por tanto, antes de integrar los nuevos capítulos, se debe realizar una comprobación de regresión sobre el código de la entrega actual. No considero estas funcionalidades verificadas nuevamente de forma independiente en esta revisión.
+
+## **9. CRITERIOS DE ACEPTACIÓN DEL DESARROLLO**
+
+Cada capítulo debe superar una batería de pruebas antes de considerarse terminado.
+
+| Área        | Condición de aceptación                                  |
+| ----------- | -------------------------------------------------------- |
+| Narrativa   | Se puede completar la secuencia sin bloqueos             |
+| Personajes  | Animaciones y diálogos coherentes                        |
+| Exploración | Todos los caminos previstos funcionan                    |
+| Interacción | Objetos y mecanismos responden correctamente             |
+| Puzzles     | Soluciones y alternativas verificadas                    |
+| Decisiones  | Las consecuencias se conservan                           |
+| Guardado    | No se pierden los avances                                |
+| Arte        | No hay elementos provisionales en entregables finales    |
+| Audio       | Música y efectos se activan correctamente                |
+| Rendimiento | No aparecen errores ni caídas graves de rendimiento      |
+| Móvil       | Controles y distribución adaptados a dispositivos reales |
+
+### **Pruebas específicas**
+
+- Completar cada capítulo sin utilizar herramientas de depuración.
+- Repetir los capítulos después de guardar y recargar.
+- Comprobar las diferentes ramas de diálogo.
+- Verificar que los objetos no se duplican.
+- Comprobar que los checkpoints restauran correctamente el estado.
+- Verificar que los personajes no atraviesan plataformas.
+- Comprobar que las animaciones no se bloquean al cambiar de personaje.
+- Revisar los efectos de las dos lámparas y su Sinergia.
+- Probar resolución de 320, 480, 800, 1024 y 1920 píxeles de ancho.
+- Validar controles táctiles en Android e iOS reales.
+
+# **10. CONTINUIDAD NARRATIVA CON LOS SIGUIENTES LIBROS**
+
+Esta parte es especialmente importante después de revisar los documentos corregidos de *Rutas del Alma* y *Ecos del Alma*.
+
+Hay que respetar la continuidad entre ambos manuscritos.
+
+El capítulo 9 de *Rutas del Alma* termina con la llegada de la caravana y la presentación del Circo de los Nómadas. El capítulo 10 de *Ecos del Alma* desarrolla ya el Circo de las Sombras y los Sueños.
+
+Por tanto, la recomendación es:
+
+- Capítulo 9: llegada, presentación de Callum, reencuentro de historias y anticipación del espectáculo.
+- Capítulo 10: desarrollo completo del circo y sus acontecimientos.
+
+Esto evitará repetir escenas y permitirá que la experiencia del videojuego evolucione de manera natural.
+
+También hay que mantener separados los acontecimientos de Liam y Elara y los de Aides, Javier y Selene cuando se avance hacia los siguientes libros.
+
+La intención debe ser construir un universo narrativo conectado, no mezclar indiscriminadamente sus protagonistas.
+
+# **11. NUEVOS ENTREGABLES QUE DEBE RECIBIR EL DESARROLLADOR**
+
+Para ejecutar este proyecto correctamente, recomiendo dividir la documentación en ocho paquetes funcionales y un documento común.
+
+## **Paquetes de producción**
+
+P00
+
+**Prólogo — El Legado de las Lámparas Mágicas**
+
+Escenarios, introducción, lámparas, libro y aves.
+
+P03
+
+**La Luz Interior**
+
+Personajes, emociones, espejo y cooperación.
+
+P04
+
+**Las Llaves del Pensamiento**
+
+Seis sombreros, conejo, Consejero y puzzles.
+
+P05
+
+**El Despertar de las Historias Ocultas**
+
+Plaza, NPC, diálogos y comunidad.
+
+P06
+
+**El Grano y la Paja de la Historia**
+
+Presa, lago, investigación y clasificación.
+
+P07
+
+**El Libro Vivo y la Brújula Dorada**
+
+Libro, brújula, inscripciones y Custodias.
+
+P08
+
+**Sueños Paralelos y Revelaciones Internas**
+
+Dos mundos, llave, amuleto y mapa vivo.
+
+P09
+
+**El Regreso de las Historias y el Circo de los Nómadas**
+
+Caravana, pabellón, actos y recuerdos.
+
+**Documento común:**
+
+Arquitectura, variables, estados, guardado, controles, especificaciones de arte, animaciones, audio y pruebas de integración.
+
+Cada paquete debe incluir:
+
+1. Guion narrativo completo.
+2. Descripción de cada escena.
+3. Mapa de escenarios.
+4. Mecánicas y reglas de interacción.
+5. Árboles de diálogo.
+6. Fichas de personajes y objetos.
+7. Inventario de recursos gráficos.
+8. Animaciones necesarias.
+9. Efectos visuales y sonoros.
+10. Criterios de aceptación y pruebas.
+
+# **12. RECOMENDACIÓN FINAL: ORDEN DE EJECUCIÓN**
+
+Mi recomendación es desarrollar primero tres bloques que permitan validar el núcleo de la ampliación:
+
+[The Awakening of Seraphel by Fiulo on DeviantArt](https://images.openai.com/static-rsc-4/Lci_o6fkqXchg0izVbUN7WMfV08gZsHbtvb2xQWlAafdhAZPs10LXhg_WiAp-TYLCnxkYHRzRsWG6Opr4WUqgvXSznlz1o4i3CkDvc2FERXSrUaY_wpJ2v_34Jxe4col4ookme9ciu2lg0wJmh_IzVeOnzkm6xx-Hd6QOQwv3cE?purpose=inline)
+
+**PRIORIDAD 1 — Prólogo y Luz Interior**
+
+Consolidar la identidad de Liam y Elara, sus lámparas, la Sinergia y el Gran Libro.
+
+Base narrativa y jugable
+
+[Steam Workshop](https://images.openai.com/static-rsc-4/mQIVtmccT_OzIPUkqEp6TdXceNy3Aca43sQcNyQIBef2cdP7bg28krZ6qJWxL58Fk6ceUWIsfDHWdDPSez3ZOXd9czwa_D0h09M50YSpTh8BD5S0Nx8we3k93q5tGIMrMatgk4BLDupJw0gPPwA7_KPeXQmG_L87LA1o9KozDzw?purpose=inline)
+
+**PRIORIDAD 2 — Las Llaves del Pensamiento**
+
+Cerrar el sistema de los seis sombreros y los puzzles basados en perspectivas.
+
+Sistema reutilizable
+
+[Found Under the Sea Game Prop Design Concept of a Book :: Behance](https://images.openai.com/static-rsc-4/CFypSoWaHpOgFca9mboZAMcnbMrwtyIgKlYG-t5DQLdJJnoyFj53izqo0zoc-J-yNr_6gQnIjV7hSlq-Sw-sOQT8KbZmEV4bw-QiEngq9ws9Es-gxp422ymNMttwxFCMkKTGXd2f8S-TuBjWmwaw_-AD3yPfsiHN1yevkPhK0-U?purpose=inline)
+
+**PRIORIDAD 3 — Historias Ocultas, Grano y Paja y Libro Vivo**
+
+Construir el sistema de investigación, memoria, descubrimiento y reconstrucción de historias.
+
+Expansión de sistemas
+
+[Book Summary The Night Circus. Erin Morgenstern’s captivating book… | by Daniel Adams | Medium](https://images.openai.com/static-rsc-4/yaxuIQZWpIz33vfG0NeOZJ2ZducVBYPkre3zytnt4eip28RLL4YiUbBwnctaXiVeEjUSHhQbYmkrHcw78Xuu8E8YKC2HPH-YFnayG1dMvSuqvxuK4jqKZojsYbjbuoditusoaKy__XgdWc62GqGQzEXO0wuLdx2rFDTmQ7Dp0hY?purpose=inline)
+
+**PRIORIDAD 4 — Sueños Paralelos y Circo**
+
+Desarrollar los escenarios más complejos y cerrar la transición hacia el siguiente libro.
+
+Ampliación de universo
+
+## **Conclusión**
+
+El objetivo es que *Rutas del Alma* evolucione desde el prototipo de plataformas y exploración que ya existe hacia una aventura narrativa más profunda.
+
+La diferencia debe estar en que:
+
+- Liam y Elara evolucionen como personajes.
+- Aides tenga una historia propia dentro del universo.
+- Los NPC tengan memoria y consecuencias.
+- Las lámparas sean herramientas de exploración, descubrimiento y cooperación.
+- Los seis sombreros se conviertan en un sistema real de resolución de problemas.
+- El Gran Libro y la Brújula sean el eje de la aventura.
+- Los escenarios cambien como consecuencia de lo que hace el jugador.
+- Cada capítulo aporte algo nuevo a la experiencia.
+
+**La regla de diseño que debe respetarse en todo el desarrollo es que cada historia tiene que poder jugarse, descubrirse y experimentarse, no limitarse a leerse en una pantalla.**
+
+Mi siguiente paso recomendado sería convertir este informe en un **GDD de producción capítulo por capítulo**, empezando por el prólogo, con mapas de escenarios, secuencias de juego, fichas individuales de cada elemento, listado de sprites y animaciones y tareas concretas para el programador y el diseñador.
+
+🎮Preparar GDD técnico por capítulosToca para configurar

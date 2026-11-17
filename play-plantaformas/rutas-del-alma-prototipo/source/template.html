@@ -80,6 +80,10 @@ button{font-family:inherit;color:inherit}
 .kcols{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}@media(max-width:720px){.kcols{grid-template-columns:1fr}}
 .kcol{background:#fff8e4;border:2px solid var(--c);border-radius:10px;padding:.5rem .6rem}.kcol h3{margin:0;font-size:1.1rem}.ksub{font-size:.72rem;color:#6b4a2a;margin-bottom:.4rem}
 .kn{position:relative;padding:.35rem .4rem;margin-top:.5rem;border-radius:8px;border:1px solid #d9c79a;opacity:.62}.kn.on{opacity:1;background:#fff;border-color:var(--c);box-shadow:0 0 0 2px var(--c)}
+.evmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.4rem}.ev{border:1px solid #d9c79a;border-radius:8px;padding:.3rem .5rem;background:#fffdf4}.ev b{display:block}.ev small{display:block;font-size:.7rem;color:#6b5a2a}.ev span{font-size:1.1rem;font-weight:bold}
+.tabs{display:flex;gap:.4rem;margin:.3rem 0 .6rem}.tab{font:inherit;padding:.3rem .8rem;border:2px solid #d9c79a;border-radius:8px 8px 0 0;background:#f4ead0;cursor:pointer}.tab.on{background:#fffdf4;border-color:var(--gold);font-weight:bold}
+.trees{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.7rem}.tree{border:2px solid #d9c79a;border-radius:10px;padding:.5rem;background:#fffdf4}.tree h3{margin:0}.tn{border-left:4px solid #bbb;padding:.25rem .5rem;margin:.35rem 0;font-size:.82rem}.tn b{display:block}.tn small{display:block}.tn i{display:block;height:5px;background:#e2d3ab;border-radius:3px;overflow:hidden}.tn u{display:block;height:100%;background:#7aa65a}.tn.learned{border-color:#3f6a2a;background:#f1fbe9}.tn.ready{border-color:#c79a1a;background:#fff6d6}.tn.seen{border-color:#9aa;}.tn.locked{opacity:.55}.tn .g{color:#2f6a24}.tn .btn{margin-top:.2rem;padding:.2rem .6rem;font-size:.76rem}
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.6rem}.fc{border:2px solid #d9c79a;border-radius:10px;padding:.5rem;background:#fffdf4;font-size:.84rem}.fc b{display:block;font-size:1rem}.fc small,.fc span{display:block}.fc .btn{margin-top:.3rem}
 .pbs{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.5rem}.pb{font-size:.78rem}.pb i{display:block;height:6px;background:#e2d3ab;border-radius:3px;overflow:hidden}.pb u{display:block;height:100%}.led{margin:.2rem 0;padding-left:1.1rem;font-size:.8rem;line-height:1.4}
 .ops{display:grid;gap:.4rem;margin-top:.3rem}.op{border:1px solid #d9c79a;border-radius:8px;padding:.35rem .45rem;background:#fffdf4}.op.sel{border:2px solid #3f6a2a;background:#f1fbe9}.op .g{display:block;font-size:.76rem;color:#2f6a24}.op .l{display:block;font-size:.76rem;color:#a2402e;margin:.1rem 0 .25rem}.op .btn{padding:.2rem .6rem;font-size:.74rem}
 .kn b{display:block;font-size:.95rem}.kn small{display:block;font-size:.76rem;line-height:1.3}.kn em{display:block;font-size:.76rem;color:#3f6a2a;margin-top:.15rem}
@@ -139,7 +143,7 @@ body.portrait #dlg{bottom:max(10px,env(safe-area-inset-bottom,0px));width:94vw}
 
 <div id="menu" class="ov" hidden>
   <img id="mLamp" alt="">
-  <h1>Rutas del Alma</h1><div style="font-size:.7rem;opacity:.6;margin-top:-.4rem">build v20 · 2026-11-16</div>
+  <h1>Rutas del Alma</h1><div style="font-size:.7rem;opacity:.6;margin-top:-.4rem">build v21 · 2026-11-16</div>
   <p class="sub">Nivel 1 · El Valle y el Jardín de la Mente · Prototipo</p>
   <div class="row">
     <button class="btn" id="mStart">Comenzar</button>
@@ -517,7 +521,7 @@ function toggleWheel(v){
 function chooseHat(id){
   if(!S.hats||dialogActive||mode!=='play'){return}
   if(hatCD>0)return;
-  hat=hat===id?null:id;hatCD=.5;SFX.hat(hat==='white');
+  hat=hat===id?null:id;hatCD=.5;SFX.hat(hat==='white');if(hat){S.ev=S.ev||{};S.ev.hat=(S.ev.hat||0)+1}
   flashT=.25;
   toast(hat?'Sombrero '+HATN[hat]:'Sin sombrero',1800);
   if(wheelOpen)toggleWheel(false);
@@ -1009,7 +1013,7 @@ function moodTint(){const m=mood();if(m==='harmony'){ctx.fillStyle='rgba(255,196
 
 /* ================= FASE B: economía, emociones de Aides, sombreros, sinergia, acciones en equipo, escenas, fatiga ================= */
 let resLog=null,callCD=0,stuckT=0,maxX=0,progSig='',focusT={},eqBar=null,eqState={w:null,t:0},bridgeP=0,restT=0,hatChk=0,fatWarn=0,callumFoc=0,aidesFoc=0;
-function EVB(){S.gr=S.gr??0;S.pe=S.pe??0;S.lec=S.lec||{};S.ca=S.ca??20;S.fat=S.fat??10;S.hatsOn=S.hatsOn||['white','red'];S.skills=S.skills||{};S.cAuraT=S.cAuraT||0;S.guided=S.guided||0;S.restT=S.restT||0;S.obey=S.obey||0;S.dud=S.dud||0;
+function EVB(){S.gr=S.gr??0;S.pe=S.pe??0;S.lec=S.lec||{};S.ca=S.ca??20;S.fat=S.fat??10;S.hatsOn=S.hatsOn||['white','red'];S.skills=S.skills||{};S.ev=S.ev||{};S.tr=S.tr||{};S.fr=S.fr||{};S.cAuraT=S.cAuraT||0;S.guided=S.guided||0;S.restT=S.restT||0;S.obey=S.obey||0;S.dud=S.dud||0;
   HATS.forEach(h=>{h.on=S.hatsOn.includes(h.id);const b=document.querySelector('#ring .hat.'+h.id);if(b)b.classList.toggle('locked',!h.on)})}
 function gain(g,p){g=g>0?Math.round(g*fxv('grain')):g;p=p>0?Math.round(p*fxv('petal')):p;S.gr+=g||0;S.pe+=p||0;resLog={g:g||0,p:p||0,t:2.6};save()}
 const lessonDone=id=>!!(S.lec[id]&&S.lec[id].done);
@@ -1103,12 +1107,13 @@ async function doRest(c){
   restT=2.4;SFX.good();await sleep(900);
   S.fat=Math.max(0,S.fat-45);energy=100;depleted=false;S.ca=Math.max(0,S.ca-10);S.restT=60;weeds.forEach(w=>{if(w.st===5)w.g+=6});
   const m=mood();const L=m==='friction'?[['liam','…Gracias por quedarte a mi lado.'],['elara','Mañana lo hablamos con calma.']]:m==='harmony'?[['elara','Dormir junto a ti es oír el jardín entero.'],['liam','Y despertar con menos peso.']]:[['elara','La vela cuida el sueño de quien descansa.'],['liam','Mañana seguiremos.']];
-  pathAdd('cuidado',1,'Descansar en una vela');bond(3,-6);toast('Habéis descansado junto a la vela: fatiga reducida y lámparas recargadas.',3200);banter(L);save()}
+  pathAdd('cuidado',1,'Descansar en una vela');S.ev=S.ev||{};S.ev.rest=(S.ev.rest||0)+1;bond(3,-6);toast('Habéis descansado junto a la vela: fatiga reducida y lámparas recargadas.',3200);banter(L);save();await sleep(2600);try{await reflect('rest')}catch(e){}}
 /* ---- escenas ---- */
 async function nodeSombra(){nodeBusy=true;S.nodes.sombra=1;
   await showLine('Liam','Esa sombra pesa más de lo normal. ¿La enfrentamos con hechos, o la escuchamos?',{cls:'liam'});
   await showLine('Elara','Está cerrada como un puño. Si empujamos, se aferrará más.',{cls:''});
   const i=await choose([{tag:'Liam · Ataque',text:'«Iluminémosla de frente y ya está.»'},{tag:'Elara · Escucha',text:'«Dejemos que hable. Yo me encargo, tú vigila.»'},{tag:'Sinergia',text:'«Luz de los dos: tú alumbras, yo escucho.»'}]);
+  S.ev=S.ev||{};S.ev.sombra=i;
   if(i===0){gain(5,0);S.fat+=10;bond(-3,6,-8);await showLine('Elara','Está bien… aunque se ha cerrado un poco más.',{cls:''})}
   else if(i===1){gain(0,5);S.fat+=5;bond(6,-3,8);await showLine('Liam','Hecho. Te cubro las espaldas.',{cls:'liam'})}
   else if(synOK()){bond(10,-8);gain(5,5);S.fat=Math.max(0,S.fat-5);sparkMix();await showLine('Liam','Sentía que no hacía falta pelear. Solo estar.',{cls:'liam'});toast('Sinergia: ilumináis la sombra juntos.',2800)}
@@ -1121,7 +1126,7 @@ async function sauceCierre(){
     if(i===0){gain(0,3);bond(2,-1)}else if(i===1)gain(1,1)}
   fogP=Math.max(fogP,0);S.fogSoft=true;
   await showLine('Liam','«La oscuridad no desapareció, pero se disipó el silencio que la alimentaba.» Escuchar es una forma de luz.',{cls:'liam'});
-  energy=100;depleted=false;toast('Escuchar es una forma de luz: tu lámpara se recarga.',3000);dlgHide();save()}
+  energy=100;depleted=false;toast('Escuchar es una forma de luz: tu lámpara se recarga.',3000);dlgHide();save();try{await reflect('sombra')}catch(e){}}
 async function nodeLuz(){nodeBusy=true;S.nodes.luz=1;
   await showLine('Elara','Esa noche no leyeron ninguna fábula. Se contaron, por turnos, sus propias historias.',{cls:''});
   const first=await choose([{tag:'Liam primero',text:'Que cuente Liam su historia.'},{tag:'Elara primero',text:'Que cuente Elara la suya.'}]);
@@ -1287,26 +1292,26 @@ const PATHNEED=6;
 let FX={},KNU={},knInit=false,knOpen=false,KNS={};
 const fxv=k=>FX[k]!==undefined?FX[k]:(k==='liamLen'||k==='elaraLen'||k==='elaraHalf'?0:1);
 function fxCalc(){FX={};const add=(f)=>{for(const k in f){if(k==='liamLen'||k==='elaraLen'||k==='elaraHalf')FX[k]=(FX[k]||0)+f[k];else FX[k]=(FX[k]||1)*f[k]}};
-  KN.forEach(n=>{const o=n.opts.find(o=>o.k===(S.kc||{})[n.id]);if(o)add(o.fx)});const m=MAS.find(m=>m.k===S.mastery);if(m)add(m.fx)}
+  KN.forEach(n=>{const o=n.opts.find(o=>o.k===(S.kc||{})[n.id]);if(o)add(o.fx)});const m=MAS.find(m=>m.k===S.mastery);if(m)add(m.fx);KTREES.forEach(t=>{if(S.tr&&S.tr[t.id+'3'])add(t.fx)})}
 const kn=id=>!!KNU[id];
 function pathLead(){const p=S.pth||{};const e=Object.entries({hechos:p.hechos||0,emociones:p.emociones||0,cuidado:p.cuidado||0}).sort((a,b)=>b[1]-a[1]);return e[0][1]>0&&e[0][1]>e[1][1]?e[0][0]:(e[0][1]>0?'mixto':'ninguno')}
 function pathAdd(b,n,text){S.pth=S.pth||{hechos:0,emociones:0,cuidado:0};S.ledger=S.ledger||[];S.pth[b]=(S.pth[b]||0)+n;S.ledger.push({t:Math.round(S.time),b,n,text});if(S.ledger.length>60)S.ledger.shift();
   toast('Camino · '+BR[b].n+(n>0?' +':' ')+n+' — '+text,2600,'path'+b);save()}
-function ledgerChoice(o){const tg=(o.tag||'')+' '+(o.text||'');let b=null;
+function ledgerChoice(o){if(o.noled)return;S.ev=S.ev||{};if(/Reflej/i.test(o.tag||''))S.ev.reflect=(S.ev.reflect||0)+1;const tg=(o.tag||'')+' '+(o.text||'');let b=null;
   if(/Descanso|Cuidado|Té |Regar|Sembrar|Agradecer|Acompañar|Compartir/i.test(tg))b='cuidado';
   else if(/Elara|Rojo|Reflej|Escuch|Empat|Respir|Nombr|Preguntar|Tranquiliz/i.test(tg))b='emociones';
   else if(/Liam|Blanco|Hechos|Observ|Orden|Ataque|Acci[oó]n|Trabajo|Verific|Lista/i.test(tg))b='hechos';
   if(b&&o.text)pathAdd(b,1,(o.tag?o.tag+': ':'')+String(o.text).slice(0,46))}
-function knTick(){const first=!knInit;S.kn=S.kn||{};KNS=S.kn;S.kc=S.kc||{};fxCalc();
+function knTick(){const first=!knInit;try{promCheck()}catch(e){}S.kn=S.kn||{};KNS=S.kn;S.kc=S.kc||{};fxCalc();
   KN.forEach(n=>{let ok=false;try{ok=!!n.ok()}catch(e){}KNU[n.id]=ok;if(ok&&!KNS[n.id]){KNS[n.id]=1;if(!first){toast('Saber disponible · '+n.n+' (ábrelo con K y elige)',4200);SFX.good();save()}}});
-  KN.forEach(n=>{});knInit=true}
+  KN.forEach(n=>{});treeTick();treeNotify=true;knInit=true}
 function knPick(id,k){const n=KN.find(x=>x.id===id);if(!n||!KNU[id])return;const cur=S.kc[id];if(cur===k)return;
   if(cur){if(S.pe<20){toast('Cambiar de saber cuesta 20 Pétalos de Eco.',2400);return}S.pe-=20;resLog={g:0,p:-20,t:2.6}}
   S.kc[id]=k;fxCalc();save();knRender();const o=n.opts.find(o=>o.k===k);toast('Has elegido «'+o.n+'»: ganas y pierdes algo.',3000)}
 function masPick(k){const m=MAS.find(x=>x.k===k);if(!m)return;if((S.pth||{})[m.br]<PATHNEED)return;if(S.mastery&&S.mastery!==k){if(S.pe<40){toast('Cambiar de maestría cuesta 40 Pétalos de Eco.',2600);return}S.pe-=40;resLog={g:0,p:-40,t:2.6}}
   S.mastery=k;fxCalc();save();knRender();toast('Maestría: «'+m.n+'». Lo que decidiste mientras jugabas os ha llevado aquí.',3600)}
 window.__knPick=knPick;window.__masPick=masPick;
-function knRender(){const el=$('#know'),p=S.pth||{hechos:0,emociones:0,cuidado:0};
+function knSaberes(){const p=S.pth||{hechos:0,emociones:0,cuidado:0};
   const bars=Object.keys(BR).map(b=>'<div class="pb"><span>'+BR[b].n+'</span><i><u style="width:'+Math.min(100,p[b]*100/PATHNEED/1.0)+'%;background:'+BR[b].col+'"></u></i><small>'+(p[b]||0)+'/'+PATHNEED+'</small></div>').join('');
   const opt=(n,o)=>{const sel=(S.kc||{})[n.id]===o.k;return'<div class="op'+(sel?' sel':'')+'"><b>'+o.n+(sel?' ✓':'')+'</b><span class="g">Ganas: '+o.gain+'</span><span class="l">Pierdes: '+o.loss+'</span><button class="btn" onclick="__knPick(\''+n.id+'\',\''+o.k+'\')">'+(sel?'Elegido':(S.kc[n.id]?'Cambiar · 20 Pétalos':'Elegir'))+'</button></div>'};
   const col=b=>'<div class="kcol" style="--c:'+BR[b].col+'"><h3>'+BR[b].n+'</h3><div class="ksub">'+BR[b].sub+'</div>'+KN.filter(n=>n.br===b).map(n=>{const ok=KNU[n.id],pr=!ok&&n.pr?n.pr():null;
@@ -1314,9 +1319,122 @@ function knRender(){const el=$('#know'),p=S.pth||{hechos:0,emociones:0,cuidado:0
      +(b==='cuidado'?'<div class="kn on"><b>● Lecciones de Callum</b><small>'+LESS.map(l=>(lessonDone(l.id)?'✓ ':'· ')+l.n).join('<br>')+'</small></div>':'')
      +'<div class="kn '+((p[b]||0)>=PATHNEED?'on':'')+'"><b>'+((p[b]||0)>=PATHNEED?'● ':'○ ')+'Maestría · '+MAS.find(m=>m.br===b).n+'</b>'+(()=>{const m=MAS.find(m=>m.br===b);return(p[b]||0)>=PATHNEED?'<div class="op'+(S.mastery===m.k?' sel':'')+'"><span class="g">Ganas: '+m.gain+'</span><span class="l">Pierdes: '+m.loss+'</span><button class="btn" onclick="__masPick(\''+m.k+'\')">'+(S.mastery===m.k?'Elegida':(S.mastery?'Cambiar · 40 Pétalos':'Elegir (solo una)'))+'</button></div>':'<small>Se abre con '+PATHNEED+' decisiones de esta rama mientras jugáis.</small>'})()+'</div></div>';
   const led=(S.ledger||[]).slice(-6).reverse().map(l=>'<li><b>'+BR[l.b].n+'</b> · '+l.text+'</li>').join('')||'<li>Aún no habéis tomado decisiones. Hablad, escuchad, cuidad: cada elección deja huella.</li>';
-  el.querySelector('.sheet').innerHTML='<h2>Cuaderno de saberes</h2><p class="note">Cada saber compensa y a la vez cuesta algo. Vuestras decisiones durante el juego abren las maestrías.</p><div class="pbs">'+bars+'</div><div class="kcols">'+Object.keys(BR).map(col).join('')+'</div><h3 style="margin:.8rem 0 .2rem">Vuestras últimas decisiones</h3><ul class="led">'+led+'</ul><div class="row"><button class="btn" id="knClose">Cerrar (K)</button></div>';
+  return '<p class="note">Cada saber compensa y a la vez cuesta algo. Vuestras decisiones durante el juego abren las maestrías.</p><div class="pbs">'+bars+'</div><div class="kcols">'+Object.keys(BR).map(col).join('')+'</div><h3 style="margin:.8rem 0 .2rem">Vuestras últimas decisiones</h3><ul class="led">'+led+'</ul>';}
+/* ===== v21: Árboles del Conocimiento (por evidencias) + Amistades (llamadas con memoria) ===== */
+const evn=k=>(S.ev&&S.ev[k])||0;
+const KTREES=[
+ {id:'cla',n:'Árbol de la Claridad',sub:'Distinguir hechos, interpretaciones y juicios',fx:{drain:.95},ft:'Las lámparas gastan un 5 % menos.',nodes:[
+  {r:'Raíz',n:'Mirar antes de juzgar',req:'Usar la luz de Liam 8 veces.',pr:()=>[S.act.liam,8]},
+  {r:'Tronco',n:'Hechos y juicios',req:'Aprender «Distinguir hechos de juicios» con Callum.',pr:()=>[(lessonDone('hechos')||S.skills.observar)?1:0,1]},
+  {r:'Rama',n:'Contrastar',req:'Tener el Sombrero Blanco y usar la luz de Liam 20 veces.',pr:()=>[S.hats?S.act.liam:0,20]},
+  {r:'Fruto',n:'Lectura serena',req:'Resolver la sombra del Sauce tras elegir con qué luz abordarla.',pr:()=>[(S.shadows.tomas&&S.ev&&S.ev.sombra!==undefined)?1:0,1]}]},
+ {id:'esc',n:'Árbol de la Escucha',sub:'Reconocer emociones propias y ajenas sin imponer una solución',fx:{regen:1.05},ft:'La energía se recarga un 5 % más rápido.',nodes:[
+  {r:'Raíz',n:'Callar para oír',req:'Escuchar a Tomás hasta el final.',pr:()=>[S.shadows.tomas?1:0,1]},
+  {r:'Tronco',n:'Nombrar lo que se siente',req:'Nombrar una emoción con Aides dos veces.',pr:()=>[S.named||0,2]},
+  {r:'Rama',n:'Acompañar sin sustituir',req:'Reflejar lo que dice el otro en dos conversaciones.',pr:()=>[evn('reflect'),2]},
+  {r:'Fruto',n:'Límites y autocuidado',req:'Descansar en una vela dos veces.',pr:()=>[evn('rest'),2]}]},
+ {id:'cui',n:'Árbol del Cuidado',sub:'Cuidar el jardín y a quien lo cultiva',fx:{growth:1.05},ft:'Las plantas crecen un 5 % más rápido.',nodes:[
+  {r:'Raíz',n:'Confiar el jardín',req:'Pedir a Aides que cuide el jardín.',pr:()=>[S.team?1:0,1]},
+  {r:'Tronco',n:'Regar con sentido',req:'Primera cosecha.',pr:()=>[S.harv||0,1]},
+  {r:'Rama',n:'Descansar para crecer',req:'Descansar en una vela.',pr:()=>[evn('rest'),1]},
+  {r:'Fruto',n:'Cosechar a tiempo',req:'Tres cosechas.',pr:()=>[S.harv||0,3]}]},
+ {id:'coo',n:'Árbol de la Cooperación',sub:'Actuar con otros sin cargar todo el peso',fx:{fat:.95},ft:'La fatiga sube un 5 % más despacio.',nodes:[
+  {r:'Raíz',n:'Luz compartida',req:'Cambiar de lámpara tras usar la otra (sinergia) una vez.',pr:()=>[S.act.syn,1]},
+  {r:'Tronco',n:'Repartir tareas',req:'Llevar a Aides con Callum.',pr:()=>[S.tea?1:0,1]},
+  {r:'Rama',n:'Acordar y ejecutar',req:'Hacer el puente de raíces o guiar a Aides.',pr:()=>[(S.bridge||S.guided>=1)?1:0,1]},
+  {r:'Fruto',n:'Sin cargar todo el peso',req:'Vínculo entre Liam y Elara de 70 o más.',pr:()=>[S.vin,70]}]}];
+const trL=(t,i)=>!!(S.tr&&S.tr[t.id+i]);
+function trState(t,i){if(trL(t,i))return'learned';if(i>0&&!trL(t,i-1))return'locked';let p=[0,1];try{p=t.nodes[i].pr()}catch(e){}return p[0]>=p[1]?'ready':'seen'}
+function treeTick(){S.tr=S.tr||{};S.trN=S.trN||{};KTREES.forEach(t=>t.nodes.forEach((n,i)=>{if(trState(t,i)==='ready'&&!S.trN[t.id+i]){S.trN[t.id+i]=1;if(treeNotify)toast('Árbol · «'+n.n+'» listo para aprender (K → Árboles)',4000);}}))}
+let treeNotify=false;
+function trLearn(id,i){const t=KTREES.find(x=>x.id===id);if(!t||trState(t,i)!=='ready')return;S.tr[id+i]=1;SFX.good();
+  if(i===3){fxCalc();toast('Fruto del '+t.n+': '+t.nodes[i].n+' — '+t.ft,4200)}else toast('Aprendido · '+t.nodes[i].n,2800);
+  S.ledger=S.ledger||[];S.ledger.push({t:Math.round(S.time),b:t.id==='esc'?'emociones':t.id==='cla'?'hechos':'cuidado',n:0,text:'Árbol: '+t.nodes[i].n});if(S.ledger.length>60)S.ledger.shift();save();knRender()}
+window.__trLearn=trLearn;
+/* ===== v22: Evolución del jugador (diario de aprendizaje, sin etiquetas ni perfiles) ===== */
+const EVST=[
+ {k:'observar',n:'Mirar con la luz de Liam',v:()=>S.act.liam},
+ {k:'escuchar',n:'Escuchar con la luz de Elara y reflejar',v:()=>S.act.elara+evn('reflect')},
+ {k:'preguntar',n:'Preguntar en una llamada',v:()=>evn('c_preguntar')+evn('c_apoyo')},
+ {k:'comparar',n:'Cambiar de sombrero para mirar distinto',v:()=>evn('hat')},
+ {k:'experimentar',n:'Combinar lámparas o actuar en equipo',v:()=>S.act.syn+(S.bridge?1:0)+(S.guided||0)},
+ {k:'cuidar',n:'Cuidar el jardín y descansar',v:()=>(S.harv||0)+evn('rest')},
+ {k:'reflexionar',n:'Anotar una reflexión',v:()=>((S.dia||{}).refl||[]).length}];
+function diaInit(){S.dia=S.dia||{refl:[],skip:0,last:-999,since:Math.round(S.time||0)};return S.dia}
+async function reflect(ctx){const d=diaInit();if(d.skip>=2||S.time-d.last<60||dialogActive)return;d.last=S.time;
+  const Q=ctx==='sombra'?'¿Qué dato o gesto cambió vuestra primera impresión?':'Antes de seguir: ¿qué os ha ayudado más ahora?';
+  const O=ctx==='sombra'?['Ver cómo se sentía la sombra','Ver los hechos con claridad','Nada: seguiría igual']:['Mirar con calma','Escuchar al otro','Probar algo distinto','Pedir o dar ayuda'];
+  await showLine('Aides','Si queréis, podéis anotarlo en el cuaderno. No hace falta.',{cls:''});
+  const i=await choose(O.map(t=>({tag:'Reflexión',text:'«'+t+'»',noled:1})).concat([{tag:'Reflexión',text:'Prefiero seguir sin anotar.',noled:1}]));
+  if(i<O.length){d.refl.push({t:Math.round(S.time),ctx,q:Q,a:O[i]});if(d.refl.length>30)d.refl.shift();d.skip=0;toast('Anotado en Evolución',2200)}else d.skip++;
+  dlgHide();save()}
+function evoLines(){const d=diaInit();const L=[];L.push('RUTAS DEL ALMA · Mi evolución · '+VERSION);L.push('Tiempo de juego: '+Math.round(S.time/60)+' min');L.push('');L.push('Estrategias probadas:');EVST.forEach(e=>L.push(' - '+e.n+': '+e.v()));
+  L.push('');L.push('Decisiones del camino (Hechos '+((S.pth||{}).hechos||0)+' · Emociones '+((S.pth||{}).emociones||0)+' · Cuidado '+((S.pth||{}).cuidado||0)+')');(S.ledger||[]).slice(-15).forEach(l=>L.push(' · '+l.text));
+  L.push('');L.push('Reflexiones:');d.refl.forEach(r=>L.push(' · '+r.q+' → '+r.a));if(!d.refl.length)L.push(' (ninguna)');
+  L.push('');L.push('Esto es un registro de lo que habéis hecho, no un test ni un perfil psicológico.');return L.join('\n')}
+window.__dlEvo=()=>{const el=document.getElementById('evotxt');if(!el)return;el.hidden=false;el.value=evoLines();el.focus();el.select();try{navigator.clipboard.writeText(el.value).then(()=>toast('Copiado al portapapeles',2000),()=>{})}catch(e){}};
+window.__clrDia=()=>{if(!confirm('¿Borrar el diario de reflexiones? Las decisiones y saberes se mantienen.'))return;S.dia={refl:[],skip:0,last:-999,since:Math.round(S.time)};save();knRender()};
+function knEvolucion(){const d=diaInit();const tried=EVST.filter(e=>e.v()>0),not=EVST.filter(e=>!e.v());
+  const les=Object.keys(S.lec||{}).filter(k=>lessonDone(k)).length,trN=Object.keys(S.tr||{}).length,tf=KTREES.filter(t=>trL(t,3)).length;
+  const map=[['Experiencia','Lo que habéis vivido',S.act.liam+S.act.elara+(S.harv||0)+evn('rest')],['Observación','Mirar y comparar perspectivas',S.act.liam+evn('hat')],['Comprensión','Lecciones, nombrar y ramas aprendidas',les+(S.named||0)+trN],['Estrategia','Formas distintas probadas',tried.length+' de '+EVST.length],['Decisión','Elecciones anotadas en el camino',(S.ledger||[]).length],['Resultado','Sombras escuchadas y cosechas',Object.keys(S.shadows||{}).length+(S.harv||0)],['Transferencia','Frutos de los árboles (lo aprendido, aplicado otra vez)',tf+' de '+KTREES.length]];
+  return'<p class="note">Un diario de lo que habéis hecho: no es un test ni una etiqueta sobre vosotros, y cambia según cómo juguéis. Se guarda solo en este navegador.</p>'
+  +'<h3>Mapa de aprendizaje</h3><div class="evmap">'+map.map(m=>'<div class="ev"><b>'+m[0]+'</b><small>'+m[1]+'</small><span>'+m[2]+'</span></div>').join('')+'</div>'
+  +'<h3>Formas de jugar que ya habéis probado</h3><ul class="led">'+(tried.map(e=>'<li>✓ '+e.n+' · '+e.v()+'</li>').join('')||'<li>Aún nada: explorad con calma.</li>')+'</ul>'
+  +(not.length?'<p class="note">Aún sin probar (cuando os apetezca): '+not.map(e=>e.n.toLowerCase()).join('; ')+'.</p>':'')
+  +'<h3>Vuestras reflexiones</h3><ul class="led">'+(d.refl.slice(-5).reverse().map(r=>'<li>'+r.q+' <b>'+r.a+'</b></li>').join('')||'<li>Cuando descanséis junto a una vela o escuchéis a una sombra podréis anotar una frase si queréis.</li>')+'</ul>'
+  +'<div class="row"><button class="btn" onclick="__dlEvo()">Ver y copiar mi evolución</button><button class="btn" onclick="__clrDia()">Borrar reflexiones</button></div><textarea id="evotxt" readonly hidden rows="9" style="width:100%;margin-top:.5rem;font:12px monospace"></textarea>'}
+
+function knArboles(){return'<p class="note">Cada rama se aprende por evidencia: lo que habéis hecho, no lo que habéis pagado. Aprender no cuesta recursos. El fruto da un pequeño talento permanente.</p><div class="trees">'+KTREES.map(t=>'<div class="tree"><h3>'+t.n+'</h3><div class="ksub">'+t.sub+'</div>'+t.nodes.map((n,i)=>{const s=trState(t,i);let p=[0,1];try{p=n.pr()}catch(e){}
+   const lab={learned:'Aprendido ✓',ready:'Disponible',seen:'En crecimiento',locked:'Desconocido'}[s];
+   return'<div class="tn '+s+'"><b>'+n.r+' · '+(s==='locked'?'???':n.n)+'</b><small>'+lab+'</small>'+(s==='locked'?'<small>Aprende antes «'+t.nodes[i-1].n+'».</small>':(s==='learned'?(i===3?'<small class="g">Talento: '+t.ft+'</small>':''):'<small>'+n.req+'</small><i><u style="width:'+Math.min(100,Math.round(100*p[0]/p[1]))+'%"></u></i><small>'+Math.min(p[0],p[1])+' / '+p[1]+'</small>'+(s==='ready'?'<button class="btn" onclick="__trLearn(\''+t.id+'\','+i+')">Aprender</button>':'')))+'</div>'}).join('')+'</div>').join('')+'</div>'}
+
+const STG=['recién conocido','confianza inicial','amistad en crecimiento','amistad sólida'];
+const stg=c=>c>=9?3:c>=5?2:c>=2?1:0;
+const AEL={melancolia:'melancólica',ansiedad:'ansiosa',alegria:'alegre',serenidad:'serena',neutral:'tranquila'};
+const FR=[
+ {id:'aides',n:'Aides',rel:'Aprendiz del Jardín de la Mente',ok:()=>!!(S.team||S.aidesStay),emo:()=>AEL[aidesEmo()],
+  r:{escuchar:'Gracias por escuchar. A veces solo necesito decirlo en voz alta.',preguntar:'Hoy el jardín pesa un poco, pero me gusta que preguntes.',ask:'¿Podéis quedaros un momento cerca mientras riego? No hace falta que hagáis nada.',direct:'Gracias… pero prefería intentarlo yo primero.',espacio:'Un rato a solas con las semillas me vendrá bien.',cool:'Ahora prefiero un poco de silencio. Hablamos luego.'},
+  fx:(k)=>{if(k==='escuchar')S.ca=Math.max(0,S.ca-6);if(k==='ask')S.ac=Math.min(100,S.ac+8);if(k==='espacio')S.ca=Math.max(0,S.ca-3)}},
+ {id:'callum',n:'Callum',rel:'Mentor',ok:()=>!!S.tea,emo:()=>'sereno',
+  r:{escuchar:'Quien escucha deja espacio para que algo brote.',preguntar:null,ask:'Ya me has preguntado lo importante. Eso vale más que ayudarme.',direct:'No hace falta, amigo. Pero lo agradezco.',espacio:'El té puede esperar. Tómate tu tiempo.',cool:'Hablamos hace poco; deja que se asiente.'},fx:()=>{}},
+ {id:'consejero',n:'Consejero de Sombreros',rel:'Guía de perspectivas',ok:()=>!!S.hats,emo:()=>'curioso',
+  r:{escuchar:'Cada sombrero es una manera de mirar. Hoy eliges tú cuál.',preguntar:'Antes de elegir sombrero, pregúntate qué necesitas saber.',ask:'Mi ayuda es hacer preguntas; las respuestas son vuestras.',direct:'Prefiero que lo resolváis vosotros.',espacio:'Aquí estaré cuando queráis preguntar de nuevo.',cool:'Dejad que lo hablado florezca antes de volver.'},fx:()=>{}},
+ {id:'tomas',n:'Tomás',rel:'Vecino del Sauce',ok:()=>!!S.shadows.tomas,emo:()=>'aliviado',
+  r:{escuchar:'Hablar contigo me alivia el pecho. Gracias por no apurarme.',preguntar:'Sigo pensando en lo que dije bajo el Sauce. Pero ya no pesa igual.',ask:'Ahora mismo solo quería que alguien me escuchara. Eso ya lo hiciste.',direct:'Gracias, pero prefiero resolverlo a mi ritmo.',espacio:'Gracias por dejarme tiempo.',cool:'Necesito un rato antes de volver a hablar.'},fx:()=>{}},
+ {id:'javier',n:'Javier',rel:'Vecino con miedo',ok:()=>!!S.shadows.javier,emo:()=>'esperanzado',
+  r:{escuchar:'Sigo con algo de miedo, pero dicho en voz alta ya no es tan grande.',preguntar:'Me da miedo que todo se repita, pero hoy me siento acompañado.',ask:'Si queréis acompañarme, mejor despacio y sin decidir por mí.',direct:'Gracias… aunque habría preferido que me lo preguntarais.',espacio:'Os lo agradezco. A veces necesito silencio.',cool:'Aún estoy pensando en lo que hablamos.'},fx:()=>{}}];
+const PROM={aides:{kind:'harv',text:'cosechar juntos una planta'}};
+const promCnt=k=>k==='harv'?(S.harv||0):evn('rest');
+function addProm(f){S.prom=S.prom||[];if(S.prom.some(p=>p.who===f.id&&p.st==='open'))return;const P0=PROM[f.id]||{kind:'rest',text:'descansar junto a una vela y volver a hablar'};S.prom.push({id:f.id+'_'+Math.round(S.time),who:f.id,text:P0.text,kind:P0.kind,base:promCnt(P0.kind),st:'open'});if(S.prom.length>20)S.prom.shift();toast('Promesa con '+f.n+': '+P0.text+'.',3400)}
+function promCheck(){(S.prom||[]).forEach(p=>{if(p.st==='open'&&promCnt(p.kind)>p.base){p.st='kept';const f=FR.find(x=>x.id===p.who),d=frs(p.who);d.c+=1;gain(0,3);pathAdd('cuidado',1,'Cumplir lo prometido a '+(f?f.n:p.who));toast('Promesa cumplida con '+(f?f.n:p.who)+': '+p.text+'.',3600);save()}})}
+const frs=id=>{S.fr=S.fr||{};return S.fr[id]=S.fr[id]||{c:0,last:-999,topics:[],met:Math.round(S.time)}};
+function knAmistades(){const known=FR.filter(f=>f.ok());
+  if(!known.length)return'<p class="note">Aún no habéis conocido a nadie a quien llamar. Las amistades aparecen aquí cuando conocéis a alguien en el camino.</p>';
+  return'<p class="note">Una amistad se cuida con escucha, preguntas y espacio. No hay una barra que llenar: cada persona tiene su ritmo y puede pedir tiempo.</p><div class="fcards">'+known.map(f=>{const d=frs(f.id),st=stg(d.c),tp=d.topics.length?d.topics[d.topics.length-1]:null,cool=S.time-d.last<40;
+   return'<div class="fc"><b>'+f.n+'</b><small>'+f.rel+'</small><span>Ahora: '+f.emo()+'</span><span>Vínculo: '+(d.tn?'reparándose':STG[st])+'</span><small>Último contacto: '+(d.last>-900?'hace '+Math.max(1,Math.round((S.time-d.last)/60))+' min':'aún no habéis hablado')+'</small>'+(tp?'<small>Pendiente: «'+tp+'»</small>':'')+((S.prom||[]).filter(p=>p.who===f.id&&p.st==='open').map(p=>'<small>Prometido: '+p.text+'</small>').join(''))+(d.tn?'<small>Pendiente: reparar (ayudasteis sin preguntar).</small>':'')+'<small>'+(cool?'Prefiere un rato de silencio.':'Puedes llamar ahora.')+'</small><button class="btn" onclick="__call(\''+f.id+'\')">Llamar</button></div>'}).join('')+'</div>'}
+async function callFriend(id){const f=FR.find(x=>x.id===id);if(!f||!f.ok())return;knToggle(false);const d=frs(id),me=S.who==='liam'?'Liam':'Elara';
+  const prev=d.topics.length?d.topics[d.topics.length-1]:null;
+  await showLine(f.n,prev?'Me alegra que llames. La última vez hablamos de «'+prev+'».':'Me alegra que llames.',{cls:''});
+  const i=await choose([{tag:'Llamada · Escuchar',text:'«Cuéntame cómo estás. Te escucho.»',noled:1},{tag:'Llamada · Preguntar',text:'«¿Cómo te sientes hoy?»',noled:1},{tag:'Llamada · Apoyo',text:'«¿Te ayudo con algo?»',noled:1},{tag:'Llamada · Espacio',text:'«Solo quería saludarte. Descansa.»',noled:1}].concat(d.tn?[{tag:'Llamada · Reparar',text:'«Perdona: debí preguntarte antes de ayudar.»',noled:1}]:[]));
+  const k=['escuchar','preguntar','apoyo','espacio','reparar'][i];S.ev=S.ev||{};S.ev['c_'+k]=(S.ev['c_'+k]||0)+1;const cool=S.time-d.last<40;let gainC=0,tpc=k;
+  if(cool){await showLine(f.n,f.r.cool,{cls:''})}
+  else if(k==='apoyo'){const j=await choose([{tag:'Llamada · Ayudar',text:'«Voy y lo hago yo por ti.»',noled:1},{tag:'Llamada · Preguntar',text:'«¿Qué apoyo te serviría? Tú decides.»',noled:1}]);
+    if(j===0){await showLine(f.n,f.r.direct,{cls:''});tpc='ayuda no pedida';d.tn=1;toast('Ayudar sin preguntar deja un tema pendiente con '+f.n+': podéis repararlo en otra llamada.',3800)}else{await showLine(f.n,f.r.ask,{cls:''});gainC=2;f.fx('ask');tpc='apoyo pedido';addProm(f)}}
+  else if(k==='reparar'){await showLine(f.n,'Gracias por decirlo. Se nota que lo piensas.',{cls:''});gainC=1;d.tn=0;tpc='reparación';pathAdd('emociones',1,'Reparar con '+f.n)}
+  else{let t=f.r[k];if(k==='preguntar'&&!t){await showLine(f.n,'Una pista general: mirad primero lo que tenéis cerca y qué os falta para seguir.',{cls:''});const h=await choose([{tag:'Pista',text:'«¿Algo más concreto, por favor?»',noled:1},{tag:'Pista',text:'«Así está bien, lo intento.»',noled:1}]);if(h===0){S.ev.hint=(S.ev.hint||0)+1;await showLine(f.n,'Más concreto: '+objective(),{cls:''})}}else await showLine(f.n,t,{cls:''});gainC=1;f.fx(k);if(f.id==='aides'&&k==='escuchar'){S.ev=S.ev||{}}}
+  if(!cool){const before=stg(d.c);d.c+=gainC;d.last=S.time;d.topics.push(tpc==='escuchar'?'tu escucha':tpc==='preguntar'?'cómo se sentía':tpc==='espacio'?'su tiempo a solas':tpc);if(d.topics.length>6)d.topics.shift();
+    if(stg(d.c)>before){gain(0,4);pathAdd('cuidado',1,'La amistad con '+f.n+' florece');toast('Amistad · con '+f.n+': '+STG[stg(d.c)],3200)}}
+  dlgHide();save();knToggle(true,'ami')}
+window.__call=callFriend;
+let knTab='sab';
+function knRender(){const el=$('#know');treeTick();
+  const rdy=KTREES.some(t=>t.nodes.some((n,i)=>trState(t,i)==='ready')),tabs=[['sab','Saberes'],['arb','Árboles'+(rdy?' •':'')],['ami','Amistades'],['evo','Evolución']];
+  const body=knTab==='arb'?knArboles():knTab==='ami'?knAmistades():knTab==='evo'?knEvolucion():knSaberes();
+  el.querySelector('.sheet').innerHTML='<h2>Cuaderno</h2><div class="tabs">'+tabs.map(([k,n])=>'<button class="tab'+(knTab===k?' on':'')+'" onclick="__knTab(\''+k+'\')">'+n+'</button>').join('')+'</div>'+body+'<div class="row"><button class="btn" id="knClose">Cerrar (K)</button></div>';
   $('#knClose').onclick=()=>knToggle(false)}
-function knToggle(v){if(v===undefined)v=!knOpen;if(v&&(dialogActive||mode!=='play'))return;knOpen=v;$('#know').hidden=!v;if(v){knTick();knRender()}dialogActive=v}
+window.__knTab=k=>{knTab=k;knRender()};
+function knToggle(v,tab){if(v===undefined)v=!knOpen;if(v&&(dialogActive||mode!=='play'))return;if(tab)knTab=tab;knOpen=v;$('#know').hidden=!v;if(v){knTick();knRender()}dialogActive=v}
+
 function caminoHTML(){const p=S.pth||{hechos:0,emociones:0,cuidado:0},l=pathLead(),m=MAS.find(x=>x.k===S.mastery);
   const sv=KN.filter(n=>S.kc&&S.kc[n.id]).map(n=>{const o=n.opts.find(o=>o.k===S.kc[n.id]);return o.n}).join(', ')||'ninguno';
   return '<div style="grid-column:1/-1;text-align:left;font-size:.85em;line-height:1.45;margin-top:6px"><b>Vuestras decisiones:</b> Hechos '+p.hechos+' · Emociones '+p.emociones+' · Cuidado '+p.cuidado+' (rama dominante: '+(l==='mixto'?'equilibrada':l==='ninguno'?'ninguna':BR[l].n)+')<br>Saberes elegidos: '+sv+(m?'<br>Maestría: '+m.n+' — '+m.loss:'')+'</div>'}
@@ -1876,8 +1994,8 @@ document.addEventListener('visibilitychange',()=>{if(AU.c){if(document.hidden)AU
 /* ---------- arranque ---------- */
 function loadImages(){return Promise.all(Object.entries(ASSETS).map(([k,src])=>new Promise(r=>{const i=new Image();i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src})))}
 loadImages().then(()=>{buildSheets();$('#loading').hidden=true;showMenu();requestAnimationFrame(frame)});
-const VERSION='v20';
-window.__rda={VERSION,knToggle,knTick,kn,KN,MAS,knPick,masPick,pathAdd,pathLead,fxv,showLine,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
+const VERSION='v23';
+window.__rda={VERSION,promCheck,addProm,reflect,evoLines,EVST,diaInit,TREES:KTREES,FR,trState,trLearn,treeTick,callFriend,frs,knTab:()=>knTab,knToggle,knTick,kn,KN,MAS,knPick,masPick,pathAdd,pathLead,fxv,showLine,clearFx(){flashT=0},setStory(v){story=!!v;applyLake()},get hurtT(){return hurtT},get inHouse(){return inHouse},banter,sparkMix,houseTalk,finalScene,gain,lessonMenu,aidesTalk,aidesEmo,doRest,nodeSombra,nodeLuz,sauceCierre,houseExtra,peso,hatCheck,eqTick:()=>0,evoHTML,bond,mood,react,A,perf:perfStats,SHEETS,get S(){return S},P,cam,get lamp(){return lamp},get mode(){return mode},get hat(){return hat},get energy(){return energy},weeds,hidden,
   tp:(x,y)=>{P.x=x;P.y=y==null?GROUND:y;P.vx=P.vy=0},setHat:chooseHat,press:{act:()=>{pressedAct=true},swap:()=>{pressedSwap=true}},
   key,mouse,startGame,setFog:v=>{fogP=v},get dialogActive(){return dialogActive}};
 })();
